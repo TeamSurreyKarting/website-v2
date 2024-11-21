@@ -58,8 +58,6 @@ export function NewRacerForm() {
 		// Create racer profile
 		const _ = await createRacer(userId, values.firstName, values.lastName, graduationDate);
 
-		setFormSubmitting(false);
-
 		// Redirect to racers list on success
 		redirect('/racers');
 	}
