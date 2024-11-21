@@ -26,7 +26,7 @@ export default function RacerDetails(details: Database['public']['Views']['Racer
 					)}
 					variant={isEditing || isSaving ? "secondary" : "outline"}
 					onClick={() => {
-						if (isEditing === false) {
+						if (!isEditing) {
 							setIsEditing(true);
 						} else {
 							if (isEditing && !isSaving && changesMade) {
