@@ -68,7 +68,7 @@ export const columns: ColumnDef<Database['public']['Views']['RacerDetails']['Row
 							) : (<></>)}
 							<DropdownMenuSeparator />
 							<DropdownMenuItem
-								className={"text-red-500 hover:text-red-50 hover:bg-red-500"}
+								className={"text-red-500 hover:text-red-50 focus:text-red-50 hover:bg-red-500 focus:bg-red-500 "}
 							>
 								<FaTrashCan />
 								Delete Racer

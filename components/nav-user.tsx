@@ -44,10 +44,6 @@ export function NavUser({
               size="lg"
               className="h-16 border-2 border-ts-blue-600 bg-ts-blue-700/50 data-[state=open]:bg-ts-blue-600"
             >
-              {/*<Avatar className="h-8 w-8 rounded-lg">*/}
-              {/*  <AvatarImage src={user.avatar} alt={user.name} />*/}
-              {/*  <AvatarFallback className="rounded-lg bg-ts-blue-500">TS</AvatarFallback>*/}
-              {/*</Avatar>*/}
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold">{user.name}</span>
                 <span className="truncate text-xs">{user.email}</span>

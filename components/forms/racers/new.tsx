@@ -49,8 +49,6 @@ export function NewRacerForm() {
 		setFormSubmitting(true);
 
 		// Create user account
-		// TODO: Determine if user account already exists, but has no racer profile. If so, show modal to request if user wishes to assign user to profile.
-		// If account exists and is linked to a racer profile, halt and provide steps to remedy this
 		const userId = await createUser(values.email, values.firstName, values.lastName, values.isAdministrator);
 
 		// Determine graduation date
