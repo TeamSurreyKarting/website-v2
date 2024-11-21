@@ -7,11 +7,6 @@ import {
 import { PiDotsNineBold } from "react-icons/pi";
 
 import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/avatar"
-import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
