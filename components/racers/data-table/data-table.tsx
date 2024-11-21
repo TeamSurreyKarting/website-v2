@@ -4,12 +4,12 @@ import {Database} from "@/database.types";
 import {createClient} from "@/utils/supabase/server";
 import {notFound} from "next/navigation";
 
-async function getData(searchQuery?: string): Promise<Database['public']['Tables']['Racers']['Row'][]> {
+async function getData(searchQuery?: string): Promise<Database['public']['Views']['RacerDetails']['Row'][]> {
 	// Obtain list of racers
 	const supabase = await createClient();
 
 	// Build query
-	const query = supabase.from("Racers").select();
+	const query = supabase.from("RacerDetails").select();
 
 	if (searchQuery && searchQuery.trim().length > 0) {
 		// If search query, do filter

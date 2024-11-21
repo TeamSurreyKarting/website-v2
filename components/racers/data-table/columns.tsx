@@ -17,14 +17,18 @@ import { RiMailSendLine } from "react-icons/ri";
 import { FaTrashCan } from "react-icons/fa6";
 import Link from "next/link";
 
-export const columns: ColumnDef<Database['public']['Tables']['Racers']['Row']>[] = [
-	{
-		accessorKey: 'id',
-		header: "Identifier",
-	},
+export const columns: ColumnDef<Database['public']['Views']['RacerDetails']['Row']>[] = [
+	// {
+	// 	accessorKey: 'id',
+	// 	header: "Identifier",
+	// },
 	{
 		accessorKey: 'fullName',
 		header: "Name",
+	},
+	{
+		accessorKey: 'email',
+		header: "Email",
 	},
 	{
 		id: 'actions',
@@ -54,7 +58,14 @@ export const columns: ColumnDef<Database['public']['Tables']['Racers']['Row']>[]
 							<DropdownMenuItem
 								className={"lg:hidden"}
 							><FaEye />View Details</DropdownMenuItem>
-							<DropdownMenuItem><RiMailSendLine />Send Email</DropdownMenuItem>
+							{row.original.email ? (
+								<Link href={`mailto:${row.original.email ?? ''}`}>
+								<DropdownMenuItem>
+										<RiMailSendLine />
+										Send Email
+								</DropdownMenuItem>
+								</Link>
+							) : (<></>)}
 							<DropdownMenuSeparator />
 							<DropdownMenuItem
 								className={"text-red-500 hover:text-red-50 hover:bg-red-500"}
