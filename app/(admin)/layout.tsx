@@ -3,15 +3,12 @@ import "@/app/globals.scss";
 import { AppSidebar } from "@/components/app-sidebar";
 import {SidebarInset, SidebarProvider, SidebarTrigger} from "@/components/ui/sidebar";
 import {Separator} from "@/components/ui/separator";
-import {Breadcrumb, BreadcrumbList} from "@/components/ui/breadcrumb";
+import {ReactNode} from "react";
 
-export default function AdminLayout({
-	children,
-	// breadcrumb,
-}: Readonly<{
-	children: React.ReactNode;
-	// breadcrumb: Breadcrumb;
-}>) {
+export default function AdminLayout(
+	{ children, breadcrumbs }:
+	{ children: ReactNode, breadcrumbs: ReactNode })
+{
 	return (
 		<SidebarProvider className={"bg-ts-blue-950 text-white"}>
 			<AppSidebar />
@@ -20,8 +17,7 @@ export default function AdminLayout({
 					<div className={"flex items-center gap-2 px-4"}>
 						<SidebarTrigger className={"-ml-1"} />
 						<Separator orientation="vertical" className="mr-2 h-4" />
-						<span>Breadcrumb Goes Here</span>
-						{/*{breadcrumb}*/}
+						{breadcrumbs}
 					</div>
 				</header>
 				<div className={"m-4 mt-0"}>

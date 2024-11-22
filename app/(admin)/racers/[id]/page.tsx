@@ -35,7 +35,7 @@ async function getUserProfileData(userId: string): Promise<RacerProfile | null> 
 }
 
 export default async function Page({ params }: { params: { id: string } }) {
-	const userId = params.id;
+	const userId = await params.id;
 	const racerData = await getUserProfileData(userId);
 
 	if (!racerData) {
