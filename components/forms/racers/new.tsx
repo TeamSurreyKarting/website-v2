@@ -31,6 +31,8 @@ const formSchema = z.object({
 })
 
 export function NewRacerForm() {
+	const [formIsSubmitting, setFormSubmitting] = useState(false);
+
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -43,20 +45,18 @@ export function NewRacerForm() {
 		}
 	});
 
-	const [formIsSubmitting, setFormSubmitting] = useState(false);
-
 	async function onSubmit(values: z.infer<typeof formSchema>) {
 		setFormSubmitting(true);
 
 		// Create user account
-		const userId = await createUser(values.email, values.firstName, values.lastName, values.isAdministrator);
+		const user = await createUser(values.email, values.firstName, values.lastName, values.isAdministrator);
 
 		// Determine graduation date
 		const graduationTimestamp = Date.parse(`01 ${values.graduationMonth} ${values.graduationYear} GMT`);
 		const graduationDate = new Date(graduationTimestamp);
 
 		// Create racer profile
-		const _ = await createRacer(userId, values.firstName, values.lastName, graduationDate);
+		await createRacer(user.id!, values.firstName, values.lastName, graduationDate);
 
 		// Redirect to racers list on success
 		redirect('/racers');

@@ -10,25 +10,25 @@ export default function RacersTableSkeleton() {
 				<div className="relative w-full overflow-auto">
 					<table className="w-full caption-bottom">
 						<thead className="[&amp;_tr]:border-b bg-ts-blue-500">
-							<tr className="border-b transition-colors">
-								<th className="h-10 px-2 text-left align-middle [&amp;:has([role=checkbox])]:pr-0 [&amp;>[role=checkbox]]:translate-y-[2px]">
-									Identifier
-								</th>
-								<th className="h-10 px-2 text-left align-middle [&amp;:has([role=checkbox])]:pr-0 [&amp;>[role=checkbox]]:translate-y-[2px]">
-									Name
-								</th>
-								<th className="h-10 px-2 text-left align-middle [&amp;:has([role=checkbox])]:pr-0 [&amp;>[role=checkbox]]:translate-y-[2px]">
-									Actions
-								</th>
-							</tr>
+						<tr className="border-b transition-colors">
+							<th className="h-10 px-2 text-left align-middle [&amp;:has([role=checkbox])]:pr-0 [&amp;>[role=checkbox]]:translate-y-[2px]">
+								<Skeleton/>
+							</th>
+							<th className="h-10 px-2 text-left align-middle [&amp;:has([role=checkbox])]:pr-0 [&amp;>[role=checkbox]]:translate-y-[2px]">
+								<Skeleton/>
+							</th>
+							<th className="h-10 px-2 text-left align-middle [&amp;:has([role=checkbox])]:pr-0 [&amp;>[role=checkbox]]:translate-y-[2px]">
+								<Skeleton/>
+							</th>
+						</tr>
 						</thead>
 						<tbody className="[&amp;_tr:last-child]:border-0">
 						<tr className="border-b transition-colors">
 							<td className="p-2 align-middle [&amp;:has([role=checkbox])]:pr-0 [&amp;>[role=checkbox]]:translate-y-[2px]">
-								<Skeleton className="w-[288px] max-w-full" />
+								<Skeleton className="w-[288px] h-4 max-w-full" />
 							</td>
 							<td className="p-2 align-middle [&amp;:has([role=checkbox])]:pr-0 [&amp;>[role=checkbox]]:translate-y-[2px]">
-								<Skeleton className="w-[168px] max-w-full" />
+								<Skeleton className="w-[168px] h-4 max-w-full" />
 							</td>
 							<td className="p-2 align-middle [&amp;:has([role=checkbox])]:pr-0 [&amp;>[role=checkbox]]:translate-y-[2px]">
 								<div className="flex gap-2">

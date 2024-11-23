@@ -18,8 +18,7 @@ export default function Error({
 	return (
 		<div className="w-full h-full bg-nile-blue-900 rounded-xl p-4 flex flex-col items-center justify-center">
 			<h1 className="text-2xl font-bold">Error</h1>
-			<p>Something went wrong...</p>
-			<p>{error.message}</p>
+			<p className={"my-4 w-full rounded-lg bg-ts-blue-600 border border-ts-blue-300 font-mono text-sm p-4"}>{error.message}</p>
 			<Button
 				onClick={() => reset()}
 				variant={"secondary"}

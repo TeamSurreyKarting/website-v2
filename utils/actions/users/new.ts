@@ -1,6 +1,7 @@
 'use server';
 
 import {createServiceClient} from "@/utils/supabase/server";
+import {revalidatePath} from "next/cache";
 
 export async function createUser(email: string, firstName: string, lastName: string, isAdmin: boolean = false) {
 	const supabase = await createServiceClient();
@@ -22,6 +23,7 @@ export async function createUser(email: string, firstName: string, lastName: str
 		console.error(error);
 		throw error;
 	}
+	revalidatePath(`/racers`);
 
-	return data.user.id;
+	return data.user;
 }

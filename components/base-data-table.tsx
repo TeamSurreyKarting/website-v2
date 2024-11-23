@@ -89,24 +89,26 @@ export function BaseDataTable<TData, TValue>({
 				<span className={"text-slate-600"}>
 					Rows <span className={"text-slate-500"}>{displayedTableRowIndexStart}-{displayedTableRowIndexEnd}</span> of <span className={"text-slate-500"}>{totalRowCount}</span>
 				</span>
-				<div className={"flex items-center justify-between space-x-2 py-4"}>
-					<Button
-						variant={"outline"}
-						size={"sm"}
-						onClick={() => table.previousPage()}
-						disabled={!table.getCanPreviousPage()}
+				{(table.getCanPreviousPage() || table.getCanNextPage()) && (
+					<div className={"flex items-center justify-between space-x-2 py-4"}>
+						<Button
+							variant={"outline"}
+							size={"sm"}
+							onClick={() => table.previousPage()}
+							disabled={!table.getCanPreviousPage()}
 						>
-						Previous
-					</Button>
-					<Button
-						variant={"outline"}
-						size={"sm"}
-						onClick={() => table.nextPage()}
-						disabled={!table.getCanNextPage()}
-					>
-						Next
-					</Button>
-				</div>
+							Previous
+						</Button>
+						<Button
+							variant={"outline"}
+							size={"sm"}
+							onClick={() => table.nextPage()}
+							disabled={!table.getCanNextPage()}
+						>
+							Next
+						</Button>
+					</div>
+				)}
 			</div>
 		</>
 	)

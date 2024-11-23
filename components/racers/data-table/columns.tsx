@@ -55,15 +55,20 @@ export const columns: ColumnDef<Database['public']['Views']['RacerDetails']['Row
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align={"end"}>
 							<DropdownMenuLabel>Actions</DropdownMenuLabel>
-							<DropdownMenuItem
-								className={"lg:hidden"}
-							><FaEye />View Details</DropdownMenuItem>
+							<Link href={`/racers/${row.original.id}`}>
+								<DropdownMenuItem
+									className={"lg:hidden"}
+								>
+									<FaEye />
+									View Details
+								</DropdownMenuItem>
+							</Link>
 							{row.original.email ? (
 								<Link href={`mailto:${row.original.email ?? ''}`}>
-								<DropdownMenuItem>
-										<RiMailSendLine />
-										Send Email
-								</DropdownMenuItem>
+									<DropdownMenuItem>
+											<RiMailSendLine />
+											Send Email
+									</DropdownMenuItem>
 								</Link>
 							) : (<></>)}
 							<DropdownMenuSeparator />

@@ -1,0 +1,97 @@
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useState } from "react";
+import { format, parse, isValid, isBefore, isAfter } from "date-fns";
+
+interface MonthPickerProps {
+	minDate?: Date
+	maxDate?: Date
+	onChange?: (value: Date) => void
+	disabled?: boolean | undefined
+	value?: Date | undefined
+}
+
+export default function MonthYearPicker( { minDate, maxDate, value, onChange, disabled }: MonthPickerProps ) {
+	const [selectedMonth, setSelectedMonth] = useState<string | undefined>(value ? format(value, 'MM') : undefined);
+	const [selectedYear, setSelectedYear] = useState<string | undefined>(value ? format(value, 'yyyy') : undefined);
+
+	const updateValue = (month: string, year: string) => {
+		const newDate = parse(`${year}-${month}`, 'yyyy-MM', new Date())
+		if (isValid(newDate)) {
+			if (
+				(!minDate || !isBefore(newDate, minDate)) &&
+				(!maxDate || !isAfter(newDate, maxDate))
+			) {
+				console.log('changed', newDate)
+				onChange?.(newDate)
+				setSelectedMonth(month)
+				setSelectedYear(year)
+			}
+		}
+	}
+
+	const months = [
+		{ value: '01', label: 'January' },
+		{ value: '02', label: 'February' },
+		{ value: '03', label: 'March' },
+		{ value: '04', label: 'April' },
+		{ value: '05', label: 'May' },
+		{ value: '06', label: 'June' },
+		{ value: '07', label: 'July' },
+		{ value: '08', label: 'August' },
+		{ value: '09', label: 'September' },
+		{ value: '10', label: 'October' },
+		{ value: '11', label: 'November' },
+		{ value: '12', label: 'December' },
+	]
+
+	const currentYear = new Date().getFullYear()
+	const minYear = minDate ? minDate.getFullYear() : currentYear - 10
+	const maxYear = maxDate ? maxDate.getFullYear() : currentYear + 10
+	const years = Array.from({ length: maxYear - minYear + 1 }, (_, i) => (minYear + i).toString())
+
+	return (
+		<>
+			<div className="flex items-center space-x-2">
+				<Select
+					defaultValue={selectedMonth}
+					disabled={disabled}
+					onValueChange={(value) => updateValue(value, selectedYear || '')}
+				>
+					<SelectTrigger id="month-select" className="w-[180px]">
+						<SelectValue placeholder="Month"/>
+					</SelectTrigger>
+					<SelectContent className={"bg-white"}>
+						{months.map((month) => (
+							<SelectItem key={month.value} value={month.value}>
+								{month.label}
+							</SelectItem>
+						))}
+					</SelectContent>
+				</Select>
+				<Select
+					defaultValue={selectedYear}
+					disabled={disabled}
+					onValueChange={(value) => updateValue(selectedMonth || '', value)}
+				>
+					<SelectTrigger id="year-select" className={"w-[120px]"}>
+						<SelectValue placeholder="Year"/>
+					</SelectTrigger>
+					<SelectContent className={"bg-white"}>
+						{years.map((year) => (
+							<SelectItem key={year} value={year}>
+								{year}
+							</SelectItem>
+						))}
+					</SelectContent>
+				</Select>
+			</div>
+			<input
+				type="month"
+				value={selectedYear && selectedMonth ? `${selectedYear}-${selectedMonth}` : ''}
+				onChange={() => console.log("something")}
+				className="sr-only"
+				aria-hidden="true"
+			/>
+		</>
+	);
+}

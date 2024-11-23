@@ -1,7 +1,7 @@
 'use server';
 
-import {createServiceClient} from "@/utils/supabase/server";
-import {revalidatePath} from "next/cache";
+import { createServiceClient } from "@/utils/supabase/server";
+import { revalidatePath } from "next/cache";
 
 export async function createRacer(userId: string, firstName: string, lastName: string, graduationDate: Date) {
 	const supabase = await createServiceClient();
@@ -17,12 +17,8 @@ export async function createRacer(userId: string, firstName: string, lastName: s
 		throw error;
 	}
 
-	if (!data) {
-		return false;
-	}
-
 	revalidatePath(`/racers`);
 	revalidatePath(`/racers/${userId}`);
 
-	return true;
+	return data;
 }
