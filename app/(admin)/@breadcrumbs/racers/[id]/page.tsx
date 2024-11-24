@@ -15,10 +15,11 @@ async function fetchRacerName(userId: string): Promise<string | null> {
 	return error ? null : data.fullName;
 }
 
-export default async function BreadcrumbSlot({params}: {params: {id: string}}) {
-	const racerName = await fetchRacerName(params.id)
+export default async function BreadcrumbSlot(props: {params: Promise<{id: string}>}) {
+    const params = await props.params;
+    const racerName = await fetchRacerName(params.id)
 
-	return (
+    return (
 		<BreadcrumbList>
 			<BreadcrumbItem>
 				<BreadcrumbLink className={"text-gray-300"} href={"/racers"}>Racers</BreadcrumbLink>

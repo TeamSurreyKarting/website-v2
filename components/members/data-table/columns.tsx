@@ -1,7 +1,9 @@
 "use client";
 
-import { ColumnDef } from "@tanstack/react-table";
-import { Database } from "@/database.types";
+import {ColumnDef} from "@tanstack/react-table";
+import Link from "next/link";
+import {Button} from "@/components/ui/button";
+import {FaEye} from "react-icons/fa";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -18,25 +20,35 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
-import {Button} from "@/components/ui/button";
 import {MoreHorizontal} from "lucide-react";
-import { FaEye } from "react-icons/fa";
-import { RiMailSendLine } from "react-icons/ri";
-import { FaTrashCan } from "react-icons/fa6";
-import Link from "next/link";
-import {IoIdCard} from "react-icons/io5";
+import {FaTrashCan} from "react-icons/fa6";
 import {Spinner} from "@/components/ui/spinner";
-import {deleteRacer} from "@/utils/actions/racers/delete";
-import { useState } from "react";
+import {useState} from "react";
+import { revokeMembership } from "@/utils/actions/memberships/revoke";
+import {MembershipNested} from "@/utils/types/membership-nested";
 
-export const columns: ColumnDef<Database['public']['Views']['RacerDetails']['Row']>[] = [
+export const columns: ColumnDef<MembershipNested>[] = [
 	{
-		accessorKey: 'fullName',
-		header: "Name",
+		header: "Membership",
+		accessorKey: 'MembershipTypes.name',
+		cell: ({ row }) => {
+			return <Link href={`/members/memberships/${row.original.MembershipTypes?.id}`}>{row.original.MembershipTypes?.name}</Link>
+		}
 	},
 	{
-		accessorKey: 'email',
-		header: "Email",
+		header: "Full Name",
+		accessorKey: 'Racers.fullName',
+		cell: ({ row }) => {
+			return <Link href={`/racers/${row.original.Racers?.id}`}>{row.original.Racers?.fullName}</Link>
+		}
+	},
+	{
+		header: "Valid From",
+		accessorKey: 'MembershipTypes.validFrom',
+	},
+	{
+		header: "Valid To",
+		accessorKey: 'MembershipTypes.validUntil',
 	},
 	{
 		id: 'actions',
@@ -47,14 +59,14 @@ export const columns: ColumnDef<Database['public']['Views']['RacerDetails']['Row
 			return (
 				<div className={"flex gap-2"}>
 					<Link
-						href={`/racers/${row.original.id}`}
-						>
+						href={`/members/${row.original.id}`}
+					>
 						<Button
 							variant={"ghost"}
 							className={"hidden lg:block"}
 						>
-						<FaEye />
-					</Button>
+							<FaEye />
+						</Button>
 					</Link>
 					<Dialog>
 						<DropdownMenu>
@@ -66,26 +78,12 @@ export const columns: ColumnDef<Database['public']['Views']['RacerDetails']['Row
 							</DropdownMenuTrigger>
 							<DropdownMenuContent align={"end"}>
 								<DropdownMenuLabel>Actions</DropdownMenuLabel>
-								<Link href={`/racers/${row.original.id}`}>
+								<Link href={`/members/${row.original.id}`}>
 									<DropdownMenuItem
 										className={"lg:hidden"}
 									>
 										<FaEye />
 										View Details
-									</DropdownMenuItem>
-								</Link>
-								{row.original.email && (
-									<Link href={`mailto:${row.original.email ?? ''}`}>
-										<DropdownMenuItem>
-											<RiMailSendLine />
-											Send Email
-										</DropdownMenuItem>
-									</Link>
-								)}
-								<Link href={`members/new?racer=${row.original.id}`}>
-									<DropdownMenuItem>
-										<IoIdCard />
-										Assign Membership
 									</DropdownMenuItem>
 								</Link>
 								<DropdownMenuSeparator />
@@ -94,7 +92,7 @@ export const columns: ColumnDef<Database['public']['Views']['RacerDetails']['Row
 										className={"text-red-500 hover:text-red-50 focus:text-red-50 hover:bg-red-500 focus:bg-red-500 "}
 									>
 										<FaTrashCan />
-										Delete Racer
+										Delete
 									</DropdownMenuItem>
 								</DialogTrigger>
 							</DropdownMenuContent>
@@ -113,11 +111,7 @@ export const columns: ColumnDef<Database['public']['Views']['RacerDetails']['Row
 									onClick={async () => {
 										setIsDeleting(true);
 										try {
-											if (!row.original.id) {
-												throw new Error("No racer ID was supplied")
-											}
-
-											await deleteRacer(row.original.id);
+											await revokeMembership(row.original.id);
 										} catch (e) {
 											console.error(e);
 										}
@@ -132,5 +126,5 @@ export const columns: ColumnDef<Database['public']['Views']['RacerDetails']['Row
 				</div>
 			);
 		}
-	}
+	},
 ]

@@ -21,22 +21,38 @@ import {
 import {Button} from "@/components/ui/button";
 import {MoreHorizontal} from "lucide-react";
 import { FaEye } from "react-icons/fa";
-import { RiMailSendLine } from "react-icons/ri";
 import { FaTrashCan } from "react-icons/fa6";
 import Link from "next/link";
-import {IoIdCard} from "react-icons/io5";
+import {deleteMembership} from "@/utils/actions/memberships/delete";
+import {useState} from "react";
 import {Spinner} from "@/components/ui/spinner";
-import {deleteRacer} from "@/utils/actions/racers/delete";
-import { useState } from "react";
 
-export const columns: ColumnDef<Database['public']['Views']['RacerDetails']['Row']>[] = [
+export const columns: ColumnDef<Database['public']['Tables']['MembershipTypes']['Row']>[] = [
 	{
-		accessorKey: 'fullName',
+		accessorKey: 'name',
 		header: "Name",
 	},
 	{
-		accessorKey: 'email',
-		header: "Email",
+		accessorKey: 'validFrom',
+		header: "Valid From",
+	},
+	{
+		accessorKey: 'validUntil',
+		header: "Valid To",
+	},
+	{
+		accessorKey: 'price',
+		header: "Price",
+		cell: ({ row }) => {
+			const britishPounds = new Intl.NumberFormat('en-GB', {
+				style: 'currency',
+				currency: 'GBP',
+			});
+
+			return (
+				<span>{britishPounds.format(row.original.price)}</span>
+			)
+		}
 	},
 	{
 		id: 'actions',
@@ -47,7 +63,7 @@ export const columns: ColumnDef<Database['public']['Views']['RacerDetails']['Row
 			return (
 				<div className={"flex gap-2"}>
 					<Link
-						href={`/racers/${row.original.id}`}
+						href={`/members/memberships/${row.original.id}`}
 						>
 						<Button
 							variant={"ghost"}
@@ -66,7 +82,7 @@ export const columns: ColumnDef<Database['public']['Views']['RacerDetails']['Row
 							</DropdownMenuTrigger>
 							<DropdownMenuContent align={"end"}>
 								<DropdownMenuLabel>Actions</DropdownMenuLabel>
-								<Link href={`/racers/${row.original.id}`}>
+								<Link href={`/members/memberships/${row.original.id}`}>
 									<DropdownMenuItem
 										className={"lg:hidden"}
 									>
@@ -74,27 +90,13 @@ export const columns: ColumnDef<Database['public']['Views']['RacerDetails']['Row
 										View Details
 									</DropdownMenuItem>
 								</Link>
-								{row.original.email && (
-									<Link href={`mailto:${row.original.email ?? ''}`}>
-										<DropdownMenuItem>
-											<RiMailSendLine />
-											Send Email
-										</DropdownMenuItem>
-									</Link>
-								)}
-								<Link href={`members/new?racer=${row.original.id}`}>
-									<DropdownMenuItem>
-										<IoIdCard />
-										Assign Membership
-									</DropdownMenuItem>
-								</Link>
 								<DropdownMenuSeparator />
 								<DialogTrigger asChild>
 									<DropdownMenuItem
 										className={"text-red-500 hover:text-red-50 focus:text-red-50 hover:bg-red-500 focus:bg-red-500 "}
-									>
-										<FaTrashCan />
-										Delete Racer
+										>
+											<FaTrashCan />
+											Delete
 									</DropdownMenuItem>
 								</DialogTrigger>
 							</DropdownMenuContent>
@@ -113,11 +115,7 @@ export const columns: ColumnDef<Database['public']['Views']['RacerDetails']['Row
 									onClick={async () => {
 										setIsDeleting(true);
 										try {
-											if (!row.original.id) {
-												throw new Error("No racer ID was supplied")
-											}
-
-											await deleteRacer(row.original.id);
+											await deleteMembership(row.original.id);
 										} catch (e) {
 											console.error(e);
 										}

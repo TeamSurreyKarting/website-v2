@@ -30,7 +30,17 @@ const nextConfig: NextConfig = {
 	},
 	sassOptions: {
 		silenceDeprecations: ['legacy-js-api'],
-	}
+	},
+	experimental: {
+		turbo: {
+			rules: {
+				'*.svg': {
+					loaders: ['@svgr/webpack'],
+					as: '*.js',
+				},
+			},
+		},
+	},
 };
 
 export default nextConfig;
