@@ -4,7 +4,7 @@ import {Button} from "@/components/ui/button";
 import { MdEdit } from "react-icons/md";
 import { FaSave } from "react-icons/fa";
 import {FaXmark} from "react-icons/fa6";
-import {MutableRefObject, useRef, useState} from "react";
+import {useState} from "react";
 import {Database} from "@/database.types";
 import {clsx} from "clsx";
 import {Spinner} from "@/components/ui/spinner";
@@ -36,8 +36,6 @@ export default function RacerDetails( {details}: {details: Database['public']['V
 	const [isEditing, setIsEditing] = useState(false);
 	const [isSaving, setIsSaving] = useState(false);
 	const [changesMade, setChangesMade] = useState(true);
-
-	const formRef: MutableRefObject<HTMLFormElement | null> = useRef(null);
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
@@ -97,7 +95,7 @@ export default function RacerDetails( {details}: {details: Database['public']['V
 				<Spinner show={isSaving} />
 			</div>
 			<Form {...form}>
-				<form ref={formRef} onSubmit={form.handleSubmit(onSubmit)} className={"space-y-4 mt-2"}>
+				<form onSubmit={form.handleSubmit(onSubmit)} className={"space-y-4 mt-2"}>
 					<div
 						className={"grid grid-cols-1 gap-2 md:grid-cols-2"}
 					>
@@ -177,7 +175,7 @@ export default function RacerDetails( {details}: {details: Database['public']['V
 						<Button
 							variant={"secondary"}
 							className={clsx("xs:w-full md:w-fit bg-white text-black", {
-								'hidden': !isEditing,
+								'hidden': !isEditing
 							})}
 							type={"submit"}
 							disabled={isSaving}

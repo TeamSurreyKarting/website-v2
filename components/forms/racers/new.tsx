@@ -6,13 +6,12 @@ import { useForm } from "react-hook-form"
 import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
 import {Switch} from "@/components/ui/switch";
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
-import {generateYearsBetween} from "@/lib/years-between";
 import {LoadingButton} from "@/components/ui/loading-button";
 import {useState} from "react";
 import {redirect} from "next/navigation";
 import {createUser} from "@/utils/actions/users/new";
 import {createRacer} from "@/utils/actions/racers/new";
+import MonthYearPicker from "@/components/ui/month-year-picker";
 
 const formSchema = z.object({
 	email: z.string({
@@ -25,8 +24,7 @@ const formSchema = z.object({
 	lastName: z.string({
 		required_error: "Last name is required",
 	}).min(2),
-	graduationYear: z.string().transform((x) => parseInt(x)),
-	graduationMonth: z.enum(["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],),
+	graduationDate: z.date(),
 	isAdministrator: z.boolean().default(false),
 })
 
@@ -39,8 +37,7 @@ export function NewRacerForm() {
 			email: "",
 			firstName: "",
 			lastName: "",
-			graduationYear: new Date().getFullYear(),
-			graduationMonth: "August",
+			graduationDate: new Date(),
 			isAdministrator: false,
 		}
 	});
@@ -52,8 +49,7 @@ export function NewRacerForm() {
 		const user = await createUser(values.email, values.firstName, values.lastName, values.isAdministrator);
 
 		// Determine graduation date
-		const graduationTimestamp = Date.parse(`01 ${values.graduationMonth} ${values.graduationYear} GMT`);
-		const graduationDate = new Date(graduationTimestamp);
+		const graduationDate = new Date(`01 ${values.graduationDate.getMonth()} ${values.graduationDate.getFullYear()}`);
 
 		// Create racer profile
 		await createRacer(user.id!, values.firstName, values.lastName, graduationDate);
@@ -106,61 +102,18 @@ export function NewRacerForm() {
 					)}
 				/>
 				<div>
-					<FormLabel>Graduation Date</FormLabel>
-					<div className={"grid grid-cols-2 gap-2"}>
-						<FormField
-							control={form.control}
-							name={"graduationMonth"}
-							render={ ({field}) => (
-								<FormItem>
-									<FormLabel className={"font-normal"}>Month</FormLabel>
-									<Select onValueChange={field.onChange} defaultValue={field.value}>
-										<FormControl>
-											<SelectTrigger>
-												<SelectValue placeholder="Select month" />
-											</SelectTrigger>
-										</FormControl>
-										<SelectContent className={"bg-white"}>
-											<SelectItem value={"January"}>January</SelectItem>
-											<SelectItem value={"February"}>February</SelectItem>
-											<SelectItem value={"March"}>March</SelectItem>
-											<SelectItem value={"April"}>April</SelectItem>
-											<SelectItem value={"May"}>May</SelectItem>
-											<SelectItem value={"June"}>June</SelectItem>
-											<SelectItem value={"July"}>July</SelectItem>
-											<SelectItem value={"August"}>August</SelectItem>
-											<SelectItem value={"September"}>September</SelectItem>
-											<SelectItem value={"October"}>October</SelectItem>
-											<SelectItem value={"November"}>November</SelectItem>
-											<SelectItem value={"December"}>December</SelectItem>
-										</SelectContent>
-									</Select>
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name={"graduationYear"}
-							render={ ({field}) => (
-								<FormItem>
-									<FormLabel className={"font-normal"}>Year</FormLabel>
-									<Select onValueChange={field.onChange} defaultValue={`${field.value}`}>
-										<FormControl>
-											<SelectTrigger>
-												<SelectValue placeholder="Select year" />
-											</SelectTrigger>
-										</FormControl>
-										<SelectContent className={"bg-white"}>
-											{generateYearsBetween(2013, new Date().getFullYear() + 10).map((year) => (
-												<SelectItem key={year} value={`${year}`}>{year}</SelectItem>
-											))}
-										</SelectContent>
-										<FormMessage />
-									</Select>
-								</FormItem>
-							)}
-						/>
-					</div>
+					<FormField
+						control={form.control}
+						name={"graduationDate"}
+						render={({field}) => (
+							<FormItem>
+								<FormLabel>Graduation Date</FormLabel>
+								<FormControl>
+									<MonthYearPicker bypassValidation={true} {...field} />
+								</FormControl>
+							</FormItem>
+						)}
+					/>
 				</div>
 				<FormField
 					control={form.control}
@@ -187,7 +140,7 @@ export function NewRacerForm() {
 						</FormItem>
 					)}
 				/>
-				<LoadingButton className={"bg-ts-blue-700 float-right"} variant={"outline"} type="submit" loading={formIsSubmitting}>Create Racer</LoadingButton>
+				<LoadingButton className={"bg-ts-blue-700 float-right"} variant={"outline"} type={"submit"} loading={formIsSubmitting}>Create Racer</LoadingButton>
 			</form>
 		</Form>
 	);

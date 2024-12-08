@@ -1,31 +1,41 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import { format, parse, isValid, isBefore, isAfter } from "date-fns";
 
 interface MonthPickerProps {
+	name: string
 	minDate?: Date
 	maxDate?: Date
 	onChange?: (value: Date) => void
 	disabled?: boolean | undefined
 	value?: Date | undefined
+	bypassValidation?: boolean | false
 }
 
-export default function MonthYearPicker( { minDate, maxDate, value, onChange, disabled }: MonthPickerProps ) {
+export default function MonthYearPicker( { name, minDate, maxDate, value, onChange, disabled, bypassValidation }: MonthPickerProps ) {
 	const [selectedMonth, setSelectedMonth] = useState<string | undefined>(value ? format(value, 'MM') : undefined);
 	const [selectedYear, setSelectedYear] = useState<string | undefined>(value ? format(value, 'yyyy') : undefined);
+
+	useEffect(() => {
+		console.log(selectedMonth, selectedYear)
+	})
 
 	const updateValue = (month: string, year: string) => {
 		const newDate = parse(`${year}-${month}`, 'yyyy-MM', new Date())
 		if (isValid(newDate)) {
 			if (
-				(!minDate || !isBefore(newDate, minDate)) &&
-				(!maxDate || !isAfter(newDate, maxDate))
+				bypassValidation || (
+					(!minDate || !isBefore(newDate, minDate)) &&
+					(!maxDate || !isAfter(newDate, maxDate))
+				)
 			) {
-				console.log('changed', newDate)
+				console.log('valid', newDate)
 				onChange?.(newDate)
 				setSelectedMonth(month)
 				setSelectedYear(year)
 			}
+		} else {
+			console.log('invalid', newDate)
 		}
 	}
 
@@ -87,8 +97,9 @@ export default function MonthYearPicker( { minDate, maxDate, value, onChange, di
 			</div>
 			<input
 				type="month"
+				name={name}
 				value={selectedYear && selectedMonth ? `${selectedYear}-${selectedMonth}` : ''}
-				onChange={() => console.log("something")}
+				onChange={() => console.log("foo")}
 				className="sr-only"
 				aria-hidden="true"
 			/>
