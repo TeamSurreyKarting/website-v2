@@ -6,6 +6,7 @@ import TSKC from "@/public/logos/tskc.svg";
 
 import { FaHome } from "react-icons/fa";
 import { GiFullMotorcycleHelmet } from "react-icons/gi";
+import { IoIdCard } from "react-icons/io5";
 
 import { NavMain } from "@/components/nav-main"
 import { NavSecondary } from "@/components/nav-secondary"
@@ -32,6 +33,12 @@ const sidebarItems = {
       title: "Racers",
       url: "/racers",
       icon: GiFullMotorcycleHelmet,
+      items: [],
+    },
+    {
+      title: "Members",
+      url: "/members",
+      icon: IoIdCard,
       items: [],
     },
   ],

@@ -14,11 +14,9 @@ export function AdminBreadcrumbs({routes = []}: {routes: string[]}) {
 	const breadcrumbItems: ReactElement[] = [];
 	let breadcrumbPage: ReactElement = (<></>);
 
-	for(let i = 0; i < routes.length; i++) {
+	for (let i = 0; i < routes.length; i++) {
 		const route = routes[i];
-		let href;
-
-		href = fullHref ? `${fullHref}/${route}` : `/${route}`
+		const href: string = fullHref ? `${fullHref}/${route}` : `/${route}`
 		fullHref = href
 
 		if (i === routes.length-1) {
