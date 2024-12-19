@@ -12,7 +12,7 @@ async function fetchMembershipName(userId: string): Promise<string | null> {
 
     const { data, error } = await supabase.from('MembershipTypes').select('name').eq('id', userId).single();
 
-    return error ? null : data;
+    return error ? null : data.name;
 }
 
 export default async function BreadcrumbSlot(props: {params: Promise<{id: string}>}) {

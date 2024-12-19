@@ -22,7 +22,7 @@ export default function RacerMembershipList({ racerDetails }: { racerDetails: Da
 				</Link>
 			</div>
 			<div className={"mt-4"}>
-				<MembersDataTable racerId={racerDetails.id ?? undefined} />
+				<MembersDataTable racerIds={racerDetails.id ? [racerDetails.id] : undefined} />
 			</div>
 		</div>
 	);

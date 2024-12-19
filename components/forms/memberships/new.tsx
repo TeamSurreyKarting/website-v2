@@ -3,7 +3,6 @@
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import {useState} from "react";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
 import {LoadingButton} from "@/components/ui/loading-button";
@@ -34,8 +33,6 @@ const formSchema = z.object({
 });
 
 export function NewMembershipTypeForm() {
-    const [formIsSubmitting, setFormSubmitting] = useState(false);
-
     const dateNow = new Date();
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -50,7 +47,6 @@ export function NewMembershipTypeForm() {
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
 		console.log(values);
-        setFormSubmitting(true);
 
         // Create new entry
         await createMembershipType(values.name, values.validFrom, values.validTo, values.price);
@@ -125,7 +121,7 @@ export function NewMembershipTypeForm() {
 						)}
 					}
 				/>
-                <LoadingButton className={"bg-ts-blue-700 hover:bg-white hover:text-black float-right"} variant={"outline"} type={"submit"} loading={formIsSubmitting}>Create Membership</LoadingButton>
+                <LoadingButton className={"bg-ts-blue-700 hover:bg-white hover:text-black float-right"} variant={"outline"} type={"submit"} loading={form.formState.isSubmitting}>Create Membership</LoadingButton>
             </form>
         </Form>
     );

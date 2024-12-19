@@ -7,6 +7,7 @@ import TSKC from "@/public/logos/tskc.svg";
 import { FaHome } from "react-icons/fa";
 import { GiFullMotorcycleHelmet } from "react-icons/gi";
 import { IoIdCard } from "react-icons/io5";
+import { PiPiggyBankFill } from "react-icons/pi";
 
 import { NavMain } from "@/components/nav-main"
 import { NavSecondary } from "@/components/nav-secondary"
@@ -41,6 +42,12 @@ const sidebarItems = {
       icon: IoIdCard,
       items: [],
     },
+	  {
+		  title: "Finances",
+		  url: "/finances",
+		  icon: PiPiggyBankFill,
+		  items: [],
+	  }
   ],
   navSecondary: [],
 	user: {
