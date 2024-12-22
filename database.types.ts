@@ -59,25 +59,52 @@ export type Database = {
 	}
 	public: {
 		Tables: {
+			Accounts: {
+				Row: {
+					endDate: string | null
+					endingBalance: number
+					id: string
+					name: string
+					startDate: string | null
+					startingBalance: number
+				}
+				Insert: {
+					endDate?: string | null
+					endingBalance: number
+					id?: string
+					name: string
+					startDate?: string | null
+					startingBalance: number
+				}
+				Update: {
+					endDate?: string | null
+					endingBalance?: number
+					id?: string
+					name?: string
+					startDate?: string | null
+					startingBalance?: number
+				}
+				Relationships: []
+			}
 			Members: {
 				Row: {
 					addedAt: string
 					addedBy: string | null
-					id: string
+					id: string | null
 					membership: string | null
 					racer: string
 				}
 				Insert: {
 					addedAt?: string
 					addedBy?: string | null
-					id?: string
+					id?: string | null
 					membership?: string | null
 					racer: string
 				}
 				Update: {
 					addedAt?: string
 					addedBy?: string | null
-					id?: string
+					id?: string | null
 					membership?: string | null
 					racer?: string
 				}
@@ -173,6 +200,37 @@ export type Database = {
 					type?: Database["public"]["Enums"]["track_type"] | null
 				}
 				Relationships: []
+			}
+			Transactions: {
+				Row: {
+					account: string
+					id: string
+					itemDescription: string
+					occurredAt: string
+					value: number
+				}
+				Insert: {
+					account: string
+					id?: string
+					itemDescription: string
+					occurredAt?: string
+					value: number
+				}
+				Update: {
+					account?: string
+					id?: string
+					itemDescription?: string
+					occurredAt?: string
+					value?: number
+				}
+				Relationships: [
+					{
+						foreignKeyName: "Transactions_account_fkey"
+						columns: ["account"]
+						referencedRelation: "Accounts"
+						referencedColumns: ["id"]
+					},
+				]
 			}
 		}
 		Views: {

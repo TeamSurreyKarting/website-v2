@@ -11,7 +11,6 @@ export default async function NewMemberPage(props : {
 	const racerId = searchParams?.racer ?? null;
 
 	const now = new Date().toISOString();
-
 	async function getMembershipTypes(): Promise<Database['public']['Tables']['MembershipTypes']['Row'][]> {
 		const supabase = await createClient();
 
