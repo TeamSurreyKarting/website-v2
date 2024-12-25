@@ -177,6 +177,101 @@ export type Database = {
 				}
 				Relationships: []
 			}
+			TaskAssignments: {
+				Row: {
+					assigned_at: string
+					assigned_by: string
+					assigned_to: string
+					task_id: string
+				}
+				Insert: {
+					assigned_at?: string
+					assigned_by?: string
+					assigned_to: string
+					task_id?: string
+				}
+				Update: {
+					assigned_at?: string
+					assigned_by?: string
+					assigned_to?: string
+					task_id?: string
+				}
+				Relationships: [
+					{
+						foreignKeyName: "TaskAssignments_task_id_fkey"
+						columns: ["task_id"]
+						referencedRelation: "Tasks"
+						referencedColumns: ["id"]
+					},
+				]
+			}
+			TaskComments: {
+				Row: {
+					authored_by: string
+					created_at: string
+					id: string
+					message: string
+					task: string | null
+				}
+				Insert: {
+					authored_by?: string
+					created_at?: string
+					id?: string
+					message: string
+					task?: string | null
+				}
+				Update: {
+					authored_by?: string
+					created_at?: string
+					id?: string
+					message?: string
+					task?: string | null
+				}
+				Relationships: [
+					{
+						foreignKeyName: "TaskComments_task_fkey"
+						columns: ["task"]
+						referencedRelation: "Tasks"
+						referencedColumns: ["id"]
+					},
+				]
+			}
+			Tasks: {
+				Row: {
+					created_at: string
+					created_by: string
+					description: string
+					due_at: string
+					id: string
+					priority: Database["public"]["Enums"]["task_priority"]
+					status: Database["public"]["Enums"]["task_status"]
+					title: string
+					updated_at: string
+				}
+				Insert: {
+					created_at?: string
+					created_by?: string
+					description: string
+					due_at: string
+					id?: string
+					priority?: Database["public"]["Enums"]["task_priority"]
+					status?: Database["public"]["Enums"]["task_status"]
+					title: string
+					updated_at?: string
+				}
+				Update: {
+					created_at?: string
+					created_by?: string
+					description?: string
+					due_at?: string
+					id?: string
+					priority?: Database["public"]["Enums"]["task_priority"]
+					status?: Database["public"]["Enums"]["task_status"]
+					title?: string
+					updated_at?: string
+				}
+				Relationships: []
+			}
 			Tracks: {
 				Row: {
 					created_at: string
@@ -303,6 +398,13 @@ export type Database = {
 			license_type: "bukc_test" | "bukc_full"
 			points_allocations: "formula1_top10" | "linear_top10"
 			race_format: "practice" | "sprint" | "endurance"
+			task_priority: "High" | "Medium" | "Low"
+			task_status:
+				| "Open"
+				| "In Progress"
+				| "Blocked"
+				| "Completed"
+				| "Cancelled"
 			track_type: "outdoor" | "indoor"
 		}
 		CompositeTypes: {
