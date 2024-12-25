@@ -34,20 +34,15 @@ export function LoginForm({
 	const router = useRouter();
 
 	async function onSubmit(values: z.infer<typeof formSchema>) {
-
-		// Request otp from supabase
 		const supabase = createClient();
 
+		// Request otp from supabase
 		const { data, error } = await supabase.auth.signInWithOtp({
 			email: values.email,
 			options: {
 				shouldCreateUser: false,
 			}
 		})
-
-		if (error) {
-			throw error
-		}
 
 		if (error === null && data.user === null && data.session === null) {
 			router.push(`/auth/otp?email=${values.email}`);

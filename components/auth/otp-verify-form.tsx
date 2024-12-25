@@ -15,7 +15,7 @@ import {
 	InputOTPSeparator,
 	InputOTPSlot,
 } from "@/components/ui/input-otp"
-import { LoadingButton } from "@/components/ui/loading-button";
+import {LoadingButton} from "@/components/ui/loading-button";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -24,8 +24,10 @@ import { useRouter } from "next/navigation";
 import {cn} from "@/lib/utils";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
-import { FaPencil } from "react-icons/fa6";
+import {FaCheck, FaPencil } from "react-icons/fa6";
 import Link from "next/link";
+import { useState } from "react";
+import clsx from "clsx";
 
 const formSchema = z.object({
 	otp: z.string().min(6).max(6),
@@ -36,13 +38,13 @@ export function OtpVerifyForm({
     className,
     ...props
 }: React.ComponentPropsWithoutRef<"form"> & { email: string }) {
+	const [otpIsValid, setOtpIsValid] = useState(false);
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
 			otp: "",
 		},
 	});
-
 	const router = useRouter();
 
 	async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -59,14 +61,16 @@ export function OtpVerifyForm({
 		})
 
 		if (error) {
-			throw error
-		}
-
-		if (session) {
-			router.push("/");
+			form.setError("otp", { message: error.message });
+			setOtpIsValid(false);
 		} else {
-			// fixme: show error
-			// form.setError("otp", error: new Error("OTP incorrect"));
+			if (session) {
+				router.push("/");
+				setOtpIsValid(true);
+			} else {
+				form.setError("otp", { message: "Unknown error" });
+				setOtpIsValid(false);
+			}
 		}
 	}
 
@@ -101,29 +105,38 @@ export function OtpVerifyForm({
 						<FormItem>
 							<FormLabel className={"text-ts-gold-500"}>One Time Passcode</FormLabel>
 							<FormControl>
-								<InputOTP maxLength={6} {...field}>
+								<InputOTP
+									maxLength={6}
+									onComplete={() => {
+										console.log("OTP is complete")
+										form.handleSubmit(onSubmit)();
+									}}
+									{...field}>
 									<InputOTPGroup>
-										<InputOTPSlot index={0} />
-										<InputOTPSlot index={1} />
-										<InputOTPSlot index={2} />
+										<InputOTPSlot index={0}  />
+										<InputOTPSlot index={1}  />
+										<InputOTPSlot index={2}  />
 									</InputOTPGroup>
 									<InputOTPSeparator className={"w-full"} />
 									<InputOTPGroup>
-										<InputOTPSlot index={3} />
-										<InputOTPSlot index={4} />
-										<InputOTPSlot index={5} />
+										<InputOTPSlot index={3}  />
+										<InputOTPSlot index={4}  />
+										<InputOTPSlot index={5}  />
 									</InputOTPGroup>
 								</InputOTP>
 							</FormControl>
 							<FormDescription className={"opacity-60"}>
 								Enter the verification code sent to your email.
 							</FormDescription>
-							<FormMessage/>
+							<FormMessage className={"text-red-700"} />
 						</FormItem>
 					)}
 				/>
-				<LoadingButton variant={"secondary"} type={"submit"} className={"w-full border bg-ts-blue-500 hover:bg-ts-blue-400"} loading={form.formState.isSubmitting}>
-					Verify Login OTP
+				<LoadingButton variant={"secondary"} type={"submit"} className={clsx("w-full border bg-ts-blue-500 hover:bg-ts-blue-400",
+					{
+						'bg-ts-gold font-black': otpIsValid
+					})} loading={form.formState.isSubmitting && !otpIsValid}>
+					{otpIsValid ? <FaCheck /> : <>Verify Login OTP</>}
 				</LoadingButton>
 			</form>
 		</Form>

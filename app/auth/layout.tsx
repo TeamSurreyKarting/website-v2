@@ -12,11 +12,9 @@ export default function AuthLayout(
 {
 	return (
 		<div className={"bg-ts-blue-950 min-h-screen flex p-4"}>
-			<div className={"bg-ts-blue-700 border border-ts-blue-300 rounded-lg text-white flex flex-col gap-4 py-8 pb-12 px-10 max-w-lg mx-auto my-4 h-fit"}>
+			<div className={"bg-ts-blue-700 border border-ts-blue-300 rounded-lg text-white flex flex-col gap-4 py-8 pb-12 px-10 w-lg mx-auto my-4 h-fit"}>
 				<TSKC className={"h-auto max-h-32 pt-4"}/>
-				<div>
-					{children}
-				</div>
+				{children}
 			</div>
 		</div>
 	)

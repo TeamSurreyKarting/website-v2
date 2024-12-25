@@ -54,7 +54,6 @@ const sidebarItems = {
 }
 
 export function AppSidebar({ ...props }: ComponentProps<typeof Sidebar>) {
-  // todo: fetch user details from supabase
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader>
