@@ -208,23 +208,23 @@ export type Database = {
 			TaskComments: {
 				Row: {
 					authored_by: string
+					content: string
 					created_at: string
 					id: string
-					message: string
 					task: string | null
 				}
 				Insert: {
 					authored_by?: string
+					content: string
 					created_at?: string
 					id?: string
-					message: string
 					task?: string | null
 				}
 				Update: {
 					authored_by?: string
+					content?: string
 					created_at?: string
 					id?: string
-					message?: string
 					task?: string | null
 				}
 				Relationships: [
@@ -243,6 +243,7 @@ export type Database = {
 					description: string
 					due_at: string
 					id: string
+					primarily_responsible_person: string
 					priority: Database["public"]["Enums"]["task_priority"]
 					status: Database["public"]["Enums"]["task_status"]
 					title: string
@@ -254,6 +255,7 @@ export type Database = {
 					description: string
 					due_at: string
 					id?: string
+					primarily_responsible_person: string
 					priority?: Database["public"]["Enums"]["task_priority"]
 					status?: Database["public"]["Enums"]["task_status"]
 					title: string
@@ -265,6 +267,7 @@ export type Database = {
 					description?: string
 					due_at?: string
 					id?: string
+					primarily_responsible_person?: string
 					priority?: Database["public"]["Enums"]["task_priority"]
 					status?: Database["public"]["Enums"]["task_status"]
 					title?: string
