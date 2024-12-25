@@ -1,6 +1,6 @@
 "use client";
 
-import { ComponentProps } from "react";
+import { ComponentProps, Suspense } from "react";
 
 import TSKC from "@/public/logos/tskc.svg";
 
@@ -21,6 +21,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import {NavUserSkeleton} from "@/components/nav-user-skeleton";
 
 const sidebarItems = {
   navMain: [
@@ -50,31 +51,26 @@ const sidebarItems = {
 	  }
   ],
   navSecondary: [],
-	user: {
-		name: "George Nick Gorzynski",
-		email: "georgegorzynski@me.com",
-		avatar: "",
-	},
 }
 
 export function AppSidebar({ ...props }: ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild>
-				<TSKC className={"h-auto"} />
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
+          <SidebarMenu>
+              <SidebarMenuItem>
+                  <SidebarMenuButton size="lg" asChild>
+				        <TSKC className={"h-auto"} />
+                  </SidebarMenuButton>
+              </SidebarMenuItem>
+          </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={sidebarItems.navMain} />
-        <NavSecondary items={sidebarItems.navSecondary} className="mt-auto" />
+          <NavMain items={sidebarItems.navMain} />
+          <NavSecondary items={sidebarItems.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={sidebarItems.user} />
+		  <NavUser />
       </SidebarFooter>
     </Sidebar>
   )

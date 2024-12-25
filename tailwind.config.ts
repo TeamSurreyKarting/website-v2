@@ -9,6 +9,15 @@ export default {
   ],
   theme: {
   	extend: {
+		keyframes: {
+			"caret-blink": {
+				"0%,70%,100%": { opacity: "1" },
+				"20%,50%": { opacity: "0" },
+			},
+		},
+		animation: {
+			"caret-blink": "caret-blink 1.25s ease-out infinite",
+		},
 	  colors: {
 	    'ts-blue': {
 			DEFAULT: '#123047',
@@ -24,7 +33,7 @@ export default {
 			900: "#04101C",
 			950: "#000D1B"
 		},
-	  'ts-gold': {
+	  	'ts-gold': {
 		  DEFAULT: '#FCC133',
 		  50: '#FEE9A4',
 		  100: '#FDE598',
@@ -39,12 +48,11 @@ export default {
 		  950: '#8C5B02'
 		},
 		'sidebar': {
-			DEFAULT: 'ts-blue-950 text-white',
-			border: 'ts-blue-400',
-			accent: 'ts-blue-700',
-			'accent-foreground': 'ts-blue-700',
-			ring: 'ts-blue-500',
-
+		  DEFAULT: 'ts-blue-950 text-white',
+		  border: 'ts-blue-400',
+		  accent: 'ts-blue-700',
+		  'accent-foreground': 'ts-blue-700',
+		  ring: 'ts-blue-500',
 		}
 	  },
 	borderRadius: {
