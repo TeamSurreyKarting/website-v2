@@ -36,7 +36,7 @@ export function NavUser() {
 
 	useEffect(() => {
 		getAuthedUser()
-	}, [user, getAuthedUser]);
+	}, []);
 
 	return (
 		<SidebarMenu>
