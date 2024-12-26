@@ -243,6 +243,7 @@ export type Database = {
 					description: string
 					due_at: string
 					id: string
+					parent_task_id: string | null
 					primarily_responsible_person: string
 					priority: Database["public"]["Enums"]["task_priority"]
 					status: Database["public"]["Enums"]["task_status"]
@@ -255,6 +256,7 @@ export type Database = {
 					description: string
 					due_at: string
 					id?: string
+					parent_task_id?: string | null
 					primarily_responsible_person: string
 					priority?: Database["public"]["Enums"]["task_priority"]
 					status?: Database["public"]["Enums"]["task_status"]
@@ -267,13 +269,21 @@ export type Database = {
 					description?: string
 					due_at?: string
 					id?: string
+					parent_task_id?: string | null
 					primarily_responsible_person?: string
 					priority?: Database["public"]["Enums"]["task_priority"]
 					status?: Database["public"]["Enums"]["task_status"]
 					title?: string
 					updated_at?: string
 				}
-				Relationships: []
+				Relationships: [
+					{
+						foreignKeyName: "Tasks_parent_task_id_fkey"
+						columns: ["parent_task_id"]
+						referencedRelation: "Tasks"
+						referencedColumns: ["id"]
+					},
+				]
 			}
 			Tracks: {
 				Row: {
