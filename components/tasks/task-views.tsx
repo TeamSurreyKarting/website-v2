@@ -1,4 +1,4 @@
-import ChartViewSwitcher from "@/components/tasks/chart-view-switcher";
+import TaskViewSwitcher from "@/components/tasks/task-view-switcher";
 import {createClient} from "@/utils/supabase/server";
 import TasksDataTable from "@/components/tasks/data-table/data-table";
 import clsx from "clsx";
@@ -8,7 +8,7 @@ import TasksKanbanBoard from "@/components/tasks/kanban-board/board";
 async function getTasks(query?: string) {
 	const supabase = await createClient();
 
-	const dbQuery = supabase.from("Tasks").select();
+	const dbQuery = supabase.from("Tasks").select("id, created_at, created_by( id, full_name ), updated_at, primarily_responsible_person( id, full_name ), parent_task( id )");
 
 	if (query) {
 		dbQuery.like("title", `%${query}%`);
@@ -24,14 +24,14 @@ async function getTasks(query?: string) {
 	return tasks;
 }
 
-export default async function TaskCharts({ query, view }: { query?: string, view?: string, }) {
+export default async function TaskViews({ query, view }: { query?: string, view?: string, }) {
 	const tasks = await getTasks(query);
 
 	const viewType: ChartViewType = isChartViewType(view) ? ChartViewType[view] : ChartViewType.kanban;
 
 	return (
 		<>
-			<ChartViewSwitcher defaultValue={viewType} />
+			<TaskViewSwitcher defaultValue={viewType} />
 			<TasksKanbanBoard
 				tasks={tasks}
 				className={clsx({

@@ -2,7 +2,7 @@ import Search from "@/components/search";
 import Link from "next/link";
 import {Button} from "@/components/ui/button";
 import { FaPlus } from "react-icons/fa6";
-import TaskCharts from "@/components/tasks/tasks-charts";
+import TaskViews from "@/components/tasks/task-views";
 import { Suspense } from "react";
 
 export default async function TasksPage({ searchParams }: {
@@ -39,7 +39,7 @@ export default async function TasksPage({ searchParams }: {
 					<p>Loading...</p>
 				}
 			>
-				<TaskCharts query={query} view={view} />
+				<TaskViews query={query} view={view} />
 			</Suspense>
 		</div>
 	);

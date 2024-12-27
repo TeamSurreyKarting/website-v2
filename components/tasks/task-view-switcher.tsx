@@ -17,7 +17,7 @@ import {
 import {usePathname, useRouter, useSearchParams } from "next/navigation";
 import {ChartViewType} from "@/utils/types/chart-view-type";
 
-export default function ChartViewSwitcher({ defaultValue, onUpdate }: { defaultValue?: ChartViewType, onUpdate?: (value: ChartViewType) => void }) {
+export default function TaskViewSwitcher({ defaultValue, onUpdate }: { defaultValue?: ChartViewType, onUpdate?: (value: ChartViewType) => void }) {
 	const [currentValue, setValue] = useState<ChartViewType>(defaultValue ?? ChartViewType.kanban);
 	const searchParams = useSearchParams();
 	const pathname = usePathname();
