@@ -127,6 +127,18 @@ export type Database = {
 						referencedRelation: "Racers"
 						referencedColumns: ["id"]
 					},
+					{
+						foreignKeyName: "Members_racer_fkey"
+						columns: ["racer"]
+						referencedRelation: "TaskDetailsView"
+						referencedColumns: ["primarily_responsible_person_id"]
+					},
+					{
+						foreignKeyName: "Members_racer_fkey"
+						columns: ["racer"]
+						referencedRelation: "TaskDetailsView"
+						referencedColumns: ["created_by_id"]
+					},
 				]
 			}
 			MembershipTypes: {
@@ -210,6 +222,18 @@ export type Database = {
 						referencedColumns: ["id"]
 					},
 					{
+						foreignKeyName: "TaskAssignments_assigned_by_fkey1"
+						columns: ["assigned_by"]
+						referencedRelation: "TaskDetailsView"
+						referencedColumns: ["primarily_responsible_person_id"]
+					},
+					{
+						foreignKeyName: "TaskAssignments_assigned_by_fkey1"
+						columns: ["assigned_by"]
+						referencedRelation: "TaskDetailsView"
+						referencedColumns: ["created_by_id"]
+					},
+					{
 						foreignKeyName: "TaskAssignments_assigned_to_fkey1"
 						columns: ["assigned_to"]
 						referencedRelation: "RacerDetails"
@@ -219,6 +243,24 @@ export type Database = {
 						foreignKeyName: "TaskAssignments_assigned_to_fkey1"
 						columns: ["assigned_to"]
 						referencedRelation: "Racers"
+						referencedColumns: ["id"]
+					},
+					{
+						foreignKeyName: "TaskAssignments_assigned_to_fkey1"
+						columns: ["assigned_to"]
+						referencedRelation: "TaskDetailsView"
+						referencedColumns: ["primarily_responsible_person_id"]
+					},
+					{
+						foreignKeyName: "TaskAssignments_assigned_to_fkey1"
+						columns: ["assigned_to"]
+						referencedRelation: "TaskDetailsView"
+						referencedColumns: ["created_by_id"]
+					},
+					{
+						foreignKeyName: "TaskAssignments_task_fkey"
+						columns: ["task"]
+						referencedRelation: "TaskDetailsView"
 						referencedColumns: ["id"]
 					},
 					{
@@ -262,6 +304,24 @@ export type Database = {
 						foreignKeyName: "TaskComments_authored_by_fkey1"
 						columns: ["authored_by"]
 						referencedRelation: "Racers"
+						referencedColumns: ["id"]
+					},
+					{
+						foreignKeyName: "TaskComments_authored_by_fkey1"
+						columns: ["authored_by"]
+						referencedRelation: "TaskDetailsView"
+						referencedColumns: ["primarily_responsible_person_id"]
+					},
+					{
+						foreignKeyName: "TaskComments_authored_by_fkey1"
+						columns: ["authored_by"]
+						referencedRelation: "TaskDetailsView"
+						referencedColumns: ["created_by_id"]
+					},
+					{
+						foreignKeyName: "TaskComments_task_fkey"
+						columns: ["task"]
+						referencedRelation: "TaskDetailsView"
 						referencedColumns: ["id"]
 					},
 					{
@@ -326,6 +386,24 @@ export type Database = {
 						referencedColumns: ["id"]
 					},
 					{
+						foreignKeyName: "Tasks_created_by_fkey1"
+						columns: ["created_by"]
+						referencedRelation: "TaskDetailsView"
+						referencedColumns: ["primarily_responsible_person_id"]
+					},
+					{
+						foreignKeyName: "Tasks_created_by_fkey1"
+						columns: ["created_by"]
+						referencedRelation: "TaskDetailsView"
+						referencedColumns: ["created_by_id"]
+					},
+					{
+						foreignKeyName: "Tasks_parent_task_fkey"
+						columns: ["parent_task"]
+						referencedRelation: "TaskDetailsView"
+						referencedColumns: ["id"]
+					},
+					{
 						foreignKeyName: "Tasks_parent_task_fkey"
 						columns: ["parent_task"]
 						referencedRelation: "Tasks"
@@ -342,6 +420,18 @@ export type Database = {
 						columns: ["primarily_responsible_person"]
 						referencedRelation: "Racers"
 						referencedColumns: ["id"]
+					},
+					{
+						foreignKeyName: "Tasks_primarily_responsible_person_fkey1"
+						columns: ["primarily_responsible_person"]
+						referencedRelation: "TaskDetailsView"
+						referencedColumns: ["primarily_responsible_person_id"]
+					},
+					{
+						foreignKeyName: "Tasks_primarily_responsible_person_fkey1"
+						columns: ["primarily_responsible_person"]
+						referencedRelation: "TaskDetailsView"
+						referencedColumns: ["created_by_id"]
 					},
 				]
 			}
@@ -413,6 +503,41 @@ export type Database = {
 					lastName: string | null
 				}
 				Relationships: []
+			}
+			TaskDetailsView: {
+				Row: {
+					assignees: string[] | null
+					comment_count: number | null
+					created_at: string | null
+					created_by_full_name: string | null
+					created_by_id: string | null
+					description: string | null
+					due_at: string | null
+					id: string | null
+					parent_task: string | null
+					primarily_responsible_person_full_name: string | null
+					primarily_responsible_person_id: string | null
+					priority: Database["public"]["Enums"]["task_priority"] | null
+					status: Database["public"]["Enums"]["task_status"] | null
+					subtasks_completed: number | null
+					subtasks_total: number | null
+					title: string | null
+					updated_at: string | null
+				}
+				Relationships: [
+					{
+						foreignKeyName: "Tasks_parent_task_fkey"
+						columns: ["parent_task"]
+						referencedRelation: "TaskDetailsView"
+						referencedColumns: ["id"]
+					},
+					{
+						foreignKeyName: "Tasks_parent_task_fkey"
+						columns: ["parent_task"]
+						referencedRelation: "Tasks"
+						referencedColumns: ["id"]
+					},
+				]
 			}
 		}
 		Functions: {
