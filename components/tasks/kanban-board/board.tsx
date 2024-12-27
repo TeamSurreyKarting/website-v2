@@ -9,7 +9,7 @@ import { GoCommentDiscussion } from "react-icons/go";
 import {Separator} from "@/components/ui/separator";
 import {createClient} from "@/utils/supabase/client";
 
-export default function TasksKanbanBoard ({ tasks, className }: { tasks: Database['public']['Tables']['Tasks']['Row'][], className?: string }) {
+export default function TasksKanbanBoard ({ tasks, className, showSubtasks = false }: { tasks: Database['public']['Views']['TaskDetailsView']['Row'][], className?: string, showSubtasks?: boolean }) {
 	const groups: Database['public']['Enums']['task_status'][] = [
 		"Open",
 		"In Progress",
@@ -25,8 +25,12 @@ export default function TasksKanbanBoard ({ tasks, className }: { tasks: Databas
 			className={cn(`grid grid-cols-5 gap-4 h-full overflow-x-scroll`, className)}
 		>
 			{groups.map(group => {
+				let groupTasks = tasks.filter((x) => x.status === group)
+
 				// only show parent tasks for each group
-				const groupTasks = tasks.filter((x) => x.status === group && !x.parent_task_id)
+				if (!showSubtasks) {
+					groupTasks = groupTasks.filter((x) => !x.parent_task)
+				}
 
 				return (
 					<div
@@ -44,23 +48,22 @@ export default function TasksKanbanBoard ({ tasks, className }: { tasks: Databas
 							{groupTasks.map((task) => (
 								<div
 									className={"rounded-md border border-ts-blue-200 overflow-hidden"}
-									key={task.id}
+									key={ task.id }
 								>
 									<Link
-										href={`/tasks/${task.id}`}
+										href={`/tasks/${ task.id }`}
 									>
 										<div
 											className={"bg-ts-blue-400 p-2  hover:bg-ts-gold hover:text-ts-blue flex flex-row items-center justify-between group transition"}
 										>
-											<h4>{task.title}</h4>
+											<h4>{ task.title }</h4>
 											<LuExternalLink className={"opacity-0 group-hover:opacity-100"}/>
 										</div>
 									</Link>
-									<p className={"p-2 text-white opacity-75"}>{task.description}</p>
+									<p className={"p-2 text-white opacity-75"}>{ task.description }</p>
 									<div className={"m-2 p-2 flex flex-row gap-2 items-center justify-center text-white opacity-75 bg-ts-blue-500 border border-ts-blue-300 rounded-sm w-fit"}>
 										<TbSubtask/>
-										{/* todo: add subtask count with completed subtask count */}
-										<span>0 / 3</span>
+										<span>{ task.subtasks_completed } / { task.subtasks_total }</span>
 									</div>
 									<Separator className={"bg-ts-blue-100 mt-2"}/>
 									<div
@@ -72,21 +75,24 @@ export default function TasksKanbanBoard ({ tasks, className }: { tasks: Databas
 											{task.priority === "High" && <FaChevronUp/>}
 											<span>{task.priority}</span>
 										</div>
-										{/* todo: add number of participants */}
-										<span>
-											<FaUsers />
-											3
-										</span>
+										{ task.assignees && (
+											<span>
+												<FaUsers />
+												{ task.assignees.length }
+											</span>
+										)}
 										{/* todo: add indicator if authed user is responsible user */}
 										{/*	todo: add number of comments with badge for unread comments if user is primarily responsible */}
 										<span>
 											<GoCommentDiscussion />
-											5
+											{ task.comment_count }
 										</span>
-										<span>
-											<FaClock/>
-											{new Date(task.due_at).toLocaleString('en-GB')}
-										</span>
+										{ task.due_at && (
+											<span>
+												<FaClock/>
+												{new Date(task.due_at).toLocaleString('en-GB')}
+											</span>
+										)}
 									</div>
 								</div>
 							))}

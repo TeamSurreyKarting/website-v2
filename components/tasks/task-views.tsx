@@ -8,7 +8,9 @@ import TasksKanbanBoard from "@/components/tasks/kanban-board/board";
 async function getTasks(query?: string) {
 	const supabase = await createClient();
 
-	const dbQuery = supabase.from("Tasks").select("id, created_at, created_by( id, full_name ), updated_at, primarily_responsible_person( id, full_name ), parent_task( id )");
+	const dbQuery = supabase
+		.from("TaskDetailsView")
+		.select();
 
 	if (query) {
 		dbQuery.like("title", `%${query}%`);
@@ -43,7 +45,7 @@ export default async function TaskViews({ query, view }: { query?: string, view?
 				"block": view === ChartViewType.list,
 				"hidden": view !== ChartViewType.list,
 			})}>
-				<TasksDataTable tasks={tasks}/>
+				<TasksDataTable tasks={tasks} />
 			</div>
 		</>
 	);

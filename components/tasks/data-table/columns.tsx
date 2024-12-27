@@ -26,7 +26,7 @@ function FaTrashCan() {
 	return null;
 }
 
-export const columns: ColumnDef<Database['public']['Tables']['Tasks']['Row']>[] = [
+export const columns: ColumnDef<Database['public']['Views']['TaskDetailsView']['Row']>[] = [
 	{
 		accessorKey: 'title',
 		header: "Name",
