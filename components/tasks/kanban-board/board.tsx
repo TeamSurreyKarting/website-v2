@@ -3,6 +3,7 @@ import {cn} from "@/lib/utils";
 import {Badge} from "@/components/ui/badge";
 import {createClient} from "@/utils/supabase/server";
 import TaskCard from "@/components/tasks/kanban-board/task-card";
+import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip";
 
 async function getAuthedUserId(): Promise<string|undefined> {
 	const supabase = await createClient();
@@ -16,13 +17,17 @@ async function getAuthedUserId(): Promise<string|undefined> {
 	return user?.id;
 }
 
+function FaInfo() {
+	return null;
+}
+
 export default async function TasksKanbanBoard ({ tasks, className, showSubtasks = false }: { tasks: Database['public']['Views']['TaskDetailsView']['Row'][], className?: string, showSubtasks?: boolean }) {
-	const groups: Database['public']['Enums']['task_status'][] = [
-		"Open",
-		"In Progress",
-		"Blocked",
-		"Completed",
-		"Cancelled",
+	const groups: { name: Database['public']['Enums']['task_status'], description: string }[] = [
+		{ name: "Open", description: "Tasks awaiting initiation. They have been defined and assigned but have not yet begun." },
+		{ name: "In Progress", description: "Tasks being actively worked on." },
+		{ name: "Blocked", description: "Tasks that have been started but are currently unable to progress." },
+		{ name: "Completed", description: "Tasks that have been successfully finished." },
+		{ name: "Cancelled", description: "Tasks that have been formally discontinued and will not be pursued further." },
 	];
 
 	const authedUserId = await getAuthedUserId();
@@ -32,7 +37,7 @@ export default async function TasksKanbanBoard ({ tasks, className, showSubtasks
 			className={cn(`grid grid-cols-5 gap-4 h-full overflow-x-scroll`, className)}
 		>
 			{groups.map(group => {
-				let groupTasks = tasks.filter((x) => x.status === group)
+				let groupTasks = tasks.filter((x) => x.status === group.name)
 
 				// only show parent tasks for each group
 				if (!showSubtasks) {
@@ -41,13 +46,24 @@ export default async function TasksKanbanBoard ({ tasks, className, showSubtasks
 
 				return (
 					<div
-						key={group}
+						key={group.name}
 						className={"rounded-lg bg-ts-blue-600 border border-ts-blue-300 text-white overflow-hidden min-w-[200px]"}
 					>
 						<div
 							className={"bg-ts-blue-400 px-2 py-1 flex items-center justify-between"}>
-							<h3 className={"text-lg font-medium"}>{group}</h3>
-							<Badge variant="default" className={"bg-ts-blue-200 border border-white"}>{groupTasks.length}</Badge>
+							<div>
+								<TooltipProvider>
+									<Tooltip>
+										<TooltipTrigger>
+											<h3 className={"text-lg font-medium hover:underline"}>{ group.name }</h3>
+										</TooltipTrigger>
+										<TooltipContent>
+											<p>{ group.description }</p>
+										</TooltipContent>
+									</Tooltip>
+								</TooltipProvider>
+							</div>
+							<Badge variant="default" className={"bg-ts-blue-200 border border-white"}>{ groupTasks.length }</Badge>
 						</div>
 						<div
 							className={"p-2 "}
