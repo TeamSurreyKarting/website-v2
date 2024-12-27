@@ -182,24 +182,48 @@ export type Database = {
 					assigned_at: string
 					assigned_by: string
 					assigned_to: string
-					task_id: string
+					task: string
 				}
 				Insert: {
 					assigned_at?: string
 					assigned_by?: string
 					assigned_to: string
-					task_id?: string
+					task?: string
 				}
 				Update: {
 					assigned_at?: string
 					assigned_by?: string
 					assigned_to?: string
-					task_id?: string
+					task?: string
 				}
 				Relationships: [
 					{
-						foreignKeyName: "TaskAssignments_task_id_fkey"
-						columns: ["task_id"]
+						foreignKeyName: "TaskAssignments_assigned_by_fkey1"
+						columns: ["assigned_by"]
+						referencedRelation: "RacerDetails"
+						referencedColumns: ["id"]
+					},
+					{
+						foreignKeyName: "TaskAssignments_assigned_by_fkey1"
+						columns: ["assigned_by"]
+						referencedRelation: "Racers"
+						referencedColumns: ["id"]
+					},
+					{
+						foreignKeyName: "TaskAssignments_assigned_to_fkey1"
+						columns: ["assigned_to"]
+						referencedRelation: "RacerDetails"
+						referencedColumns: ["id"]
+					},
+					{
+						foreignKeyName: "TaskAssignments_assigned_to_fkey1"
+						columns: ["assigned_to"]
+						referencedRelation: "Racers"
+						referencedColumns: ["id"]
+					},
+					{
+						foreignKeyName: "TaskAssignments_task_fkey"
+						columns: ["task"]
 						referencedRelation: "Tasks"
 						referencedColumns: ["id"]
 					},
@@ -229,6 +253,18 @@ export type Database = {
 				}
 				Relationships: [
 					{
+						foreignKeyName: "TaskComments_authored_by_fkey1"
+						columns: ["authored_by"]
+						referencedRelation: "RacerDetails"
+						referencedColumns: ["id"]
+					},
+					{
+						foreignKeyName: "TaskComments_authored_by_fkey1"
+						columns: ["authored_by"]
+						referencedRelation: "Racers"
+						referencedColumns: ["id"]
+					},
+					{
 						foreignKeyName: "TaskComments_task_fkey"
 						columns: ["task"]
 						referencedRelation: "Tasks"
@@ -243,7 +279,7 @@ export type Database = {
 					description: string
 					due_at: string
 					id: string
-					parent_task_id: string | null
+					parent_task: string | null
 					primarily_responsible_person: string
 					priority: Database["public"]["Enums"]["task_priority"]
 					status: Database["public"]["Enums"]["task_status"]
@@ -256,7 +292,7 @@ export type Database = {
 					description: string
 					due_at: string
 					id?: string
-					parent_task_id?: string | null
+					parent_task?: string | null
 					primarily_responsible_person: string
 					priority?: Database["public"]["Enums"]["task_priority"]
 					status?: Database["public"]["Enums"]["task_status"]
@@ -269,7 +305,7 @@ export type Database = {
 					description?: string
 					due_at?: string
 					id?: string
-					parent_task_id?: string | null
+					parent_task?: string | null
 					primarily_responsible_person?: string
 					priority?: Database["public"]["Enums"]["task_priority"]
 					status?: Database["public"]["Enums"]["task_status"]
@@ -278,9 +314,33 @@ export type Database = {
 				}
 				Relationships: [
 					{
-						foreignKeyName: "Tasks_parent_task_id_fkey"
-						columns: ["parent_task_id"]
+						foreignKeyName: "Tasks_created_by_fkey1"
+						columns: ["created_by"]
+						referencedRelation: "RacerDetails"
+						referencedColumns: ["id"]
+					},
+					{
+						foreignKeyName: "Tasks_created_by_fkey1"
+						columns: ["created_by"]
+						referencedRelation: "Racers"
+						referencedColumns: ["id"]
+					},
+					{
+						foreignKeyName: "Tasks_parent_task_fkey"
+						columns: ["parent_task"]
 						referencedRelation: "Tasks"
+						referencedColumns: ["id"]
+					},
+					{
+						foreignKeyName: "Tasks_primarily_responsible_person_fkey1"
+						columns: ["primarily_responsible_person"]
+						referencedRelation: "RacerDetails"
+						referencedColumns: ["id"]
+					},
+					{
+						foreignKeyName: "Tasks_primarily_responsible_person_fkey1"
+						columns: ["primarily_responsible_person"]
+						referencedRelation: "Racers"
 						referencedColumns: ["id"]
 					},
 				]
