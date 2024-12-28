@@ -189,7 +189,7 @@ export type Database = {
 				}
 				Relationships: []
 			}
-			TaskAssignments: {
+			TaskAssignees: {
 				Row: {
 					assigned_at: string
 					assigned_by: string
