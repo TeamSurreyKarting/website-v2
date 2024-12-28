@@ -66,7 +66,7 @@ export default async function TasksKanbanBoard ({ tasks, className, showSubtasks
 							<Badge variant="default" className={"bg-ts-blue-200 border border-white"}>{ groupTasks.length }</Badge>
 						</div>
 						<div
-							className={"p-2 "}
+							className={"p-2 flex flex-col gap-2"}
 						>
 							{groupTasks.map((task) => <TaskCard key={task.id} task={task} authedUserId={authedUserId} />)}
 						</div>
