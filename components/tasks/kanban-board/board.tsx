@@ -17,10 +17,6 @@ async function getAuthedUserId(): Promise<string|undefined> {
 	return user?.id;
 }
 
-function FaInfo() {
-	return null;
-}
-
 export default async function TasksKanbanBoard ({ tasks, className, showSubtasks = false }: { tasks: Database['public']['Views']['TaskDetailsView']['Row'][], className?: string, showSubtasks?: boolean }) {
 	const groups: { name: Database['public']['Enums']['task_status'], description: string }[] = [
 		{ name: "Open", description: "Tasks awaiting initiation. They have been defined and assigned but have not yet begun." },
