@@ -42,41 +42,41 @@ const sidebarItems = {
       icon: IoIdCard,
       items: [],
     },
-	{
-	  title: "Tasks",
-	  url: "/tasks",
-	  icon: FaTasks,
-	  items: [],
-	},
     {
-	  title: "Finances",
-	  url: "/finances",
-	  icon: PiPiggyBankFill,
-	  items: [],
-    }
+      title: "Tasks",
+      url: "/tasks",
+      icon: FaTasks,
+      items: [],
+    },
+    {
+      title: "Finances",
+      url: "/finances",
+      icon: PiPiggyBankFill,
+      items: [],
+    },
   ],
   navSecondary: [],
-}
+};
 
 export function AppSidebar({ ...props }: ComponentProps<typeof Sidebar>) {
-	return (
-		<Sidebar variant="inset" {...props}>
-			<SidebarHeader>
-				<SidebarMenu>
-					<SidebarMenuItem>
-						<SidebarMenuButton size="lg" asChild>
-							<TSKC className={"h-auto"} />
-						</SidebarMenuButton>
-					</SidebarMenuItem>
-				</SidebarMenu>
-			</SidebarHeader>
-			<SidebarContent>
-				<NavMain items={sidebarItems.navMain} />
-				<NavSecondary items={sidebarItems.navSecondary} className="mt-auto" />
-			</SidebarContent>
-			<SidebarFooter>
-				<NavUser />
-			</SidebarFooter>
-		</Sidebar>
-	)
+  return (
+    <Sidebar variant="inset" {...props}>
+      <SidebarHeader>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton size="lg" asChild>
+              <TSKC className={"h-auto"} />
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarHeader>
+      <SidebarContent>
+        <NavMain items={sidebarItems.navMain} />
+        <NavSecondary items={sidebarItems.navSecondary} className="mt-auto" />
+      </SidebarContent>
+      <SidebarFooter>
+        <NavUser />
+      </SidebarFooter>
+    </Sidebar>
+  );
 }

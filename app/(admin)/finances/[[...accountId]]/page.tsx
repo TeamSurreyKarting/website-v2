@@ -2,130 +2,132 @@ import AccountSelector from "@/components/finances/accountSelector";
 import AccountsSummary from "@/components/finances/accountsSummary";
 import TransactionsDataTable from "@/components/finances/transactions/data-table";
 import { Suspense } from "react";
-import {Database} from "@/database.types";
-import {createClient} from "@/utils/supabase/server";
-import {Button} from "@/components/ui/button";
+import { Database } from "@/database.types";
+import { createClient } from "@/utils/supabase/server";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { FaPlus } from "react-icons/fa6";
 import { notFound } from "next/navigation";
 
 async function getAccounts(onlyActive: boolean = true) {
-	const supabase = await createClient();
+  const supabase = await createClient();
 
-	const query = supabase.from('Accounts').select().order('endDate', { ascending: false });
+  const query = supabase
+    .from("Accounts")
+    .select()
+    .order("endDate", { ascending: false });
 
-	if (onlyActive) {
-		// filter query to only show budgets that are currently active
-		const now = new Date();
-		const nowISO = now.toISOString();
+  if (onlyActive) {
+    // filter query to only show budgets that are currently active
+    const now = new Date();
+    const nowISO = now.toISOString();
 
-		query.gt('endDate', nowISO);
-		query.lt('startDate', nowISO);
-	}
+    query.gt("endDate", nowISO);
+    query.lt("startDate", nowISO);
+  }
 
-	const { data: accounts, error } = await query;
+  const { data: accounts, error } = await query;
 
-	if (error) {
-		throw error;
-	}
+  if (error) {
+    throw error;
+  }
 
-	return accounts;
+  return accounts;
 }
 
-async function getAccountDetails(accountId: string): Promise<Database['public']['Tables']['Accounts']['Row']> {
-	const supabase = await createClient();
+async function getAccountDetails(
+  accountId: string,
+): Promise<Database["public"]["Tables"]["Accounts"]["Row"]> {
+  const supabase = await createClient();
 
-	const query = supabase.from('Accounts').select().eq('id', accountId).single();
+  const query = supabase.from("Accounts").select().eq("id", accountId).single();
 
-	const { data: account, error } = await query;
+  const { data: account, error } = await query;
 
-	if (error) throw error;
+  if (error) throw error;
 
-	return account;
+  return account;
 }
 
-async function getAccountTxns(accountId: string): Promise<TxAccount[] | undefined> {
-	const supabase = await createClient();
+async function getAccountTxns(
+  accountId: string,
+): Promise<TxAccount[] | undefined> {
+  const supabase = await createClient();
 
-	// build query
-	const query = supabase
-		.from('Transactions')
-		.select('id, occurredAt, itemDescription, value, Accounts( id, name )')
-		.eq('account', accountId)
-		.order('occurredAt', { ascending: false });
+  // build query
+  const query = supabase
+    .from("Transactions")
+    .select("id, occurredAt, itemDescription, value, Accounts( id, name )")
+    .eq("account", accountId)
+    .order("occurredAt", { ascending: false });
 
-	const { data: transactions, error } = await query;
+  const { data: transactions, error } = await query;
 
-	if (error) {
-		throw error;
-	}
+  if (error) {
+    throw error;
+  }
 
-	if (transactions === null) {
-		throw Error("Error finding transactions");
-	}
+  if (transactions === null) {
+    throw Error("Error finding transactions");
+  }
 
-	return transactions;
+  return transactions;
 }
 
 export default async function Page({
-    params,
+  params,
 }: {
-	params: Promise<{ accountId?: string }>
+  params: Promise<{ accountId?: string }>;
 }) {
-	const accountId = (await params).accountId;
+  const accountId = (await params).accountId;
 
-	const [
-		accounts,
-		accountDetails,
-		accountTxns,
-	] = await Promise.all([
-		getAccounts(),
-		accountId ? getAccountDetails(accountId) : null,
-		accountId ? getAccountTxns(accountId) : null,
-	]);
+  const [accounts, accountDetails, accountTxns] = await Promise.all([
+    getAccounts(),
+    accountId ? getAccountDetails(accountId) : null,
+    accountId ? getAccountTxns(accountId) : null,
+  ]);
 
-	if (accountId && !accountDetails) {
-		notFound();
-	}
+  if (accountId && !accountDetails) {
+    notFound();
+  }
 
-	return (
-		<div className={"container mx-auto"}>
-			<Suspense
-				fallback={<p>Loading accounts...</p>}
-			>
-				<AccountSelector accounts={accounts} value={accountDetails?.id} />
-			</Suspense>
-			<div className={"mt-4"}>
-				{accountDetails ? (
-					<Suspense
-						fallback={<p>Loading summary of accounts...</p>}
-					>
-						<AccountsSummary key={accountDetails.id} accountDetails={accountDetails} />
-						<div className={"mt-4"}>
-							<div
-								className={"mt-8 mb-4 flex gap-4 items-center"}
-								>
-								<h3 className={"font-medium text-lg"}>Transaction History</h3>
-								<Link
-									href={`/finances/transactions/new?accountId=${accountDetails.id}`}
-								>
-									<Button
-										className={"bg-ts-blue-400  border border-white"}
-									>
-										<FaPlus />
-										<span>Add Transaction</span>
-									</Button>
-								</Link>
-							</div>
-							<TransactionsDataTable data={accountTxns ?? []} />
-						</div>
-					</Suspense>
-				) : (
-					<div className={"mt-8 rounded-lg border border-ts-blue-300 bg-ts-blue-500 p-8 text-center"}>
-						Select an account to view finances.
-					</div>
-				)}
-			</div>
-		</div>
-	);
+  return (
+    <div className={"container mx-auto"}>
+      <Suspense fallback={<p>Loading accounts...</p>}>
+        <AccountSelector accounts={accounts} value={accountDetails?.id} />
+      </Suspense>
+      <div className={"mt-4"}>
+        {accountDetails ? (
+          <Suspense fallback={<p>Loading summary of accounts...</p>}>
+            <AccountsSummary
+              key={accountDetails.id}
+              accountDetails={accountDetails}
+            />
+            <div className={"mt-4"}>
+              <div className={"mt-8 mb-4 flex gap-4 items-center"}>
+                <h3 className={"font-medium text-lg"}>Transaction History</h3>
+                <Link
+                  href={`/finances/transactions/new?accountId=${accountDetails.id}`}
+                >
+                  <Button className={"bg-ts-blue-400  border border-white"}>
+                    <FaPlus />
+                    <span>Add Transaction</span>
+                  </Button>
+                </Link>
+              </div>
+              <TransactionsDataTable data={accountTxns ?? []} />
+            </div>
+          </Suspense>
+        ) : (
+          <div
+            className={
+              "mt-8 rounded-lg border border-ts-blue-300 bg-ts-blue-500 p-8 text-center"
+            }
+          >
+            Select an account to view finances.
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }

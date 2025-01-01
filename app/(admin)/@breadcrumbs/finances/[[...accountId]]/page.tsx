@@ -1,43 +1,53 @@
 import {
-	BreadcrumbItem,
-	BreadcrumbLink,
-	BreadcrumbList,
-	BreadcrumbPage,
-	BreadcrumbSeparator,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import {createClient} from "@/utils/supabase/server";
+import { createClient } from "@/utils/supabase/server";
 
-async function fetchAccountName(accountId: string): Promise<string | undefined> {
-	const supabase = await createClient();
+async function fetchAccountName(
+  accountId: string,
+): Promise<string | undefined> {
+  const supabase = await createClient();
 
-	const { data } = await supabase.from('Accounts').select('name').eq('id', accountId).single();
+  const { data } = await supabase
+    .from("Accounts")
+    .select("name")
+    .eq("id", accountId)
+    .single();
 
-	return data?.name;
+  return data?.name;
 }
 
 export default async function BreadcrumbSlot({
-	 params,
- }: {
-	params: Promise<{ accountId?: string }>
+  params,
+}: {
+  params: Promise<{ accountId?: string }>;
 }) {
-	const accountId = (await params).accountId;
-	console.log('accountId', accountId);
+  const accountId = (await params).accountId;
+  console.log("accountId", accountId);
 
-	const accountName = accountId ? await fetchAccountName(accountId) : null;
+  const accountName = accountId ? await fetchAccountName(accountId) : null;
 
-	return (
-		<BreadcrumbList>
-			<BreadcrumbItem>
-				<BreadcrumbLink className={"text-gray-300"} href={"/finances"}>Finances</BreadcrumbLink>
-			</BreadcrumbItem>
-			{accountName && (
-				<>
-				<BreadcrumbSeparator />
-				<BreadcrumbItem>
-					<BreadcrumbPage className={"text-white capitalize"}>{accountName ?? accountId}</BreadcrumbPage>
-				</BreadcrumbItem>
-				</>
-			)}
-		</BreadcrumbList>
-	);
+  return (
+    <BreadcrumbList>
+      <BreadcrumbItem>
+        <BreadcrumbLink className={"text-gray-300"} href={"/finances"}>
+          Finances
+        </BreadcrumbLink>
+      </BreadcrumbItem>
+      {accountName && (
+        <>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage className={"text-white capitalize"}>
+              {accountName ?? accountId}
+            </BreadcrumbPage>
+          </BreadcrumbItem>
+        </>
+      )}
+    </BreadcrumbList>
+  );
 }
