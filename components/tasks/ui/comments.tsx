@@ -1,30 +1,40 @@
-import { createClient } from "@/utils/supabase/server";
+'use client';
+
 import { Badge } from "@/components/ui/badge";
 import AddComment from "@/components/tasks/ui/add-comment";
+import { CommentWithAuthorDetails } from "@/utils/db-fns/tasks/types/comment-with-author-details";
+import { useEffect } from "react";
+import { createClient } from "@/utils/supabase/client";
+import { redirect } from "next/navigation";
 
-async function getComments(taskId: string) {
-  const supabase = await createClient();
-
-  const { data: subtasks, error } = await supabase
-    .from("TaskComments")
-    .select("id, task, authored_by( id, fullName ), created_at, content")
-    .eq("task", taskId)
-    .order("created_at", { ascending: false });
-
-  if (error) throw error;
-
-  return subtasks;
-}
-
-export default async function Comments({
+export default function Comments({
   taskId,
+  comments,
   className,
 }: {
   taskId: string;
+  comments: CommentWithAuthorDetails[];
   className?: string;
 }) {
-  // todo: allow for realtime listening for comments that come in
-  const comments = await getComments(taskId);
+  const supabase = createClient();
+
+  useEffect(() => {
+    const channel = supabase
+      .channel('rt_TaskComments')
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
+        table: 'TaskComments',
+      }, () => {
+        redirect(`/tasks/${taskId}`);
+      });
+
+    channel.subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    }
+  }, [supabase]);
 
   return (
     <div className={className}>
@@ -46,7 +56,7 @@ export default async function Comments({
             }
           >
             <h4 className={"opacity-75 text-sm font-medium"}>
-              {c.authored_by.fullName}
+              {c.authored_by!.fullName}
             </h4>
             <span className={"text-xs font-medium"}>
               {new Date(c.created_at).toLocaleString("en-GB")}
