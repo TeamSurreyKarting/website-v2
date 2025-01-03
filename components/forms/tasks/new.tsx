@@ -21,7 +21,6 @@ import { createNewTask } from "@/utils/actions/tasks/new";
 import { FormDueDatePicker } from "@/components/tasks/ui/form/due-date-picker";
 import FormStatusPicker from "@/components/tasks/ui/form/status-picker";
 import FormPriorityPicker from "@/components/tasks/ui/form/priority-picker";
-import { Database } from "@/database.types";
 
 const formSchema = z.object({
   title: z
@@ -175,6 +174,9 @@ export function TaskForm({
                 onValueChange={field.onChange}
                 fullWidth={false}
               />
+              <FormDescription>
+                The person that is primarily responsible for overseeing this task&apos;s completion.
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
