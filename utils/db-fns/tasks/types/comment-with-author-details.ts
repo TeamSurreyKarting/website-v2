@@ -1,6 +1,6 @@
 export type CommentWithAuthorDetails = {
   id: string
-  task: string | null
+  task: string
   authored_by: {
     id: string
     fullName: string | null
