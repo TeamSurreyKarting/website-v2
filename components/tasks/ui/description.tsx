@@ -88,16 +88,16 @@ export default function TaskDescription({
         description: error.message,
       });
       return null;
-    } else {
-      toast({
-        title: "Task Details Updated",
-      });
-
-      setOpen(false);
-      form.reset();
-
-      redirect(`/tasks/${taskId}`);
     }
+
+    toast({
+      title: "Task Details Updated",
+    });
+
+    setOpen(false);
+    form.reset();
+
+    redirect(`/tasks/${taskId}`);
   }
 
   return (
@@ -105,10 +105,7 @@ export default function TaskDescription({
       <div
         className={"flex flex-wrap items-center justify-between gap-x-2 mb-3"}
       >
-        <div className={"flex flex-row gap-2.5"}>
-          <h3 className={"text-lg font-medium"}>Description</h3>
-        </div>
-
+        <h3 className={"text-lg font-medium"}>Description</h3>
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <Button
