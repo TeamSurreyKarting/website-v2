@@ -19,7 +19,7 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { LoadingButton } from "@/components/ui/loading-button";
 import RacerCombobox from "@/components/racers/combobox";
 import RacerMultiSelect from "@/components/racers/multi-select";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { updateAssignees } from "@/utils/actions/tasks/update-assignees";
 
 const formSchema = z.object({
