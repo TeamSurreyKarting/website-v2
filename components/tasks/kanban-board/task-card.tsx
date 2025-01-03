@@ -15,7 +15,6 @@ import {
 } from "react-icons/fa6";
 import { TbSubtask } from "react-icons/tb";
 import { GoCommentDiscussion } from "react-icons/go";
-import { useDraggable } from "@dnd-kit/core";
 
 export default function TaskCard({
   task,
@@ -27,32 +26,9 @@ export default function TaskCard({
   const dueAt = task.due_at ? new Date(task.due_at) : null;
   const isPastDue = dueAt ? new Date() > dueAt : false;
 
-  const { attributes, listeners, setNodeRef, transform, isDragging } =
-    useDraggable({
-      id: `draggable-${task.id}`,
-      data: {
-        type: "Task",
-        task,
-      },
-    });
-  const dragStyle = transform
-    ? {
-        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-      }
-    : undefined;
-
   return (
     <div
-      ref={setNodeRef}
-      className={clsx(
-        " bg-ts-blue-600 rounded-md border border-ts-blue-200 overflow-hidden",
-        {
-          "border-ts-gold": isDragging,
-        },
-      )}
-      style={dragStyle}
-      {...attributes}
-      {...listeners}
+      className={" bg-ts-blue-600 rounded-md border border-ts-blue-200 overflow-hidden"}
     >
       <Link href={`/tasks/${task.id}`}>
         <div

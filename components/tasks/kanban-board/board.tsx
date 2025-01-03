@@ -10,13 +10,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import {
-  DndContext,
-  DragEndEvent,
-  DragOverEvent,
-  useDroppable,
-} from "@dnd-kit/core";
-import clsx from "clsx";
 
 export default function TasksKanbanBoard({
   tasks,
@@ -38,7 +31,9 @@ export default function TasksKanbanBoard({
       description:
         "Tasks awaiting initiation. They have been defined and assigned but have not yet begun.",
     },
-    { name: "In Progress", description: "Tasks being actively worked on." },
+    {
+      name: "In Progress",
+      description: "Tasks being actively worked on." },
     {
       name: "Blocked",
       description:
@@ -55,27 +50,7 @@ export default function TasksKanbanBoard({
     },
   ];
 
-  const draggingEventDidEnd = (event: DragEndEvent) => {
-    console.log("dragging event complete", event);
-  };
-
-  const onDragOver = (event: DragOverEvent) => {
-    const { active, over } = event;
-    if (!over) return;
-
-    if (active.id === over.id) return;
-
-    const activeIsOfTypeTask = active.data.current?.type === "Task";
-    const overIsOfTypeTask = active.data.current?.type === "Task";
-
-    // only permit dragging tasks
-    if (!activeIsOfTypeTask) return;
-
-    // fixme: handle dropping over column
-  };
-
   return (
-    <DndContext onDragEnd={draggingEventDidEnd} onDragOver={onDragOver}>
       <div
         className={cn(
           `grid grid-cols-5 gap-4 h-full w-full overflow-x-scroll`,
@@ -83,14 +58,6 @@ export default function TasksKanbanBoard({
         )}
       >
         {groups.map((group) => {
-          const { isOver, setNodeRef } = useDroppable({
-            id: `droppable-${group}`,
-            data: {
-              type: "Column",
-              group,
-            },
-          });
-
           let groupTasks = tasks.filter((x) => x.status === group.name);
 
           // only show parent tasks for each group
@@ -100,7 +67,6 @@ export default function TasksKanbanBoard({
 
           return (
             <div
-              ref={setNodeRef}
               key={group.name}
               className={
                 "rounded-lg bg-ts-blue-600 border border-ts-blue-300 text-white min-w-[200px]"
@@ -133,9 +99,7 @@ export default function TasksKanbanBoard({
                 </Badge>
               </div>
               <div
-                className={clsx("p-2 flex flex-col gap-2", {
-                  "bg-ts-blue-400 border border-ts-gold border-dashed": isOver,
-                })}
+                className={"p-2 flex flex-col gap-2"}
               >
                 {groupTasks.map((task) => (
                   <TaskCard
@@ -149,6 +113,5 @@ export default function TasksKanbanBoard({
           );
         })}
       </div>
-    </DndContext>
   );
 }
