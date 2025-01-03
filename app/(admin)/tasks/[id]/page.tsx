@@ -1,16 +1,16 @@
 import { Database } from "@/database.types";
 import { createClient } from "@/utils/supabase/server";
-import Link from "next/link";
 import { EditTaskDetails } from "@/components/forms/tasks/edit-minor-details";
 import TitleEdit from "@/components/tasks/ui/title-edit";
 import clsx from "clsx";
 import Comments from "@/components/tasks/ui/comments";
 import Subtasks from "@/components/tasks/ui/subtasks";
 import TaskDescription from "@/components/tasks/ui/description";
+import TaskAssignees from "@/components/tasks/ui/assignees";
+import { CommentWithAuthorDetails } from "@/utils/db-fns/tasks/types/comment-with-author-details";
+import { TaskAssignmentWithAuthorDetails } from "@/utils/db-fns/tasks/types/task-assignment-with-author-details";
 
-async function getTask(
-  id: string,
-): Promise<Database["public"]["Views"]["TaskDetailsView"]["Row"]> {
+async function getTask(id: string): Promise<Database["public"]["Views"]["TaskDetailsView"]["Row"]> {
   const supabase = await createClient();
 
   const { data: task, error } = await supabase
@@ -26,6 +26,33 @@ async function getTask(
   return task;
 }
 
+async function getTaskComments(taskId: string): Promise<CommentWithAuthorDetails[] | null> {
+  const supabase = await createClient();
+
+  const { data: comments, error } = await supabase
+    .from("TaskComments")
+    .select("id, task, authored_by:Racers( id, fullName ), created_at, content")
+    .eq("task", taskId)
+    .order("created_at", { ascending: false });
+
+  if (error) throw error;
+
+  return comments;
+}
+
+async function getTaskAssignments(taskId: string): Promise<TaskAssignmentWithAuthorDetails[] | null> {
+  const supabase = await createClient();
+
+  const { data: assignments, error } = await supabase
+    .from("TaskAssignees")
+    .select("task, assigned_at, assigned_by:Racers!TaskAssignments_assigned_by_fkey1( id, fullName ), assigned_to:Racers!TaskAssignments_assigned_to_fkey1( id, fullName )")
+    .eq("task", taskId);
+
+  if (error) throw error;
+
+  return assignments;
+}
+
 export default async function TaskDetailPage({
   params,
 }: {
@@ -33,7 +60,15 @@ export default async function TaskDetailPage({
 }) {
   const taskId = (await params).id;
 
-  const task = await getTask(taskId);
+  const [
+    task,
+    taskComments,
+    taskAssignments,
+  ] = await Promise.all([
+    getTask(taskId),
+    getTaskComments(taskId),
+    getTaskAssignments(taskId),
+  ]);
 
   return (
     <>
@@ -53,7 +88,7 @@ export default async function TaskDetailPage({
             taskId={taskId}
           />
         </div>
-        <div className={"gap-3 grid md:grid-cols-2 grid-flow-row p-3"}>
+        <div className={"gap-3 grid md:grid-cols-3 grid-flow-row p-3"}>
           <div className={"flex flex-col gap-1 items-left"}>
             <strong>Due Date</strong>
             <span>{new Date(task.due_at!).toLocaleString("en-GB")}</span>
@@ -66,15 +101,22 @@ export default async function TaskDetailPage({
             <strong>Status</strong>
             <span>{task.status}</span>
           </div>
-          <div className={"flex flex-col gap-1 items-left"}>
-            <strong>Primary Responsible Person</strong>
-            <Link href={`/racers/${task.primarily_responsible_person_id}`}>
-              {task.primarily_responsible_person_full_name}
-            </Link>
-          </div>
         </div>
       </div>
-      <TaskDescription taskId={taskId} defaultValue={task.description!} />
+      <TaskAssignees
+        taskId={taskId}
+        primaryResponsiblePerson={
+          {
+            id: task.primarily_responsible_person_id!,
+            fullName: task.primarily_responsible_person_full_name!,
+          }
+        }
+        assignments={taskAssignments}
+      />
+      <TaskDescription
+        taskId={taskId}
+        defaultValue={task.description!}
+      />
       <div
         className={clsx("grid gap-6 md:gap-3 grid-cols-1 mt-6", {
           "grid-cols-1 md:grid-cols-[3fr_2fr]": task.parent_task === null,
@@ -86,10 +128,13 @@ export default async function TaskDetailPage({
             className={"rounded-lg bg-ts-blue border border-ts-blue-400 p-4"}
           />
         )}
-        <Comments
-          taskId={taskId}
-          className={"rounded-lg bg-ts-blue border border-ts-blue-400 p-4"}
-        />
+        { taskComments && (
+          <Comments
+            taskId={taskId}
+            comments={taskComments}
+            className={"rounded-lg bg-ts-blue border border-ts-blue-400 p-4"}
+          />
+        )}
       </div>
     </>
   );
