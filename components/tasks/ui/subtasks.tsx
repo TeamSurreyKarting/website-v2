@@ -22,6 +22,7 @@ async function getSubtasks(
 
   return subtasks;
 }
+
 export default async function Subtasks({
   taskId,
   className,
