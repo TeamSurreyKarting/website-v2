@@ -14,7 +14,7 @@ async function getTasks(query?: string, assignedTo?: string) {
   const dbQuery = supabase.from("TaskDetailsView").select();
 
   if (query) {
-    dbQuery.like("title", `%${query}%`);
+    dbQuery.ilike("title", `%${query}%`);
 
     // todo: include filtering by description
     // dbQuery.like("description", `%${query}%`);
