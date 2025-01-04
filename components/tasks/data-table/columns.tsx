@@ -53,8 +53,8 @@ export const columns: ColumnDef<
     header: "Priority",
   },
   {
-    accessorKey: "created_by",
-    header: "Created By",
+    accessorKey: "primarily_responsible_person_full_name",
+    header: "Primary Responsible Person",
   },
   {
     id: "actions",

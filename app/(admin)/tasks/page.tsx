@@ -11,10 +11,13 @@ export default async function TasksPage({
   searchParams?: Promise<{
     q?: string;
     view?: string;
+    assignedTo?: string;
   }>;
 }) {
-  const query = (await searchParams)?.q ?? "";
-  const view = (await searchParams)?.view;
+  const awaitedSearchParams = await searchParams;
+  const query = awaitedSearchParams?.q ?? "";
+  const view = awaitedSearchParams?.view;
+  const assignedTo = awaitedSearchParams?.assignedTo ?? "";
 
   return (
     <div className={"container mx-auto"}>
@@ -29,7 +32,11 @@ export default async function TasksPage({
         </Link>
       </div>
       <Suspense key={query} fallback={<p>Loading...</p>}>
-        <TaskViews query={query} view={view} />
+        <TaskViews
+          query={query}
+          view={view}
+          assignedTo={assignedTo}
+        />
       </Suspense>
     </div>
   );

@@ -6,8 +6,9 @@ import { ChartViewType, isChartViewType } from "@/utils/types/chart-view-type";
 import TasksKanbanBoard from "@/components/tasks/kanban-board/board";
 import { notFound } from "next/navigation";
 import { getAuthedUserId } from "@/utils/db-fns/auth/get-user-id";
+import TaskViewOptions from "@/components/tasks/ui/view-filters";
 
-async function getTasks(query?: string) {
+async function getTasks(query?: string, assignedTo?: string) {
   const supabase = await createClient();
 
   const dbQuery = supabase.from("TaskDetailsView").select();
@@ -17,6 +18,10 @@ async function getTasks(query?: string) {
 
     // todo: include filtering by description
     // dbQuery.like("description", `%${query}%`);
+  }
+
+  if (assignedTo) {
+    dbQuery.eq("primarily_responsible_person_id", assignedTo);
   }
 
   const { data: tasks, error } = await dbQuery;
@@ -29,11 +34,14 @@ async function getTasks(query?: string) {
 export default async function TaskViews({
   query,
   view,
+  assignedTo,
 }: {
   query?: string;
   view?: string;
+  assignedTo?: string;
 }) {
-  const tasks = await getTasks(query);
+  const tasks = await getTasks(query, assignedTo);
+  console.log(tasks);
 
   const authedUserId = await getAuthedUserId();
 
@@ -47,7 +55,16 @@ export default async function TaskViews({
 
   return (
     <>
-      <TaskViewSwitcher defaultValue={viewType} />
+      <div
+        className={"flex flex-row gap-4 pt-4 pb-2 justify-between"}
+      >
+        <TaskViewSwitcher
+          defaultValue={viewType}
+        />
+        <TaskViewOptions
+          assignedTo={assignedTo}
+        />
+      </div>
       <TasksKanbanBoard
         tasks={tasks}
         authedUserId={authedUserId}
