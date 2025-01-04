@@ -26,8 +26,6 @@ export default function RacerMultiSelect({
         throw error;
       }
 
-      // todo: Ensure that the selected racer, if not included in the results, is still included in the combobox
-      // setRacers((selectedRacer && !racers.includes(selectedRacer)) ? [...racers, selectedRacer] : racers);
       setRacers(fetchedRacers);
     }
     getRacers();

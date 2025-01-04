@@ -75,7 +75,6 @@ export function EditTaskDetails(
   // when state is set to closed, reset field values to defaults
   useEffect(() => {
     if (open === false) {
-      // fixme: find the right function to do this
       form.reset();
     }
   }, [open]);
