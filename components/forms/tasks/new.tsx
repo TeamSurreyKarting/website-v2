@@ -18,7 +18,7 @@ import { Textarea } from "@/components/ui/textarea";
 import RacerCombobox from "@/components/racers/combobox";
 import RacerMultiSelect from "@/components/racers/multi-select";
 import { createNewTask } from "@/utils/actions/tasks/new";
-import { FormDueDatePicker } from "@/components/tasks/ui/form/due-date-picker";
+import { FormDatePicker } from "@/components/ui/datetime-picker";
 import FormStatusPicker from "@/components/tasks/ui/form/status-picker";
 import FormPriorityPicker from "@/components/tasks/ui/form/priority-picker";
 
@@ -126,7 +126,8 @@ export function TaskForm({
           name={"dueAt"}
           render={({ field }) => (
             <>
-              <FormDueDatePicker
+              <FormDatePicker
+                label={"Due At"}
                 defaultValue={field.value}
                 onValueChange={field.onChange}
                 fullWidth={false}

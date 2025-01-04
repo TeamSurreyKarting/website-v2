@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { LoadingButton } from "@/components/ui/loading-button";
-import { FormDueDatePicker } from "@/components/tasks/ui/form/due-date-picker";
+import { FormDatePicker } from "@/components/ui/datetime-picker";
 import FormStatusPicker from "@/components/tasks/ui/form/status-picker";
 import RacerCombobox from "@/components/racers/combobox";
 import { useToast } from "@/hooks/use-toast";
@@ -142,7 +142,8 @@ export function EditTaskDetails(
               name={"dueAt"}
               render={({ field }) => (
                 <>
-                  <FormDueDatePicker
+                  <FormDatePicker
+                    label={"Due At"}
                     defaultValue={field.value}
                     onValueChange={field.onChange}
                     fullWidth={true}
