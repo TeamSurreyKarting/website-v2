@@ -40,7 +40,7 @@ export default function TaskViewSwitcher({
 
   return (
     <TooltipProvider>
-      <div className="flex gap-2 pt-4 pb-2">
+      <div className="flex gap-2">
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
