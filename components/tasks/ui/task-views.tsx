@@ -15,9 +15,7 @@ async function getTasks(query?: string, assignedTo?: string) {
 
   if (query) {
     dbQuery.ilike("title", `%${query}%`);
-
-    // todo: include filtering by description
-    // dbQuery.like("description", `%${query}%`);
+    dbQuery.ilike("description", `%${query}%`);
   }
 
   if (assignedTo) {
