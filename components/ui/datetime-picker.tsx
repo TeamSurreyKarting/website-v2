@@ -7,22 +7,24 @@ import { FormControl, FormItem, FormLabel } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
-import { TimePicker } from "@/components/ui/date-time-picker";
+import { TimePicker } from "@/components/ui/time-picker/picker";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 
-export function FormDueDatePicker({
+export function FormDatePicker({
+  label,
   defaultValue,
   onValueChange,
   fullWidth,
 }: {
+  label: string;
   defaultValue?: Date;
   onValueChange: (value?: Date) => void;
   fullWidth?: boolean;
 }) {
   return (
     <FormItem>
-      <FormLabel>Due Date</FormLabel>
+      <FormLabel>{label}</FormLabel>
       <Popover>
         <PopoverTrigger asChild>
           <FormControl>
