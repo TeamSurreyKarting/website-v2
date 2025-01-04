@@ -11,7 +11,7 @@ export default function RacerMultiSelect({
   defaultValue?: string[];
   onValueChange(value: string[]): void;
 }) {
-  let [racers, setRacers] = useState<{ id: string; fullName: string }[]>([]);
+  const [racers, setRacers] = useState<{ id: string; fullName: string }[]>([]);
 
   useEffect(() => {
     async function getRacers() {

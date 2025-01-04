@@ -30,11 +30,11 @@ export default function RacerCombobox({
   onValueChange?(value: string): void;
   fullWidth: boolean;
 }) {
-  let [racers, setRacers] = useState<{ id: string; fullName: string }[]>([]);
-  let [isLoading, setLoading] = useState<boolean>(false);
-  let [filter, setFilter] = useState<string>("");
-  let [isOpen, setIsOpen] = useState<boolean>(false);
-  let [selectedRacer, setSelectedRacer] = useState<
+  const [racers, setRacers] = useState<{ id: string; fullName: string }[]>([]);
+  const [isLoading, setLoading] = useState<boolean>(false);
+  const [filter, setFilter] = useState<string>("");
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [selectedRacer, setSelectedRacer] = useState<
     { id: string; fullName: string } | undefined
   >(undefined);
 

@@ -20,15 +20,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { deleteRacer } from "@/utils/actions/racers/delete";
 import { Spinner } from "@/components/ui/spinner";
 import { useState } from "react";
 import Link from "next/link";
 import { FaEye } from "react-icons/fa6";
 import { MoreHorizontal } from "lucide-react";
-import { RiMailSendLine } from "react-icons/ri";
 import { deleteTask } from "@/utils/actions/tasks/delete";
-
 function FaTrashCan() {
   return null;
 }
