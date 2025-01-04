@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/tooltip";
 import {
   SquareKanbanIcon,
-  SquareGanttChartIcon,
   ListChecksIcon,
 } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -64,23 +63,6 @@ export default function TaskViewSwitcher({
             <p>Kanban View</p>
           </TooltipContent>
         </Tooltip>
-
-        {/* FIXME: Gantt chart type requires defining a start date in data model */}
-        {/*<Tooltip>*/}
-        {/*	<TooltipTrigger asChild>*/}
-        {/*		<Button*/}
-        {/*			className={clsx("bg-ts-blue text-white hover:bg-ts-blue-400 hover:text-white", {*/}
-        {/*				"bg-ts-gold text-black": currentValue === ChartViewType.Gantt*/}
-        {/*			})}*/}
-        {/*			onClick={() => {setValue(ChartViewType.Gantt); onUpdate?.(ChartViewType.Gantt)}}>*/}
-        {/*			<SquareGanttChartIcon />*/}
-        {/*		</Button>*/}
-        {/*	</TooltipTrigger>*/}
-        {/*	<TooltipContent>*/}
-        {/*		<p>Gantt View</p>*/}
-        {/*	</TooltipContent>*/}
-        {/*</Tooltip>*/}
-
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
