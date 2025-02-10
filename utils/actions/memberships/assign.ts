@@ -12,17 +12,24 @@ async function racerHasMembership(
 
   const { data, error } = await supabase
     .from("Members")
-    .select("id")
+    .select("*")
     .eq("racer", racer)
     .eq("membership", membership)
     .limit(1);
+
+  console.log("data", data);
+  console.log("error", error);
 
   if (error) {
     console.error(error);
     throw error;
   }
 
-  return data !== null;
+  const hasMembership = (data !== null && data.length > 0);
+
+  console.log("hasMembership", hasMembership);
+
+  return hasMembership;
 }
 
 export async function assignMembershipToUser(
@@ -57,12 +64,12 @@ export async function assignMembershipToUser(
     throw new Error("This racer already has this membership type.");
   }
 
-  const { error } = await supabase.from("Members").insert({
-    // addedBy: user.id,
-    addedBy: "12d5d516-962c-420c-8256-cad436362236",
-    membership: membership,
-    racer: racer,
-  });
+  const { error } = await supabase
+    .from("Members")
+    .insert({
+      membership: membership,
+      racer: racer,
+    });
 
   if (error) {
     console.log(error);

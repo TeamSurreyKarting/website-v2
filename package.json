@@ -9,6 +9,7 @@
     "supabase:start": "supabase start",
     "supabase:stop": "supabase stop",
     "supabase:pull": "supabase db pull",
+    "supabase:gen-local-types": "supabase gen types typescript --local > database.types.ts",
     "lint": "next lint"
   },
   "dependencies": {

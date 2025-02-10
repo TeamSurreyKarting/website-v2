@@ -38,7 +38,7 @@ async function getData(
 
   return members.map((m) => {
     return {
-      id: m.id!,
+      id: m.id,
       addedAt: m.addedAt,
       addedBy: m.addedBy,
       MembershipTypes: {
