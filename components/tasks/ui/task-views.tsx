@@ -39,10 +39,8 @@ export default async function TaskViews({
   assignedTo?: string;
 }) {
   const tasks = await getTasks(query, assignedTo);
-  console.log(tasks);
 
   const authedUserId = await getAuthedUserId();
-
   if (!authedUserId) {
     notFound();
   }
@@ -50,6 +48,8 @@ export default async function TaskViews({
   const viewType: ChartViewType = isChartViewType(view)
     ? ChartViewType[view]
     : ChartViewType.kanban;
+
+  console.log(viewType);
 
   return (
     <>
@@ -66,16 +66,10 @@ export default async function TaskViews({
       <TasksKanbanBoard
         tasks={tasks}
         authedUserId={authedUserId}
-        className={clsx({
-          grid: view === ChartViewType.kanban,
-          hidden: view !== ChartViewType.kanban,
-        })}
+        className={viewType === ChartViewType.kanban ? "grid" : "hidden"}
       />
       <div
-        className={clsx({
-          block: view === ChartViewType.list,
-          hidden: view !== ChartViewType.list,
-        })}
+        className={viewType === ChartViewType.list ? "block" : "hidden"}
       >
         <TasksDataTable tasks={tasks} />
       </div>

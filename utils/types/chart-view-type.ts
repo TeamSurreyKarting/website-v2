@@ -14,7 +14,7 @@ export const ChartViewTypeLookup = Object.values(ChartViewType).reduce(
 );
 
 // Type guard to check if a string is a valid ChartViewType
-export function isChartViewType(value?: string): value is ChartViewType {
+export function isChartViewType(value: string | undefined): value is ChartViewType {
   if (!value) return false;
 
   return value in ChartViewTypeLookup;
