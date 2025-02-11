@@ -143,7 +143,7 @@ export function NewRacerForm() {
           control={form.control}
           name={"isAdministrator"}
           render={({ field }) => (
-            <FormItem className="flex flex-row gap-0.5 items-center justify-between rounded-lg border p-3 shadow-sm">
+            <FormItem className="flex flex-row gap-0.5 items-center justify-between rounded-lg border p-3 shadow-xs">
               <div className="space-y-0.5">
                 <FormLabel>Grant Administrator Privileges</FormLabel>
                 <FormDescription className={"text-ts-gold-100"}>

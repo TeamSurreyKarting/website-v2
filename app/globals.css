@@ -1,0 +1,104 @@
+@import 'tailwindcss';
+
+@plugin 'tailwindcss-animate';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --animate-caret-blink: caret-blink 1.25s ease-out infinite;
+
+  --color-ts-blue-50: #3081bf;
+  --color-ts-blue-100: #2d79b3;
+  --color-ts-blue-200: #266697;
+  --color-ts-blue-300: #20557e;
+  --color-ts-blue-400: #194262;
+  --color-ts-blue-500: #123047;
+  --color-ts-blue-600: #0e2739;
+  --color-ts-blue-700: #0b1e2d;
+  --color-ts-blue-800: #07131c;
+  --color-ts-blue-900: #04101c;
+  --color-ts-blue-950: #000d1b;
+  --color-ts-blue: #123047;
+
+  --color-ts-gold-50: #fee9a4;
+  --color-ts-gold-100: #fde598;
+  --color-ts-gold-200: #fddd7e;
+  --color-ts-gold-300: #fdd465;
+  --color-ts-gold-400: #fccb4c;
+  --color-ts-gold-500: #fcc133;
+  --color-ts-gold-600: #fbb310;
+  --color-ts-gold-700: #e49c03;
+  --color-ts-gold-800: #c18203;
+  --color-ts-gold-900: #9e6802;
+  --color-ts-gold-950: #8c5b02;
+  --color-ts-gold: #fcc133;
+
+  --color-sidebar: ts-blue-950 text-white;
+  --color-sidebar-border: ts-blue-400;
+  --color-sidebar-accent: ts-blue-700;
+  --color-sidebar-accent-foreground: ts-blue-700;
+  --color-sidebar-ring: ts-blue-500;
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  @keyframes caret-blink {
+    0%,
+    70%,
+    100% {
+      opacity: 1;
+    }
+    20%,
+    50% {
+      opacity: 0;
+    }
+  }
+}
+
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+}
+
+@layer utilities {
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+  }
+}
+
+:root {
+    --radius: 0.5rem;
+    --sidebar-background: 211 100% 5%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+}
+
+.dark {
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+}

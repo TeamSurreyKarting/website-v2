@@ -1,4 +1,4 @@
-import "@/app/globals.scss";
+import "@/app/globals.css";
 
 import { AppSidebar } from "@/components/app-sidebar";
 import {

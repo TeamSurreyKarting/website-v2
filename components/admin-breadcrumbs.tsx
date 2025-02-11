@@ -11,8 +11,8 @@ import {
 
 export function AdminBreadcrumbs({ routes = [] }: { routes: string[] }) {
   let fullHref: string | undefined = undefined;
-  const breadcrumbItems: ReactElement[] = [];
-  let breadcrumbPage: ReactElement = <></>;
+  const breadcrumbItems: ReactElement<any>[] = [];
+  let breadcrumbPage: ReactElement<any> = <></>;
 
   for (let i = 0; i < routes.length; i++) {
     const route = routes[i];
