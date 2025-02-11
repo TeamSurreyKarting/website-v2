@@ -11,7 +11,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
           "bg-ts-blue-700 border border-ts-blue-300 rounded-lg text-white flex flex-col gap-4 py-8 pb-12 px-10 w-lg mx-auto my-4 h-fit"
         }
       >
-        {/*<TSKC className={"h-auto max-h-32 pt-4"} />*/}
+        <TSKC className={"h-auto max-h-32 pt-4"} />
         {children}
       </div>
     </div>

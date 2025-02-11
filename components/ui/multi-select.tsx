@@ -211,7 +211,7 @@ export const MultiSelect = React.forwardRef<
             {...props}
             onClick={handleTogglePopover}
             className={cn(
-              "flex w-full p-1 rounded-md border min-h-10 h-auto items-center justify-between bg-inherit hover:bg-inherit [&_svg]:pointer-events-auto",
+              "flex w-full p-1 rounded-md border min-h-10 h-auto items-center justify-between bg-inherit hover:bg-inherit [&>svg]:pointer-events-auto",
               className,
             )}
           >
@@ -314,7 +314,7 @@ export const MultiSelect = React.forwardRef<
                         "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
                         selectedValues.length === options.length
                           ? "bg-primary text-primary-foreground"
-                          : "opacity-50 [&_svg]:invisible",
+                          : "opacity-50 [&>svg]:invisible",
                       )}
                     >
                       <CheckIcon className="h-4 w-4" />
@@ -335,7 +335,7 @@ export const MultiSelect = React.forwardRef<
                           "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary overflow-hidden",
                           isSelected
                             ? "bg-primary text-primary-foreground border-ts-gold-700"
-                            : "opacity-50 [&_svg]:invisible",
+                            : "opacity-50 [&>svg]:invisible",
                         )}
                       >
                         <CheckIcon
