@@ -28,6 +28,7 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+.pnpm-debug.log*
 
 # env files (can opt-in for committing if needed)
 .env*
@@ -39,4 +40,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-node_modules.nosync
+# IDE
+.idea/
+.vscode/
