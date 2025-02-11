@@ -32,7 +32,7 @@ import { createClient } from "@/utils/supabase/client";
 import { redirect } from "next/navigation";
 
 const formSchema = z.object({
-  dueAt: z.date().min(new Date()),
+  dueAt: z.date(),
   status: z
     .enum(["Open", "In Progress", "Blocked", "Completed", "Cancelled"])
     .default("Open"),
