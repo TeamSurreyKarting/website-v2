@@ -10,7 +10,8 @@
 		"supabase:start": "supabase start",
 		"supabase:stop": "supabase stop",
 		"supabase:pull": "supabase db pull",
-		"lint": "next lint"
+		"lint": "next lint",
+		"supabase:gen-local-types": "supabase gen types typescript --local > database.types.ts"
 	},
 	"dependencies": {
 		"@hookform/resolvers": "^4.0.0",
