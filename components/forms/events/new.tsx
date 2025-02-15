@@ -344,8 +344,7 @@ export default function NewEventForm({ membershipTypes }: { membershipTypes: Tab
                           decimalsLimit={2}
                           decimalScale={2}
                           intlConfig={{ locale: "en-GB", currency: "GBP" }}
-                          onValueChange={(value) =>
-                            setTicketToAdd({...ticketToAdd, price: Number(value)})
+                          onValueChange={(value) => setTicketToAdd({...ticketToAdd, price: Number(value)})
                         }
                         />
                       </FormControl>
