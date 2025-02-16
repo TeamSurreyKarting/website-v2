@@ -177,7 +177,7 @@ export default function ChecklistCard({ checklistItems, eventId, }: { checklistI
               <LoadingButton
                 loading={form.formState.isLoading}
                 type={"submit"}
-                className={"bg-ts-blue-700 float-right"}
+                className={"bg-white text-black float-right"}
               >
                 Add
               </LoadingButton>

@@ -109,7 +109,10 @@ export default function RacerCombobox({
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0 bg-ts-blue-600 text-white">
+      <PopoverContent
+        className="w-[200px] p-0 bg-ts-blue-600 text-white"
+        align={"end"}
+      >
         <Command shouldFilter={false}>
           <CommandInput
             placeholder="Search..."

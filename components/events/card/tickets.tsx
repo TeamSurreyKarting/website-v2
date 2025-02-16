@@ -1,18 +1,17 @@
 "use client";
 
 import { Tables } from "@/database.types";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { Tickets, UserPlus } from "lucide-react";
+import { EllipsisVertical, Pencil, Tickets, Trash2, UserPlus } from "lucide-react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { createClient } from "@/utils/supabase/client";
 import { Input } from "@/components/ui/input";
-import RacerCombobox from "@/components/racers/combobox";
 import { Select, SelectContent, SelectItem, SelectSeparator, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
@@ -24,6 +23,20 @@ import { CalendarIcon } from "@radix-ui/react-icons";
 import { LoadingButton } from "@/components/ui/loading-button";
 import { useRouter } from "next/navigation";
 import { Progress } from "@/components/ui/progress";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem, DropdownMenuSeparator,
+  DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
+import pluralize from "pluralize";
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel,
+  AlertDialogContent, AlertDialogDescription, AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger
+} from "@/components/ui/alert-dialog";
 
 type Ticket = (Tables<'EventTicket'> & { EventTicketAllocation: Tables<'EventTicketAllocation'>[] });
 
@@ -42,14 +55,8 @@ const ticketTypeFormSchema = z.object({
 
 const ZERO_UUID = "00000000-0000-0000-0000-000000000000";
 
-const ticketAssignmentFormSchema = z.object({
-  racer: z.string().uuid(),
-  eventTicket: z.string().uuid(),
-});
-
-export default function TicketsCard({ className, tickets, racers, membershipTypes, eventId }: { className?: string, tickets: Ticket[], racers: Tables<'Racers'>[], membershipTypes: Tables<'MembershipTypes'>[], eventId: string }) {
+export default function TicketsCard({ className, tickets, membershipTypes, eventId }: { className?: string, tickets: Ticket[], membershipTypes: Tables<'MembershipTypes'>[], eventId: string }) {
   const [ticketTypeDialogIsOpen, setTicketTypeDialogOpen] = useState<boolean>(false);
-  const [ticketAssignmentDialogIsOpen, setTicketAssignmentDialogIsOpen] = useState<boolean>(false);
   const { refresh } = useRouter();
 
   const ticketTypeForm = useForm<z.infer<typeof ticketTypeFormSchema>>({
@@ -64,27 +71,6 @@ export default function TicketsCard({ className, tickets, racers, membershipType
       maxAvailable: 0,
     }
   });
-
-  const ticketAssignmentForm = useForm<z.infer<typeof ticketAssignmentFormSchema>>({
-    resolver: zodResolver(ticketAssignmentFormSchema),
-    defaultValues: {
-      racer: undefined,
-      eventTicket: undefined,
-    }
-  });
-
-  async function submitTicketAssignmentForm(values: z.infer<typeof ticketAssignmentFormSchema>) {
-    try {
-      const supabase = createClient();
-
-      await supabase.from("EventTicketAllocation").insert(values).throwOnError();
-
-      setTicketAssignmentDialogIsOpen(false);
-      refresh();
-    } catch (error) {
-      console.error(error);
-    }
-  }
 
   async function submitTicketTypeForm(values: z.infer<typeof ticketTypeFormSchema>) {
     try {
@@ -102,88 +88,27 @@ export default function TicketsCard({ className, tickets, racers, membershipType
     }
   }
 
+  const sortedTickets = tickets.sort((a, b) => a.price - b.price);
+
   return (
     <>
       <Card className={cn("bg-ts-blue", className)}>
         <CardHeader className={"flex flex-col sm:flex-row gap-2 items-start sm:items-center justify-between"}>
-          <CardTitle>Tickets</CardTitle>
+          <div className={"flex flex-col space-y-1.5"}>
+            <CardTitle>Tickets</CardTitle>
+            <CardDescription>{tickets.length} ticket {pluralize('type', tickets.length)}</CardDescription>
+          </div>
           <div className={"flex flex-col sm:flex-row gap-2 items-start sm:items-center justify-between"}>
             <Button onClick={() => setTicketTypeDialogOpen(!ticketTypeDialogIsOpen)}>
               <Tickets />
               <span>Add Ticket Type</span>
             </Button>
-            <Button onClick={() => setTicketAssignmentDialogIsOpen(!ticketAssignmentDialogIsOpen)}>
-              <UserPlus />
-              <span>Assign Ticket</span>
-            </Button>
           </div>
         </CardHeader>
         <CardContent className={"flex flex-col gap-2"}>
-          {tickets.map((ticket) => <TicketItem key={ticket.id} ticket={ticket} />)}
+          {sortedTickets.map((ticket) => <TicketItem key={ticket.id} ticket={ticket} membershipTypes={membershipTypes} />)}
         </CardContent>
       </Card>
-      <Dialog open={ticketAssignmentDialogIsOpen} onOpenChange={setTicketAssignmentDialogIsOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Add New Ticket Assignment</DialogTitle>
-          </DialogHeader>
-          <Form {...ticketAssignmentForm}>
-            <form onSubmit={ticketAssignmentForm.handleSubmit(submitTicketAssignmentForm)} className={"space-y-6"}>
-              <FormField
-                control={ticketAssignmentForm.control}
-                name={"eventTicket"}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Ticket</FormLabel>
-                    <FormControl>
-                      <Select
-                        {...field}
-                        defaultValue={field.value}
-                        onValueChange={field.onChange}
-                      >
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Select option" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          { tickets.map((ticket) => (
-                            <SelectItem
-                              key={ticket.id}
-                              value={ticket.id}
-                            >
-                              {ticket.name}
-                            </SelectItem>
-                          )) }
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-                />
-              <FormField
-                control={ticketAssignmentForm.control}
-                name={"racer"}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Racer</FormLabel>
-                    <FormControl>
-                      <RacerCombobox defaultValue={field.value} onValueChange={field.onChange} fullWidth={true} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <LoadingButton
-                loading={ticketTypeForm.formState.isLoading}
-                className={"float-right bg-white text-black"}
-                type={"submit"}
-              >
-                Add
-              </LoadingButton>
-            </form>
-          </Form>
-        </DialogContent>
-      </Dialog>
       <Dialog open={ticketTypeDialogIsOpen} onOpenChange={setTicketTypeDialogOpen}>
         <DialogContent>
           <DialogHeader>
@@ -371,29 +296,338 @@ export default function TicketsCard({ className, tickets, racers, membershipType
   )
 }
 
-// todo: form for editing ticket item
 const ticketEditFormSchema = z.object({
   ticket: z.string().uuid(),
-})
+  membershipType: z.string().uuid(),
+  name: z.string(),
+  price: z.number(),
+  availableFrom: z.date(),
+  availableUntil: z.date(),
+  maxAvailable: z.number().min(0),
+});
 
-function TicketItem({ ticket }: { ticket: Ticket }) {
+function TicketItem({ ticket, membershipTypes }: { ticket: Ticket, membershipTypes: Tables<'MembershipTypes'>[] }) {
+  const ticketEditForm = useForm<z.infer<typeof ticketEditFormSchema>>({
+    resolver: zodResolver(ticketEditFormSchema),
+    defaultValues: {
+      ticket: ticket.id,
+      membershipType: ticket.membershipType === null ? ZERO_UUID : ticket.membershipType,
+      name: ticket.name,
+      price: ticket.price,
+      availableFrom: new Date(ticket.availableFrom),
+      availableUntil: new Date(ticket.availableUntil),
+      maxAvailable: ticket.maxAvailable,
+    }
+  });
   const gbpFormat = Intl.NumberFormat("en-GB", {
     style: "currency",
     currency: "GBP",
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
+  const [ticketEditDialogIsOpen, setTicketEditDialogOpen] = useState<boolean>(false);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
+  const { refresh } = useRouter();
+
+  async function onSubmit(values: z.infer<typeof ticketEditFormSchema>) {
+    try {
+      const supabase = createClient();
+
+      const updateBody = {
+        membershipType: ticketEditForm.formState.dirtyFields.membershipType ? values.membershipType : undefined,
+        name: ticketEditForm.formState.dirtyFields.name ? values.name : undefined,
+        price: ticketEditForm.formState.dirtyFields.price ? values.price : undefined,
+        availableFrom: ticketEditForm.formState.dirtyFields.availableFrom ? values.availableFrom.toISOString() : undefined,
+        availableUntil: ticketEditForm.formState.dirtyFields.availableUntil ? values.availableUntil.toISOString() : undefined,
+        maxAvailable: ticketEditForm.formState.dirtyFields.maxAvailable ? values.maxAvailable : undefined,
+      }
+
+      await supabase
+        .from("EventTicket")
+        .update(updateBody)
+        .eq("id", values.ticket)
+        .throwOnError();
+
+      refresh();
+      setTicketEditDialogOpen(false);
+
+      ticketEditForm.reset();
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  async function onDelete() {
+    setIsDeleting(true);
+
+    try {
+      const supabase = createClient();
+
+      await supabase.from("EventTicket").delete().eq("id", ticket.id).throwOnError();
+
+      refresh();
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsDeleting(false);
+    }
+  }
 
   return (
-    <div
-      className={"bg-ts-blue-400 p-2 rounded-lg border border-ts-gold-700"}
-    >
-      <h4 className={"text-md font-bold"}>{ticket.name}</h4>
-      <p>Price: <strong>{gbpFormat.format(ticket.price)}</strong></p>
-      <div className={"flex flex-row gap-2 items-center"}>
-        <span>{ticket.EventTicketAllocation.length}/{ticket.maxAvailable}</span>
-        <Progress value={(ticket.EventTicketAllocation.length/ticket.maxAvailable) * 100} />
-      </div>
-    </div>
+    <>
+      <AlertDialog>
+        <DropdownMenu>
+          <Card
+            className={"bg-ts-blue-400 p-2 rounded-lg border border-ts-gold-700"}
+          >
+            <CardHeader className={"flex-row gap-x-3 justify-between"}>
+              <div className={"flex flex-col space-y-1.5"}>
+                <CardTitle className={"text-md font-bold"}>{ticket.name}</CardTitle>
+                <CardDescription>Price: <strong>{gbpFormat.format(ticket.price)}</strong></CardDescription>
+              </div>
+              <DropdownMenuTrigger asChild>
+                <Button variant={"ghost"}>
+                  <EllipsisVertical />
+                </Button>
+              </DropdownMenuTrigger>
+            </CardHeader>
+            <CardContent>
+              <div className={"flex flex-row gap-2 items-center"}>
+                <span>{ticket.EventTicketAllocation.length}/{ticket.maxAvailable}</span>
+                <Progress value={(ticket.EventTicketAllocation.length/ticket.maxAvailable) * 100} />
+              </div>
+            </CardContent>
+          </Card>
+          <DropdownMenuContent className="w-42" align={"end"}>
+            <DropdownMenuItem onClick={() => setTicketEditDialogOpen(true)}>
+              <Pencil />
+              Edit
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <AlertDialogTrigger asChild>
+              <DropdownMenuItem
+                className={"text-red-500 hover:text-red-50 focus:text-red-50 hover:bg-red-500 focus:bg-red-500"}
+              >
+                <Trash2 />
+                Delete
+              </DropdownMenuItem>
+            </AlertDialogTrigger>
+          </DropdownMenuContent>
+        </DropdownMenu>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirm Deletion</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will de-allocate all assigned tickets.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className={"gap-x-3 gap-y-1.5"}>
+            <AlertDialogCancel className={"m-0"}>Cancel</AlertDialogCancel>
+            <AlertDialogAction asChild>
+              <LoadingButton
+                variant={"destructive"}
+                loading={isDeleting}
+                onClick={() => onDelete()}
+              >
+                Confirm Deletion
+              </LoadingButton>
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+      <Dialog open={ticketEditDialogIsOpen} onOpenChange={setTicketEditDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit Ticket</DialogTitle>
+          </DialogHeader>
+          <Form {...ticketEditForm}>
+            <form onSubmit={ticketEditForm.handleSubmit(onSubmit)} className={"space-y-6"}>
+              <FormField
+                control={ticketEditForm.control}
+                name={"name"}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Ticket Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        value={undefined}
+                        defaultValue={field.value}
+                        onChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={ticketEditForm.control}
+                name={"price"}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Price</FormLabel>
+                    <FormControl>
+                      <CurrencyInput
+                        {...field}
+                        customInput={Input}
+                        placeholder={'£'}
+                        prefix={"£"}
+                        decimalsLimit={2}
+                        decimalScale={2}
+                        intlConfig={{ locale: "en-GB", currency: "GBP" }}
+                        value={undefined}
+                        defaultValue={field.value}
+                        onValueChange={(value) => field.onChange(Number(value))}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={ticketEditForm.control}
+                name={"membershipType"}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Membership Restriction</FormLabel>
+                    <FormControl>
+                      <Select
+                        {...field}
+                        value={undefined}
+                        defaultValue={field.value}
+                        onValueChange={field.onChange}
+                      >
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Membership" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value={ZERO_UUID}>Non-Member</SelectItem>
+                          <SelectSeparator />
+                          { membershipTypes.map((membershipType) => (
+                            <SelectItem
+                              key={membershipType.id}
+                              value={membershipType.id}
+                            >
+                              {membershipType.name}
+                            </SelectItem>
+                          )) }
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <div className={"grid grid-cols-1 md:grid-cols-2 gap-2"}>
+                <FormField
+                  control={ticketEditForm.control}
+                  name={"availableFrom"}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Available From</FormLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant={"outline"}
+                              className={cn(
+                                "w-full text-left font-normal bg-ts-blue-500 border border-white",
+                                field.value && "text-muted-foreground"
+                              )}
+                            >
+                              {field.value ? (
+                                format(field.value, "PPP HH:mm")
+                              ) : (
+                                 <span>Pick a date</span>
+                               )}
+                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0 bg-ts-blue-500 text-white">
+                          <Calendar
+                            mode={"single"}
+                            selected={field.value}
+                            onSelect={field.onChange}
+                          />
+                          <TimePicker date={field.value} dateDidSet={field.onChange} />
+                        </PopoverContent>
+                      </Popover>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={ticketEditForm.control}
+                  name={"availableUntil"}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Available Until</FormLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant={"outline"}
+                              className={cn(
+                                "w-full text-left font-normal bg-ts-blue-500 border border-white",
+                                field.value && "text-muted-foreground"
+                              )}
+                            >
+                              {field.value ? (
+                                format(field.value, "PPP HH:mm")
+                              ) : (
+                                 <span>Pick a date</span>
+                               )}
+                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0 bg-ts-blue-500 text-white">
+                          <Calendar
+                            mode={"single"}
+                            selected={field.value}
+                            onSelect={field.onChange}
+                          />
+                          <TimePicker date={field.value} dateDidSet={field.onChange} />
+                        </PopoverContent>
+                      </Popover>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <FormField
+                control={ticketEditForm.control}
+                name={"maxAvailable"}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Number Available</FormLabel>
+                    <FormControl>
+                      <Input
+                        type={"number"}
+                        min={0}
+                        {...field}
+                        value={undefined}
+                        defaultValue={field.value}
+                        onChange={(event) => field.onChange(Number(event.target.value))}
+                      />
+                    </FormControl>
+                    <FormDescription>Set to zero to have unlimited tickets</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <LoadingButton
+                loading={ticketEditForm.formState.isLoading}
+                className={"float-right bg-white text-black"}
+                type="submit"
+              >
+                Update
+              </LoadingButton>
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
+    </>
   )
 }

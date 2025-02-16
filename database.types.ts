@@ -396,18 +396,21 @@ export type Database = {
       }
       EventTransport: {
         Row: {
+          additionalDetails: string | null
           driver: string
           event: string
           id: string
           maxCapacity: number
         }
         Insert: {
+          additionalDetails?: string | null
           driver: string
           event: string
           id?: string
           maxCapacity?: number
         }
         Update: {
+          additionalDetails?: string | null
           driver?: string
           event?: string
           id?: string
@@ -453,55 +456,21 @@ export type Database = {
       }
       EventTransportAllocation: {
         Row: {
-          createdAt: string
-          createdBy: string | null
           id: string
           ticketAllocation: string
           transport: string | null
         }
         Insert: {
-          createdAt?: string
-          createdBy?: string | null
           id?: string
           ticketAllocation: string
           transport?: string | null
         }
         Update: {
-          createdAt?: string
-          createdBy?: string | null
           id?: string
           ticketAllocation?: string
           transport?: string | null
         }
         Relationships: [
-          {
-            foreignKeyName: "EventTransportAllocation_createdBy_fkey"
-            columns: ["createdBy"]
-            isOneToOne: false
-            referencedRelation: "RacerDetails"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "EventTransportAllocation_createdBy_fkey"
-            columns: ["createdBy"]
-            isOneToOne: false
-            referencedRelation: "Racers"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "EventTransportAllocation_createdBy_fkey"
-            columns: ["createdBy"]
-            isOneToOne: false
-            referencedRelation: "TaskDetailsView"
-            referencedColumns: ["primarily_responsible_person_id"]
-          },
-          {
-            foreignKeyName: "EventTransportAllocation_createdBy_fkey"
-            columns: ["createdBy"]
-            isOneToOne: false
-            referencedRelation: "TaskDetailsView"
-            referencedColumns: ["created_by_id"]
-          },
           {
             foreignKeyName: "EventTransportAllocation_ticketAllocation_fkey"
             columns: ["ticketAllocation"]

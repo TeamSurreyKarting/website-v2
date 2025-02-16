@@ -36,7 +36,7 @@ export const columns: ColumnDef<
     cell: ({ row }) => (
       <div className={"flex gap-2"}>
         <Link href={`/events/${row.original.id}`}>
-          <Button variant={"ghost"} className={"hidden lg:block"}>
+          <Button variant={"ghost"}>
             <FaEye />
           </Button>
         </Link>

@@ -7,12 +7,13 @@ import ChecklistCard from "@/components/events/card/checklist";
 import TicketsCard from "@/components/events/card/tickets";
 import TicketHoldersCard from "@/components/events/card/ticket-holders";
 import ScheduleCard from "@/components/events/card/schedule";
+import TransportCard from "@/components/events/card/transport";
 
 type Event = Tables<'Events'> & {
   EventChecklist: (Tables<'EventChecklist'> & { Racers: Tables<'Racers'> })[],
   EventSchedule: Tables<'EventSchedule'>[],
-  EventTicket: (Tables<'EventTicket'> & { EventTicketAllocation: (Tables<'EventTicketAllocation'> & { Racers: Tables<'Racers'>, EventTicketAllocationCheckIn: Tables<'EventTicketAllocationCheckIn'> })[] })[],
-  EventTransport: (Tables<'EventTransport'> & { EventTransportAllocation: Tables<'EventTransportAllocation'>[] })[]
+  EventTicket: (Tables<'EventTicket'> & { EventTicketAllocation: (Tables<'EventTicketAllocation'> & { Racers: Tables<'Racers'>, EventTicketAllocationCheckIn: Tables<'EventTicketAllocationCheckIn'> | null })[] })[],
+  EventTransport: (Tables<'EventTransport'> & { Racers: Tables<'Racers'>, EventTransportAllocation: Tables<'EventTransportAllocation'>[] })[]
 }
 
 async function getEvent(id: string): Promise<Event | null> {
@@ -20,7 +21,7 @@ async function getEvent(id: string): Promise<Event | null> {
 
   const { data } = await supabase
     .from("Events")
-    .select("*, EventChecklist( *, Racers( * )), EventSchedule( * ), EventTicket( *, EventTicketAllocation( *, Racers!EventTicketAllocation_racer_fkey( * ), EventTicketAllocationCheckIn( * ) )), EventTransport( *, EventTransportAllocation( * ))")
+    .select("*, EventChecklist( *, Racers( * )), EventSchedule( * ), EventTicket( *, EventTicketAllocation( *, Racers!EventTicketAllocation_racer_fkey( * ), EventTicketAllocationCheckIn( * ) )), EventTransport( *, Racers!eventtransport_driver_fkey( * ), EventTransportAllocation( * ))")
     .eq("id", id)
     .maybeSingle()
     .throwOnError();
@@ -114,14 +115,10 @@ export default async function EventPage({ params }: { params?: Promise<{ id: str
           {event?.EventChecklist && <ChecklistCard checklistItems={event.EventChecklist} eventId={event.id} />}
         </div>
         <div className={"grid grid-cols-1 md:grid-cols-2 gap-2 my-2"}>
-          {event?.EventTicket && <TicketsCard className={"order-last sm:order-first"} tickets={event.EventTicket} racers={racers} membershipTypes={membershipTypes} eventId={event.id} />}
+          {event?.EventTicket && <TicketsCard className={"order-last sm:order-first"} tickets={event.EventTicket} membershipTypes={membershipTypes} eventId={event.id} />}
           {event?.EventTicket && <TicketHoldersCard tickets={event.EventTicket} eventStart={new Date(event.startsAt)} />}
         </div>
-        <Card className={"bg-ts-blue"}>
-          <CardHeader>
-            <CardTitle>Transport</CardTitle>
-          </CardHeader>
-        </Card>
+        {event?.EventTransport && <TransportCard eventId={event.id} transport={event.EventTransport} ticketAllocations={event.EventTicket.flatMap((evTx) => evTx.EventTicketAllocation)} />}
       </>
     )
   } catch (e) {

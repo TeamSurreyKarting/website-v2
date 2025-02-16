@@ -284,9 +284,9 @@ export function TimelineItem({ item }: { item: ScheduleItem } ) {
 
   return (
     <div className={"grid grid-cols-[1fr_7fr] gap-4 items-center"} data-complete={isComplete}>
-      <div>
-        <div className={"flex flex-row gap-2 text-sm items-center"}><Clock /> <span>{format(new Date(item.date), 'HH:mm')}</span></div>
-        <div className={"flex flex-row gap-2 text-sm items-center"}><CalendarIcon /> <span>{format(new Date(item.date), 'd/M')}</span></div>
+      <div className={"flex flex-col gap-1"}>
+        <div className={"flex flex-row gap-2 items-center"}><Clock className={"h-4 w-4"} /> <span>{format(new Date(item.date), 'HH:mm')}</span></div>
+        <div className={"flex flex-row gap-2 items-center"}><CalendarIcon className={"h-4 w-4"} /> <span>{format(new Date(item.date), 'd/M')}</span></div>
       </div>
       <Card className={clsx("w-full bg-ts-blue-400 flex flex-row gap-2 items-center justify-between", {
         'bg-ts-blue-800': isComplete,
@@ -303,7 +303,7 @@ export function TimelineItem({ item }: { item: ScheduleItem } ) {
           <Dialog open={editFormDialogIsOpen} onOpenChange={setEditFormDialogIsOpen}>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant={"outline"}>
+                <Button variant={"ghost"}>
                   <EllipsisVertical />
                 </Button>
               </DropdownMenuTrigger>
