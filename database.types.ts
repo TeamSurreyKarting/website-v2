@@ -61,6 +61,432 @@ export type Database = {
         }
         Relationships: []
       }
+      EventChecklist: {
+        Row: {
+          assignedTo: string
+          createdAt: string
+          description: string | null
+          event: string
+          id: string
+          isDone: boolean
+          orderPosition: number
+          title: string
+        }
+        Insert: {
+          assignedTo: string
+          createdAt?: string
+          description?: string | null
+          event: string
+          id?: string
+          isDone?: boolean
+          orderPosition?: number
+          title: string
+        }
+        Update: {
+          assignedTo?: string
+          createdAt?: string
+          description?: string | null
+          event?: string
+          id?: string
+          isDone?: boolean
+          orderPosition?: number
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "EventChecklist_assignedTo_fkey"
+            columns: ["assignedTo"]
+            isOneToOne: false
+            referencedRelation: "RacerDetails"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "EventChecklist_assignedTo_fkey"
+            columns: ["assignedTo"]
+            isOneToOne: false
+            referencedRelation: "Racers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "EventChecklist_assignedTo_fkey"
+            columns: ["assignedTo"]
+            isOneToOne: false
+            referencedRelation: "TaskDetailsView"
+            referencedColumns: ["primarily_responsible_person_id"]
+          },
+          {
+            foreignKeyName: "EventChecklist_assignedTo_fkey"
+            columns: ["assignedTo"]
+            isOneToOne: false
+            referencedRelation: "TaskDetailsView"
+            referencedColumns: ["created_by_id"]
+          },
+          {
+            foreignKeyName: "EventChecklist_event_fkey"
+            columns: ["event"]
+            isOneToOne: false
+            referencedRelation: "Events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      Events: {
+        Row: {
+          createdAt: string
+          createdBy: string
+          description: string | null
+          endsAt: string
+          id: string
+          name: string
+          startsAt: string
+        }
+        Insert: {
+          createdAt?: string
+          createdBy?: string
+          description?: string | null
+          endsAt: string
+          id?: string
+          name: string
+          startsAt: string
+        }
+        Update: {
+          createdAt?: string
+          createdBy?: string
+          description?: string | null
+          endsAt?: string
+          id?: string
+          name?: string
+          startsAt?: string
+        }
+        Relationships: []
+      }
+      EventSchedule: {
+        Row: {
+          completionStatus: boolean
+          createdAt: string
+          createdBy: string | null
+          description: string | null
+          event: string | null
+          id: string
+          scheduledFor: string
+          title: string
+        }
+        Insert: {
+          completionStatus?: boolean
+          createdAt?: string
+          createdBy?: string | null
+          description?: string | null
+          event?: string | null
+          id?: string
+          scheduledFor: string
+          title: string
+        }
+        Update: {
+          completionStatus?: boolean
+          createdAt?: string
+          createdBy?: string | null
+          description?: string | null
+          event?: string | null
+          id?: string
+          scheduledFor?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "EventSchedule_createdBy_fkey"
+            columns: ["createdBy"]
+            isOneToOne: false
+            referencedRelation: "RacerDetails"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "EventSchedule_createdBy_fkey"
+            columns: ["createdBy"]
+            isOneToOne: false
+            referencedRelation: "Racers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "EventSchedule_createdBy_fkey"
+            columns: ["createdBy"]
+            isOneToOne: false
+            referencedRelation: "TaskDetailsView"
+            referencedColumns: ["primarily_responsible_person_id"]
+          },
+          {
+            foreignKeyName: "EventSchedule_createdBy_fkey"
+            columns: ["createdBy"]
+            isOneToOne: false
+            referencedRelation: "TaskDetailsView"
+            referencedColumns: ["created_by_id"]
+          },
+          {
+            foreignKeyName: "EventSchedule_event_fkey"
+            columns: ["event"]
+            isOneToOne: false
+            referencedRelation: "Events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      EventTicket: {
+        Row: {
+          availableFrom: string
+          availableUntil: string
+          createdAt: string
+          event: string | null
+          id: string
+          maxAvailable: number
+          membershipType: string | null
+          name: string
+          price: number
+        }
+        Insert: {
+          availableFrom?: string
+          availableUntil: string
+          createdAt?: string
+          event?: string | null
+          id?: string
+          maxAvailable?: number
+          membershipType?: string | null
+          name: string
+          price: number
+        }
+        Update: {
+          availableFrom?: string
+          availableUntil?: string
+          createdAt?: string
+          event?: string | null
+          id?: string
+          maxAvailable?: number
+          membershipType?: string | null
+          name?: string
+          price?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "EventTicket_event_fkey"
+            columns: ["event"]
+            isOneToOne: false
+            referencedRelation: "Events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "EventTicket_membershipType_fkey"
+            columns: ["membershipType"]
+            isOneToOne: false
+            referencedRelation: "MembershipTypes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      EventTicketAllocation: {
+        Row: {
+          allocatedAt: string
+          allocatedBy: string | null
+          eventTicket: string
+          id: string
+          racer: string
+        }
+        Insert: {
+          allocatedAt?: string
+          allocatedBy?: string | null
+          eventTicket: string
+          id?: string
+          racer: string
+        }
+        Update: {
+          allocatedAt?: string
+          allocatedBy?: string | null
+          eventTicket?: string
+          id?: string
+          racer?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "EventTicketAllocation_allocatedBy_fkey"
+            columns: ["allocatedBy"]
+            isOneToOne: false
+            referencedRelation: "RacerDetails"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "EventTicketAllocation_allocatedBy_fkey"
+            columns: ["allocatedBy"]
+            isOneToOne: false
+            referencedRelation: "Racers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "EventTicketAllocation_allocatedBy_fkey"
+            columns: ["allocatedBy"]
+            isOneToOne: false
+            referencedRelation: "TaskDetailsView"
+            referencedColumns: ["primarily_responsible_person_id"]
+          },
+          {
+            foreignKeyName: "EventTicketAllocation_allocatedBy_fkey"
+            columns: ["allocatedBy"]
+            isOneToOne: false
+            referencedRelation: "TaskDetailsView"
+            referencedColumns: ["created_by_id"]
+          },
+          {
+            foreignKeyName: "EventTicketAllocation_eventTicket_fkey"
+            columns: ["eventTicket"]
+            isOneToOne: false
+            referencedRelation: "EventTicket"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "EventTicketAllocation_racer_fkey"
+            columns: ["racer"]
+            isOneToOne: false
+            referencedRelation: "RacerDetails"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "EventTicketAllocation_racer_fkey"
+            columns: ["racer"]
+            isOneToOne: false
+            referencedRelation: "Racers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "EventTicketAllocation_racer_fkey"
+            columns: ["racer"]
+            isOneToOne: false
+            referencedRelation: "TaskDetailsView"
+            referencedColumns: ["primarily_responsible_person_id"]
+          },
+          {
+            foreignKeyName: "EventTicketAllocation_racer_fkey"
+            columns: ["racer"]
+            isOneToOne: false
+            referencedRelation: "TaskDetailsView"
+            referencedColumns: ["created_by_id"]
+          },
+        ]
+      }
+      EventTicketAllocationCheckIn: {
+        Row: {
+          createdAt: string
+          createdBy: string
+          id: string
+        }
+        Insert: {
+          createdAt?: string
+          createdBy?: string
+          id: string
+        }
+        Update: {
+          createdAt?: string
+          createdBy?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "EventTicketAllocationCheckIn_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "EventTicketAllocation"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      EventTransport: {
+        Row: {
+          additionalDetails: string | null
+          driver: string
+          event: string
+          id: string
+          maxCapacity: number
+        }
+        Insert: {
+          additionalDetails?: string | null
+          driver: string
+          event: string
+          id?: string
+          maxCapacity?: number
+        }
+        Update: {
+          additionalDetails?: string | null
+          driver?: string
+          event?: string
+          id?: string
+          maxCapacity?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "eventtransport_driver_fkey"
+            columns: ["driver"]
+            isOneToOne: false
+            referencedRelation: "RacerDetails"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "eventtransport_driver_fkey"
+            columns: ["driver"]
+            isOneToOne: false
+            referencedRelation: "Racers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "eventtransport_driver_fkey"
+            columns: ["driver"]
+            isOneToOne: false
+            referencedRelation: "TaskDetailsView"
+            referencedColumns: ["primarily_responsible_person_id"]
+          },
+          {
+            foreignKeyName: "eventtransport_driver_fkey"
+            columns: ["driver"]
+            isOneToOne: false
+            referencedRelation: "TaskDetailsView"
+            referencedColumns: ["created_by_id"]
+          },
+          {
+            foreignKeyName: "eventtransport_event_fkey"
+            columns: ["event"]
+            isOneToOne: false
+            referencedRelation: "Events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      EventTransportAllocation: {
+        Row: {
+          id: string
+          ticketAllocation: string
+          transport: string | null
+        }
+        Insert: {
+          id?: string
+          ticketAllocation: string
+          transport?: string | null
+        }
+        Update: {
+          id?: string
+          ticketAllocation?: string
+          transport?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "EventTransportAllocation_ticketAllocation_fkey"
+            columns: ["ticketAllocation"]
+            isOneToOne: false
+            referencedRelation: "EventTicketAllocation"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "EventTransportAllocation_transport_fkey"
+            columns: ["transport"]
+            isOneToOne: false
+            referencedRelation: "EventTransport"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       Members: {
         Row: {
           addedAt: string

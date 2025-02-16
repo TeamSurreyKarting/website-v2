@@ -75,7 +75,7 @@ export default function AssigneeEdit({
     } catch (e) {
       toast({
         title: "Failed to update assignees",
-        message: e.message,
+        description: (e as Error).message,
       });
     }
   }

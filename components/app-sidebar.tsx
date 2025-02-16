@@ -21,6 +21,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { FaCalendar } from "react-icons/fa6";
 
 const sidebarItems = {
   navMain: [
@@ -52,6 +53,12 @@ const sidebarItems = {
       title: "Finances",
       url: "/finances",
       icon: PiPiggyBankFill,
+      items: [],
+    },
+    {
+      title: "Events",
+      url: "/events",
+      icon: FaCalendar,
       items: [],
     },
   ],
