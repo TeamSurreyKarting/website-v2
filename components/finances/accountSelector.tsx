@@ -44,9 +44,8 @@ export default function AccountSelector({
   });
 
   return (
-    <div className={"flex flex-row gap-2 items-center justify-between"}>
       <Select value={value} onValueChange={handleSelectionChange}>
-        <SelectTrigger className="w-full md:w-[320px]">
+        <SelectTrigger className="w-fit">
           <SelectValue placeholder="Account" />
         </SelectTrigger>
         <SelectContent>
@@ -66,12 +65,5 @@ export default function AccountSelector({
           ))}
         </SelectContent>
       </Select>
-      <Link href={"/finances/accounts/new"}>
-        <Button>
-          <FaPlus />
-          <span>Create Account</span>
-        </Button>
-      </Link>
-    </div>
   );
 }

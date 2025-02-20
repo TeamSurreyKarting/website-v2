@@ -93,10 +93,18 @@ export default async function Page({
   }
 
   return (
-    <div className={"container mx-auto"}>
-      <Suspense fallback={<p>Loading accounts...</p>}>
-        <AccountSelector accounts={accounts} value={accountDetails?.id} />
-      </Suspense>
+    <>
+      <div className={"flex flex-row gap-2 items-center justify-between"}>
+        <Suspense fallback={<p>Loading accounts...</p>}>
+          <AccountSelector accounts={accounts} value={accountDetails?.id} />
+        </Suspense>
+        <Link href={"/finances/accounts/new"}>
+          <Button>
+            <FaPlus />
+            <span className={"hidden md:block"}>Create Account</span>
+          </Button>
+        </Link>
+      </div>
       <div className={"mt-4"}>
         {accountDetails ? (
           <Suspense fallback={<p>Loading summary of accounts...</p>}>
@@ -120,13 +128,13 @@ export default async function Page({
             </div>
           </Suspense>
         ) : (
-          <Card>
-            <CardHeader>
-              <CardTitle>Select an account to view finances.</CardTitle>
-            </CardHeader>
-          </Card>
+           <Card>
+             <CardHeader>
+               <CardTitle>Select an account to view finances.</CardTitle>
+             </CardHeader>
+           </Card>
         )}
       </div>
-    </div>
+    </>
   );
 }

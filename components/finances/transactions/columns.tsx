@@ -25,24 +25,25 @@ import { FaTrashCan } from "react-icons/fa6";
 import { Eye, MoreHorizontal } from "lucide-react";
 import { useState } from "react";
 import { deleteTransaction } from "@/utils/actions/finances/transactions/delete";
+import { format } from "date-fns";
 
 export const columns: ColumnDef<TxAccount>[] = [
-  {
-    header: "Account",
-    accessorKey: "Accounts.name",
-    cell: ({ row }) => {
-      return (
-        <Link href={`/finances?account=${row.original.Accounts?.id}`}>
-          {row.original.Accounts?.name}
-        </Link>
-      );
-    },
-  },
+  // {
+  //   header: "Account",
+  //   accessorKey: "Accounts.name",
+  //   cell: ({ row }) => {
+  //     return (
+  //       <Link href={`/finances?account=${row.original.Accounts?.id}`}>
+  //         {row.original.Accounts?.name}
+  //       </Link>
+  //     );
+  //   },
+  // },
   {
     header: "Timestamp",
     accessorKey: "occurredAt",
     cell: ({ row }) => {
-      return new Date(row.original.occurredAt).toLocaleString("en-GB");
+      return format(new Date(row.original.occurredAt), 'd/M/y HH:mm');
     },
   },
   {
