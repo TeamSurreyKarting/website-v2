@@ -9,6 +9,8 @@ import TaskDescription from "@/components/tasks/ui/description";
 import TaskAssignees from "@/components/tasks/ui/assignees";
 import { CommentWithAuthorDetails } from "@/utils/db-fns/tasks/types/comment-with-author-details";
 import { TaskAssignmentWithAuthorDetails } from "@/utils/db-fns/tasks/types/task-assignment-with-author-details";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { format } from "date-fns";
 
 async function getTask(id: string): Promise<Database["public"]["Views"]["TaskDetailsView"]["Row"]> {
   const supabase = await createClient();
@@ -73,10 +75,10 @@ export default async function TaskDetailPage({
   return (
     <>
       <TitleEdit defaultValue={task.title!} taskId={taskId} />
-      <div
-        className={"rounded-lg bg-ts-blue border border-ts-blue-400 p-6 my-2 "}
+      <Card
+        className={"my-2"}
       >
-        <div className="flex flex-wrap items-center justify-between gap-x-2 mb-3">
+        <CardHeader className="flex flex-row items-center justify-between gap-x-2 mb-3">
           <h3 className={"text-xl font-medium"}>Task Details</h3>
           <EditTaskDetails
             values={{
@@ -87,11 +89,11 @@ export default async function TaskDetailPage({
             }}
             taskId={taskId}
           />
-        </div>
-        <div className={"gap-3 grid md:grid-cols-3 grid-flow-row p-3"}>
+        </CardHeader>
+        <CardContent className={"gap-3 grid md:grid-cols-3 grid-flow-row"}>
           <div className={"flex flex-col gap-1 items-left"}>
             <strong>Due Date</strong>
-            <span>{new Date(task.due_at!).toLocaleString("en-GB")}</span>
+            <span>{format(new Date(task.due_at!), 'PPP, HH:mm')}</span>
           </div>
           <div className={"flex flex-col gap-1 items-left"}>
             <strong>Priority</strong>
@@ -101,8 +103,8 @@ export default async function TaskDetailPage({
             <strong>Status</strong>
             <span>{task.status}</span>
           </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
       <TaskAssignees
         taskId={taskId}
         primaryResponsiblePerson={
@@ -125,14 +127,12 @@ export default async function TaskDetailPage({
         {task.parent_task === null && (
           <Subtasks
             taskId={taskId}
-            className={"rounded-lg bg-ts-blue border border-ts-blue-400 p-4"}
           />
         )}
         { taskComments && (
           <Comments
             taskId={taskId}
             comments={taskComments}
-            className={"rounded-lg bg-ts-blue border border-ts-blue-400 p-4"}
           />
         )}
       </div>

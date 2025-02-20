@@ -48,10 +48,10 @@ export default function RacerFilter({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
-          variant="outline"
+          variant={selectedRacers.length > 0 ? "default" : "secondary"}
           role="combobox"
           aria-expanded={open}
-          className="w-[225px] justify-between bg-ts-blue-600 border-white border-2"
+          className="w-[225px] justify-between"
         >
           {selectedRacers.length > 0 ? (
             <span>
@@ -64,15 +64,15 @@ export default function RacerFilter({
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[225px] p-0 bg-ts-blue-600 text-white">
+      <PopoverContent className="w-[225px] p-0 ">
         <Command>
           <CommandInput
             className={"text-gray-100"}
-            placeholder="Search membership types..."
+            placeholder="Search racers..."
           />
           <CommandList>
-            <CommandEmpty>No membership types found.</CommandEmpty>
-            <CommandGroup className={"bg-ts-blue-500"}>
+            <CommandEmpty>No racers found.</CommandEmpty>
+            <CommandGroup>
               {racers.map((racer) => (
                 <CommandItem
                   key={racer.id}

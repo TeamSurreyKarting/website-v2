@@ -43,7 +43,7 @@ export default async function EventsListPage({ searchParams }: { searchParams?: 
           </div>
           <div className={"flex flex-row gap-2"}>
             <Link href={"/events/new"} className={"flex gap-2 items-center"}>
-              <Button variant={"secondary"}>
+              <Button>
                 <FaPlus />
                 Create
               </Button>

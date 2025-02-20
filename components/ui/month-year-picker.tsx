@@ -89,7 +89,7 @@ export default function MonthYearPicker({
           <SelectTrigger id="month-select" className="w-[180px]">
             <SelectValue placeholder="Month" />
           </SelectTrigger>
-          <SelectContent className={"bg-ts-blue-500"}>
+          <SelectContent>
             {months.map((month) => (
               <SelectItem key={month.value} value={month.value}>
                 {month.label}
@@ -105,7 +105,7 @@ export default function MonthYearPicker({
           <SelectTrigger id="year-select" className={"w-[120px]"}>
             <SelectValue placeholder="Year" />
           </SelectTrigger>
-          <SelectContent className={"bg-ts-blue-500"}>
+          <SelectContent>
             {years.map((year) => (
               <SelectItem key={year} value={year}>
                 {year}

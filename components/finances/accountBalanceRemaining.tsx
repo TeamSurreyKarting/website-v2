@@ -8,7 +8,7 @@ import {
   RadialBarChart,
 } from "recharts";
 
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartConfig, ChartContainer } from "@/components/ui/chart";
 
 const chartConfig = {
@@ -45,6 +45,10 @@ export function AccountBalanceRemaining({
 
   return (
     <Card className="flex flex-col">
+      <CardHeader className={"text-left"}>
+        <CardTitle className={"text-xl"}>Remaining Balance</CardTitle>
+        <CardDescription>Starting Balance: {gbpFormat.format(starting)}</CardDescription>
+      </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
           config={chartConfig}
@@ -52,8 +56,8 @@ export function AccountBalanceRemaining({
         >
           <RadialBarChart
             data={chartData}
-            startAngle={360}
-            endAngle={0}
+            startAngle={-66}
+            endAngle={-66+((remaining/starting)*330)}
             innerRadius={80}
             outerRadius={135}
           >
@@ -61,7 +65,7 @@ export function AccountBalanceRemaining({
               gridType="circle"
               radialLines={false}
               stroke="#"
-              className="first:fill-muted last:fill-background"
+              className="fill-none"
               polarRadius={[86, 74]}
             />
             <RadialBar dataKey="remaining" background cornerRadius={10} />
@@ -83,13 +87,6 @@ export function AccountBalanceRemaining({
                         >
                           {gbpFormat.format(chartData[0].remaining)}
                         </tspan>
-                        <tspan
-                          x={viewBox.cx}
-                          y={(viewBox.cy || 0) + 24}
-                          className="fill-muted-foreground"
-                        >
-                          Remaining
-                        </tspan>
                       </text>
                     );
                   }
@@ -99,9 +96,6 @@ export function AccountBalanceRemaining({
           </RadialBarChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter>
-        <span></span>
-      </CardFooter>
     </Card>
   );
 }

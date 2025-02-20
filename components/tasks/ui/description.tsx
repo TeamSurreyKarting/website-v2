@@ -26,6 +26,8 @@ import {
 } from "@/components/ui/form";
 import { LoadingButton } from "@/components/ui/loading-button";
 import { Textarea } from "@/components/ui/textarea";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Pencil } from "lucide-react";
 
 const formSchema = z.object({
   description: z
@@ -101,21 +103,21 @@ export default function TaskDescription({
   }
 
   return (
-    <div className={"rounded-lg bg-ts-blue border border-ts-blue-400 mt-6 p-4"}>
-      <div
-        className={"flex flex-wrap items-center justify-between gap-x-2 mb-3"}
+    <Card className={"mt-6"}>
+      <CardHeader
+        className={"flex flex-row items-center justify-between gap-x-2"}
       >
         <h3 className={"text-lg font-medium"}>Description</h3>
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <Button
-              variant="outline"
+              variant={"secondary"}
               type={"button"}
               className={
-                "bg-ts-blue-400 hover:bg-white hover:text-black float-right"
+                "float-right"
               }
             >
-              Edit Description
+              <Pencil />
             </Button>
           </DialogTrigger>
           <DialogContent>
@@ -167,8 +169,10 @@ export default function TaskDescription({
             </Form>
           </DialogContent>
         </Dialog>
-      </div>
-      <p className={"mt-1 mx-3"}>{defaultValue}</p>
-    </div>
+      </CardHeader>
+      <CardContent>
+        <p className={"mx-1.5"}>{defaultValue}</p>
+      </CardContent>
+    </Card>
   );
 }

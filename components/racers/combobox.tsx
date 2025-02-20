@@ -98,10 +98,10 @@ export default function RacerCombobox({
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
         <Button
-          variant="outline"
+          variant="input"
           role="combobox"
           className={cn(
-            "justify-between bg-ts-blue-600 text-white",
+            "justify-between ",
             fullWidth ? "w-full mt-2" : "w-[200px]",
           )}
         >
@@ -110,8 +110,8 @@ export default function RacerCombobox({
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        className="w-[200px] p-0 bg-ts-blue-600 text-white"
-        align={"end"}
+        className="w-[200px] p-0"
+        align={"start"}
       >
         <Command shouldFilter={false}>
           <CommandInput

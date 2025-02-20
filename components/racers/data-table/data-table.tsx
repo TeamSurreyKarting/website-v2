@@ -15,7 +15,7 @@ async function getData(
 
   if (searchQuery && searchQuery.trim().length > 0) {
     // If search query, do filter
-    query.like("fullName", `%${searchQuery.trim()}%`);
+    query.ilike("fullName", `%${searchQuery.trim()}%`);
   }
 
   const { data: racers } = await query;

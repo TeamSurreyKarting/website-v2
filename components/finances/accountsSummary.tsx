@@ -20,7 +20,6 @@ export default async function AccountsSummary({
       </div>
       <div className={"rounded-lg bg-ts-blue-500 border border-ts-blue-300"}>
         {/* Line Chart - Step of transaction history */}
-        <p>asdfafasdfasdf</p>
       </div>
     </div>
   );

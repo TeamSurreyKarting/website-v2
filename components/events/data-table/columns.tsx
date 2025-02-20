@@ -3,9 +3,9 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Tables } from "@/database.types";
 import { Button } from "@/components/ui/button";
-import { FaEye } from "react-icons/fa";
 import Link from "next/link";
 import { format } from "date-fns";
+import { Eye } from "lucide-react";
 
 export const columns: ColumnDef<
   Tables<'Events'>
@@ -37,7 +37,7 @@ export const columns: ColumnDef<
       <div className={"flex gap-2"}>
         <Link href={`/events/${row.original.id}`}>
           <Button variant={"ghost"}>
-            <FaEye />
+            <Eye />
           </Button>
         </Link>
       </div>

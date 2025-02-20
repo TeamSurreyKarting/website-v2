@@ -22,10 +22,16 @@ async function getRacerDetails(
   return racer;
 }
 
-export default async function Page(props: { params: Promise<{ id: string }> }) {
+export default async function Page(props: { params: Promise<{ id?: string }> }) {
   const params = await props.params;
-  const racerId = await params.id;
-  const [racerProfile] = await Promise.all([getRacerDetails(racerId)]);
+  const racerId = params.id;
+
+  if (!racerId) {
+    console.error("Racer not found in database.")
+    notFound();
+  }
+
+  const racerProfile = await getRacerDetails(racerId);
 
   if (!racerProfile) {
     notFound();
@@ -37,8 +43,10 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
       <h3 className={"text-xl font-medium text-ts-gold-700"}>
         {racerProfile.fullName}
       </h3>
-      <RacerDetails details={racerProfile} />
-      <RacerMembershipList racerDetails={racerProfile} />
+      <div className="flex flex-col gap-2 mt-4">
+        <RacerDetails details={racerProfile} />
+        <RacerMembershipList racerDetails={racerProfile} />
+      </div>
     </>
   );
 }

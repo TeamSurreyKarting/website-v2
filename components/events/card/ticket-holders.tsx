@@ -59,7 +59,7 @@ export default function TicketHoldersCard({ tickets, eventStart }: { tickets: Ti
 
   return (
     <>
-      <Card className={"bg-ts-blue order-first sm:order-last"}>
+      <Card className={"order-first sm:order-last"}>
         <CardHeader className={"flex flex-row justify-between"}>
           <div className={"flex flex-col space-y-1.5"}>
             <CardTitle>Ticket Holders</CardTitle>
@@ -134,7 +134,7 @@ export default function TicketHoldersCard({ tickets, eventStart }: { tickets: Ti
               />
               <LoadingButton
                 loading={ticketAssignmentForm.formState.isLoading}
-                className={"float-right bg-white text-black"}
+                className={"float-right"}
                 type={"submit"}
               >
                 Add

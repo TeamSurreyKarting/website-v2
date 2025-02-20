@@ -44,9 +44,9 @@ export default function AccountSelector({
   });
 
   return (
-    <div className={"flex gap-2 "}>
+    <div className={"flex flex-row gap-2 items-center justify-between"}>
       <Select value={value} onValueChange={handleSelectionChange}>
-        <SelectTrigger className="w-full md:w-[320px] bg-ts-blue-400">
+        <SelectTrigger className="w-full md:w-[320px]">
           <SelectValue placeholder="Account" />
         </SelectTrigger>
         <SelectContent>
@@ -55,7 +55,7 @@ export default function AccountSelector({
               key={account.id}
               value={account.id}
               className={clsx("flex gap-2", {
-                "text-ts-gold-700 font-medium": account.id === value,
+                "font-medium": account.id === value,
               })}
             >
               <p>{account.name}</p>
@@ -67,7 +67,7 @@ export default function AccountSelector({
         </SelectContent>
       </Select>
       <Link href={"/finances/accounts/new"}>
-        <Button className={"bg-ts-blue-400  border border-white"}>
+        <Button>
           <FaPlus />
           <span>Create Account</span>
         </Button>

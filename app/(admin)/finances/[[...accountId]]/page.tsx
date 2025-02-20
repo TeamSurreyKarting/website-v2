@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { FaPlus } from "react-icons/fa6";
 import { notFound } from "next/navigation";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 async function getAccounts(onlyActive: boolean = true) {
   const supabase = await createClient();
@@ -104,12 +105,12 @@ export default async function Page({
               accountDetails={accountDetails}
             />
             <div className={"mt-4"}>
-              <div className={"mt-8 mb-4 flex gap-4 items-center"}>
+              <div className={"mt-8 mb-4 flex gap-4 items-center justify-between"}>
                 <h3 className={"font-medium text-lg"}>Transaction History</h3>
                 <Link
                   href={`/finances/transactions/new?accountId=${accountDetails.id}`}
                 >
-                  <Button className={"bg-ts-blue-400  border border-white"}>
+                  <Button>
                     <FaPlus />
                     <span>Add Transaction</span>
                   </Button>
@@ -119,13 +120,11 @@ export default async function Page({
             </div>
           </Suspense>
         ) : (
-          <div
-            className={
-              "mt-8 rounded-lg border border-ts-blue-300 bg-ts-blue-500 p-8 text-center"
-            }
-          >
-            Select an account to view finances.
-          </div>
+          <Card>
+            <CardHeader>
+              <CardTitle>Select an account to view finances.</CardTitle>
+            </CardHeader>
+          </Card>
         )}
       </div>
     </div>

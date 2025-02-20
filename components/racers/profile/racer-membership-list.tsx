@@ -3,6 +3,7 @@ import Link from "next/link";
 import { FaPlus } from "react-icons/fa6";
 import { Button } from "@/components/ui/button";
 import MembersDataTable from "@/components/members/data-table/data-table";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function RacerMembershipList({
   racerDetails,
@@ -10,25 +11,21 @@ export default function RacerMembershipList({
   racerDetails: Database["public"]["Views"]["RacerDetails"]["Row"];
 }) {
   return (
-    <div
-      className={
-        "transition-colors my-6 rounded-lg bg-ts-blue-600 border-ts-blue-400 w-full border p-4"
-      }
-    >
-      <div className={"h-10 flex gap-2 justify-between items-center"}>
-        <h4 className={"font-medium text-xl"}>Memberships</h4>
+    <Card>
+      <CardHeader className={"flex flex-row gap-2 justify-between items-center"}>
+        <CardTitle className={"font-medium text-xl"}>Memberships</CardTitle>
         <Link href={`/members/new?racer=${racerDetails.id}`}>
-          <Button variant={"outline"} className={"bg-ts-blue-400"}>
+          <Button>
             <FaPlus />
             Assign Membership
           </Button>
         </Link>
-      </div>
-      <div className={"mt-4"}>
+      </CardHeader>
+      <CardContent>
         <MembersDataTable
           racerIds={racerDetails.id ? [racerDetails.id] : undefined}
         />
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

@@ -61,7 +61,6 @@ export default async function Page(props: {
       <h2 className={"text-2xl font-bold"}>Members</h2>
       <div className="mx-auto my-2 flex justify-between gap-x-2">
         <div className={"flex flex-row gap-2 items-center"}>
-          <IoFilterCircleOutline className="opacity-80 h-full aspect-square" />
           {membershipTypes !== null && membershipTypes.length > 0 && (
             <MembershipTypeFilter membershipTypes={membershipTypes} />
           )}
@@ -80,7 +79,7 @@ export default async function Page(props: {
             </Button>
           </Link>
           <Link href={"/members/new"} className={"flex gap-2 items-center"}>
-            <Button variant={"secondary"}>
+            <Button>
               <FaPlus />
               Create
             </Button>

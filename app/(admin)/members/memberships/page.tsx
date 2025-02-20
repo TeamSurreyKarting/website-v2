@@ -22,7 +22,7 @@ export default async function Page(props: {
           href={"/members/memberships/new"}
           className={"flex gap-2 items-center"}
         >
-          <Button variant={"secondary"}>
+          <Button>
             <FaPlus />
             Create
           </Button>

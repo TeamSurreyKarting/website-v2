@@ -50,10 +50,10 @@ export default function MembershipTypeFilter({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
-          variant="outline"
+          variant={selectedMemberships.length > 0 ? "default" : "secondary"}
           role="combobox"
           aria-expanded={open}
-          className="w-[225px] justify-between bg-ts-blue-600 border-white border-2"
+          className="w-[225px] justify-between"
         >
           {selectedMemberships.length > 0 ? (
             <span>{selectedMemberships.length} Membership Selected</span>
@@ -63,15 +63,11 @@ export default function MembershipTypeFilter({
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[225px] p-0 bg-ts-blue-600 text-white">
+      <PopoverContent className="w-[225px] p-0">
         <Command>
-          <CommandInput
-            className={"text-gray-100"}
-            placeholder="Search membership types..."
-          />
           <CommandList>
             <CommandEmpty>No membership types found.</CommandEmpty>
-            <CommandGroup className={"bg-ts-blue-500"}>
+            <CommandGroup>
               {membershipTypes.map((membershipType) => (
                 <CommandItem
                   key={membershipType.id}

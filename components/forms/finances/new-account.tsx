@@ -90,7 +90,7 @@ export function NewFinancialAccountForm() {
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input placeholder={"Account Name"} {...field} />
+                <Input placeholder={"Account Name"} autoComplete={"off"} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -162,13 +162,12 @@ export function NewFinancialAccountForm() {
         />
         <LoadingButton
           className={
-            "bg-ts-blue-700 hover:bg-white hover:text-black float-right"
+            "float-right"
           }
-          variant={"outline"}
           type={"submit"}
           loading={form.formState.isSubmitting}
         >
-          Create Financial Account
+          Create Account
         </LoadingButton>
       </form>
     </Form>

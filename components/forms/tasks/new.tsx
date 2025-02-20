@@ -203,9 +203,8 @@ export function TaskForm({
         />
         <LoadingButton
           className={
-            "bg-ts-blue-700 hover:bg-white hover:text-black float-right"
+            "float-right"
           }
-          variant={"outline"}
           type={"submit"}
           loading={form.formState.isSubmitting}
         >

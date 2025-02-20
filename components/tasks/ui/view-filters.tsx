@@ -59,14 +59,14 @@ export default function TaskViewFilters({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
-          className={"bg-ts-blue-500 hover:bg-white hover:text-black float-right"}
+          variant={form.watch().assignedTo.length > 0 ? "default" : "secondary"}
         >
           <IoFilterCircleOutline />
           Filters
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        className={"bg-ts-blue text-white"}
+        align={"end"}
       >
         <Form {...form}>
           <form
@@ -80,7 +80,7 @@ export default function TaskViewFilters({
                   <FormLabel>Primarily Assigned To</FormLabel>
                   <RacerCombobox
                     defaultValue={field.value}
-                    onValueChange={field.onChange}
+                    onValueChange={(value) => { field.onChange(value); setOpen(false); }}
                     fullWidth={true}
                   />
                   <FormMessage />

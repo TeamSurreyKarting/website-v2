@@ -1,69 +1,172 @@
 @import 'tailwindcss';
-
 @plugin 'tailwindcss-animate';
 
 @custom-variant dark (&:is(.dark *));
 
+:root {
+/*  --background: 206 75% 95%;*/
+/*  --foreground: 206 3.8% 7.5%;*/
+/*  --card: 206 37.5% 95%;*/
+/*  --card-foreground: 206 3.8% 12.5%;*/
+/*  --popover: 206 75% 97.5%;*/
+/*  --popover-foreground: 206 98.8% 5%;*/
+/*  --primary: 206, 60%, 17%;*/
+/*  --primary-foreground: 0 0% 100%;*/
+/*  --secondary: 42, 97%, 59%;*/
+/*  --secondary-foreground: 0 0% 0%;*/
+/*  --muted: 244 25% 90%;*/
+/*  --muted-foreground: 206 3.8% 37.5%;*/
+/*  --accent: 244 25% 85%;*/
+/*  --accent-foreground: 206 3.8% 12.5%;*/
+/*  --destructive: 0 87.5% 40%;*/
+/*  --destructive-foreground: 206 3.8% 95%;*/
+/*  --border: 206 27.5% 66%;*/
+/*  --input: 206 27.5% 34%;*/
+/*  --ring: 206 88.7% 45.3%;*/
+/*  --radius: 0.5rem;*/
+/*  --sidebar-background: 206, 75%, 90%;*/
+/*  --sidebar-foreground: 206, 4%, 7%;*/
+/*  --sidebar-primary: 206, 60%, 16%;*/
+/*  --sidebar-primary-foreground: 0, 0%, 100%;*/
+/*  --sidebar-accent: 244, 25%, 81%;*/
+/*  --sidebar-accent-foreground: 0 0% 0%;*/
+/*  --sidebar-border: 206, 28%, 63%;*/
+/*  --sidebar-ring: 196, 98%, 45%;*/
+/*}*/
+
+/*.dark {*/
+  --background: var(--color-ts-blue-700);
+  --foreground: oklch(100% 0 0);
+  --card: var(--color-ts-blue-600);
+  --card-foreground: oklch(100% 0 0);
+  --popover: var(--color-ts-blue-400);
+  --popover-foreground: oklch(100% 0 0);
+  --primary: var(--color-ts-gold-500);
+  --primary-foreground: var(--color-ts-blue-900);
+  --secondary: var(--color-ts-blue-500);
+  --secondary-foreground: var(--color-ts-gold-500);
+  --muted: 244 25% 20%;
+  --muted-foreground: 206 3.8% 62.5%;
+  --accent: var(--color-ts-blue-300);
+  --accent-foreground: 206 3.8% 92.5%;
+  --destructive: oklch(50.97% 0.2035 28.64);
+  --destructive-foreground: oklch(100% 0 0);
+  --border: var(--color-ts-blue-600);
+  --input: var(--color-ts-blue-500);
+  --input-border: var(--color-ts-blue-400);
+  --input-focus: var(--color-ts-blue-400);
+  --input-focus-border: var(--color-ts-blue-300);
+  --switch-active: var(--color-ts-gold-500);
+  --switch-inactive: var(--color-ts-blue-400);
+  --switch-toggle: var(--color-ts-blue-800);
+  --ring: var(--color-ts-blue-200);
+  --radius: 0.5rem;
+  --sidebar-background: var(--color-ts-blue-800);
+  --sidebar-foreground: oklch(100% 0 0);
+  --sidebar-primary: var(--color-ts-blue-700);
+  --sidebar-primary-foreground: oklch(100% 0 0);
+  --sidebar-accent: var(--color-ts-blue-700);
+  --sidebar-accent-foreground: oklch(100% 0 0);
+  --sidebar-active: var(--color-ts-gold-500);
+  --sidebar-active-foreground: var(--color-ts-blue-900);
+  --sidebar-border: var(--color-ts-gold-700);
+  --sidebar-ring: var(--color-ts-blue-200);
+}
+
 @theme {
+  --color-ts-blue: oklch(29.86% 0.055 244.39);
+  --color-ts-blue-50: oklch(58.34% 0.123 245.51);
+  --color-ts-blue-100: oklch(55.7% 0.116 245.38);
+  --color-ts-blue-200: oklch(49.33% 0.102 245.3);
+  --color-ts-blue-300: oklch(43.47% 0.088 245.32);
+  --color-ts-blue-400: oklch(36.65% 0.072 245.23);
+  --color-ts-blue-500: oklch(29.86% 0.055 244.39);
+  --color-ts-blue-600: oklch(26.26% 0.046 242.59);
+  --color-ts-blue-700: oklch(22.73% 0.038 244.51);
+  --color-ts-blue-800: oklch(18.03% 0.026 241.8);
+  --color-ts-blue-900: oklch(14.37% 0.017 235.16);
+  --color-ts-blue-950: oklch(11.61% 0.013 222.28);
+
+  --color-ts-gold: oklch(84.24% 0.1597 84.05);
+  --color-ts-gold-50: oklch(94.73% 0.057 87.11);
+  --color-ts-gold-100: oklch(93.63% 0.071 87.76);
+  --color-ts-gold-200: oklch(91.02% 0.098 87.43);
+  --color-ts-gold-300: oklch(89.08% 0.117 86.58);
+  --color-ts-gold-400: oklch(86.73% 0.142 85.76);
+  --color-ts-gold-500: oklch(84.24% 0.16 84.05);
+  --color-ts-gold-600: oklch(79.69% 0.165 78.08);
+  --color-ts-gold-700: oklch(73.68% 0.153 78.67);
+  --color-ts-gold-800: oklch(66.19% 0.137 79.1);
+  --color-ts-gold-900: oklch(57.08% 0.118 79.46);
+  --color-ts-gold-950: oklch(50.31% 0.104 79.62);
+
   --animate-caret-blink: caret-blink 1.25s ease-out infinite;
 
-  --color-ts-blue-50: #3081bf;
-  --color-ts-blue-100: #2d79b3;
-  --color-ts-blue-200: #266697;
-  --color-ts-blue-300: #20557e;
-  --color-ts-blue-400: #194262;
-  --color-ts-blue-500: #123047;
-  --color-ts-blue-600: #0e2739;
-  --color-ts-blue-700: #0b1e2d;
-  --color-ts-blue-800: #07131c;
-  --color-ts-blue-900: #04101c;
-  --color-ts-blue-950: #000d1b;
-  --color-ts-blue: #123047;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
 
-  --color-ts-gold-50: #fee9a4;
-  --color-ts-gold-100: #fde598;
-  --color-ts-gold-200: #fddd7e;
-  --color-ts-gold-300: #fdd465;
-  --color-ts-gold-400: #fccb4c;
-  --color-ts-gold-500: #fcc133;
-  --color-ts-gold-600: #fbb310;
-  --color-ts-gold-700: #e49c03;
-  --color-ts-gold-800: #c18203;
-  --color-ts-gold-900: #9e6802;
-  --color-ts-gold-950: #8c5b02;
-  --color-ts-gold: #fcc133;
+  --color-sidebar: var(--sidebar-background);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-active: var(--sidebar-active);
+  --color-sidebar-active-foreground: var(--sidebar-active-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
 
-  --color-sidebar: ts-blue-950 text-white;
-  --color-sidebar-border: ts-blue-400;
-  --color-sidebar-accent: ts-blue-700;
-  --color-sidebar-accent-foreground: ts-blue-700;
-  --color-sidebar-ring: ts-blue-500;
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+
+  --color-border: var(--border);
+  --color-ring: var(--ring);
+
+  --color-input: var(--input);
+  --color-input-border: var(--input-border);
+  --color-input-focus: var(--input-focus);
+  --color-input-border-focus: var(--input-focus-border);
+
+  --color-switch-inactive: var(--switch-inactive);
+  --color-switch-active: var(--switch-active);
+  --color-switch-toggle: var(--switch-toggle);
 
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
+}
 
-  @keyframes caret-blink {
-    0%,
-    70%,
-    100% {
-      opacity: 1;
-    }
-    20%,
-    50% {
-      opacity: 0;
-    }
+@layer utilities {
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 }
 
-/*
-  The default border color has changed to `currentColor` in Tailwind CSS v4,
-  so we've added these compatibility styles to make sure everything still
-  looks the same as it did with Tailwind CSS v3.
-
-  If we ever want to remove these styles, we need to add an explicit border
-  color utility to any element that depends on these defaults.
-*/
 @layer base {
   *,
   ::after,
@@ -72,33 +175,11 @@
   ::file-selector-button {
     border-color: var(--color-gray-200, currentColor);
   }
-}
-
-@layer utilities {
+  * {
+    @apply border-border outline-ring/50;
+  }
   body {
-    font-family: Arial, Helvetica, sans-serif;
+    @apply bg-background text-foreground;
   }
 }
 
-:root {
-    --radius: 0.5rem;
-    --sidebar-background: 211 100% 5%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-}
-
-.dark {
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-}

@@ -46,7 +46,7 @@ export function BaseDataTable<TData, TValue>({
     <>
       <div className="rounded-md border overflow-hidden">
         <Table>
-          <TableHeader className={"bg-ts-blue-500"}>
+          <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
@@ -95,12 +95,10 @@ export function BaseDataTable<TData, TValue>({
         </Table>
       </div>
       <div className={"flex items-center justify-between space-x-2 py-4"}>
-        <span className={"text-slate-600"}>
+        <span className={"text-muted-foreground"}>
           Rows{" "}
-          <span className={"text-slate-500"}>
-            {displayedTableRowIndexStart}-{displayedTableRowIndexEnd}
-          </span>{" "}
-          of <span className={"text-slate-500"}>{totalRowCount}</span>
+            {displayedTableRowIndexStart}{" "}–{" "}{displayedTableRowIndexEnd}{" "}
+          of <span className={"text-muted-foreground"}>{totalRowCount}</span>
         </span>
         {(table.getCanPreviousPage() || table.getCanNextPage()) && (
           <div className={"flex items-center justify-between space-x-2 py-4"}>

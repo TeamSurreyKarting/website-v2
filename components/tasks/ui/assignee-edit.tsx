@@ -21,6 +21,7 @@ import RacerCombobox from "@/components/racers/combobox";
 import RacerMultiSelect from "@/components/racers/multi-select";
 import { useRouter } from "next/navigation";
 import { updateAssignees } from "@/utils/actions/tasks/update-assignees";
+import { Pencil } from "lucide-react";
 
 const formSchema = z.object({
   primaryResponsiblePerson: z
@@ -52,7 +53,7 @@ export default function AssigneeEdit({
   });
   const [open, setOpen] = useState(false);
   const { toast } = useToast();
-  const router = useRouter();
+  const { refresh } = useRouter();
 
   useEffect(() => {
     form.reset();
@@ -71,7 +72,7 @@ export default function AssigneeEdit({
       setOpen(false);
       form.reset();
 
-      router.refresh();
+      refresh();
     } catch (e) {
       toast({
         title: "Failed to update assignees",
@@ -84,13 +85,13 @@ export default function AssigneeEdit({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
-          variant="outline"
+          variant={"secondary"}
           type={"button"}
           className={
-            "bg-ts-blue-400 hover:bg-white hover:text-black float-right"
+            "float-right"
           }
         >
-          Edit Assignees
+          <Pencil />
         </Button>
       </DialogTrigger>
       <DialogContent>
@@ -145,10 +146,9 @@ export default function AssigneeEdit({
             <DialogFooter>
               <LoadingButton
                 className={
-                  "bg-ts-blue-400 border border-white hover:bg-white hover:text-black float-right"
+                  "float-right"
                 }
                 loading={form.formState.isSubmitting}
-                variant={"secondary"}
               >
                 Save
               </LoadingButton>

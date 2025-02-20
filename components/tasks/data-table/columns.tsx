@@ -23,8 +23,7 @@ import {
 import { Spinner } from "@/components/ui/spinner";
 import { useState } from "react";
 import Link from "next/link";
-import { FaEye } from "react-icons/fa6";
-import { MoreHorizontal } from "lucide-react";
+import { Eye, MoreHorizontal } from "lucide-react";
 import { deleteTask } from "@/utils/actions/tasks/delete";
 function FaTrashCan() {
   return null;
@@ -63,7 +62,7 @@ export const columns: ColumnDef<
         <div className={"flex gap-2"}>
           <Link href={`/tasks/${row.original.id}`}>
             <Button variant={"ghost"} className={"hidden lg:block"}>
-              <FaEye />
+              <Eye />
             </Button>
           </Link>
           <Dialog>
@@ -78,7 +77,7 @@ export const columns: ColumnDef<
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                 <Link href={`/racers/${row.original.id}`}>
                   <DropdownMenuItem className={"lg:hidden"}>
-                    <FaEye />
+                    <Eye />
                     View Details
                   </DropdownMenuItem>
                 </Link>
