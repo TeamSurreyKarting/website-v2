@@ -1,16 +1,17 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { FaPencil, FaPlus } from "react-icons/fa6";
+import { FaPencil } from "react-icons/fa6";
 import { Suspense } from "react";
 import MembersDataTable from "@/components/members/data-table/data-table";
-import MembershipTypeFilter from "@/components/members/data-table/membership-type-filter";
-import { Database } from "@/database.types";
+import { Tables } from "@/database.types";
 import { createClient } from "@/utils/supabase/server";
-import { IoFilterCircleOutline } from "react-icons/io5";
-import RacerFilter from "@/components/members/data-table/racer-filter";
+import { notFound } from "next/navigation";
+import MembershipListFilters from "@/components/memberships/list-filters";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { UserPlus } from "lucide-react";
 
 async function getMembershipTypes(): Promise<
-  Database["public"]["Tables"]["MembershipTypes"]["Row"][] | null
+  Tables<'MembershipTypes'>[] | null
 > {
   const supabase = await createClient();
 
@@ -24,7 +25,7 @@ async function getMembershipTypes(): Promise<
 }
 
 async function getRacers(): Promise<
-  Database["public"]["Tables"]["Racers"]["Row"][] | null
+  Tables<'Racers'>[] | null
 > {
   const supabase = await createClient();
 
@@ -56,32 +57,39 @@ export default async function Page(props: {
     getRacers(),
   ]);
 
+  if (!membershipTypes || !racers) {
+    console.error("Error getting data")
+    notFound();
+  }
+
   return (
     <div className={"container mx-auto"}>
       <h2 className={"text-2xl font-bold"}>Members</h2>
       <div className="mx-auto my-2 flex justify-between gap-x-2">
-        <div className={"flex flex-row gap-2 items-center"}>
-          {membershipTypes !== null && membershipTypes.length > 0 && (
-            <MembershipTypeFilter membershipTypes={membershipTypes} />
-          )}
-          {racers !== null && racers.length > 0 && (
-            <RacerFilter racers={racers} />
-          )}
-        </div>
+        <MembershipListFilters membershipTypes={membershipTypes} racers={racers} />
         <div className={"flex flex-row gap-2"}>
           <Link
             href={"/members/memberships"}
             className={"flex gap-2 items-center"}
           >
-            <Button variant={"secondary"}>
-              <FaPencil />
-              Manage Membership Types
-            </Button>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant={"secondary"}>
+                    <FaPencil />
+                    <span className={"hidden md:block"}>Manage Membership Types</span>
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Manage Membership Types</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </Link>
           <Link href={"/members/new"} className={"flex gap-2 items-center"}>
             <Button>
-              <FaPlus />
-              Create
+              <UserPlus />
+              Assign
             </Button>
           </Link>
         </div>
@@ -101,3 +109,5 @@ export default async function Page(props: {
     </div>
   );
 }
+
+
