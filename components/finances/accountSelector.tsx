@@ -43,27 +43,29 @@ export default function AccountSelector({
     maximumFractionDigits: 2,
   });
 
+  const selectedAccount = accounts.find((acc) => acc.id === value);
+
   return (
-      <Select value={value} onValueChange={handleSelectionChange}>
-        <SelectTrigger className="w-fit">
-          <SelectValue placeholder="Account" />
-        </SelectTrigger>
-        <SelectContent>
-          {accounts.map((account) => (
-            <SelectItem
-              key={account.id}
-              value={account.id}
-              className={clsx("flex gap-2", {
-                "font-medium": account.id === value,
-              })}
-            >
-              <p>{account.name}</p>
-              <span className={"opacity-60"}>
-                {gbpFormat.format(account.endingBalance)}
-              </span>
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+    <Select value={value} onValueChange={handleSelectionChange}>
+      <SelectTrigger className="w-full overflow-hidden">
+        {selectedAccount ? selectedAccount.name : "Select Account..."}
+      </SelectTrigger>
+      <SelectContent>
+        {accounts.map((account) => (
+          <SelectItem
+            key={account.id}
+            value={account.id}
+            className={clsx("flex gap-2", {
+              "font-medium": account.id === value,
+            })}
+          >
+            <p className={"truncate"}>{account.name}</p>
+            <span className={"opacity-60"}>
+              {gbpFormat.format(account.endingBalance)}
+            </span>
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
   );
 }

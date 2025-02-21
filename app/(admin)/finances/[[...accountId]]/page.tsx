@@ -94,8 +94,8 @@ export default async function Page({
 
   return (
     <>
-      <div className={"flex flex-row gap-2 items-center justify-between"}>
-        <Suspense fallback={<p>Loading accounts...</p>}>
+      <div className={"grid grid-cols-[1fr_auto] gap-2 items-center justify-between"}>
+        <Suspense fallback={<p>Loading...</p>}>
           <AccountSelector accounts={accounts} value={accountDetails?.id} />
         </Suspense>
         <Link href={"/finances/accounts/new"}>
