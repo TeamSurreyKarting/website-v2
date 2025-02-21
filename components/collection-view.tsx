@@ -37,7 +37,7 @@ export function CollectionView<TData extends CollectionItem>({ data, renderItem,
   return (
     <div
       ref={parentRef}
-      className={cn("h-[70vh] overflow-auto", className)}
+      className={cn("h-full", className)}
       {...props}
     >
       <div
@@ -46,11 +46,7 @@ export function CollectionView<TData extends CollectionItem>({ data, renderItem,
       >
         {virtualizer.getVirtualItems().map((virtualItem) => {
           const item = data[virtualItem.index];
-          const cardContent = (
-            <Card className="p-4">
-              <CardContent>{renderItem(item)}</CardContent>
-            </Card>
-          );
+          const cardContent = renderItem(item);
 
           return (
             <div
