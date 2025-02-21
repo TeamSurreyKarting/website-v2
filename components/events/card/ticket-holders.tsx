@@ -18,6 +18,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { UserPlus } from "lucide-react";
+import { ResponsiveModal } from "@/components/ui/responsive-modal";
 
 type Ticket = Tables<'EventTicket'> & { EventTicketAllocation: TicketAllocation[] }
 type TicketAllocation = Tables<'EventTicketAllocation'> & { Racers: Tables<'Racers'>, EventTicketAllocationCheckIn: Tables<'EventTicketAllocationCheckIn'> | null }
@@ -65,12 +66,75 @@ export default function TicketHoldersCard({ tickets, eventStart }: { tickets: Ti
             <CardTitle>Ticket Holders</CardTitle>
             <CardDescription>{ticketAllocations.length === 0 ? "No" : ticketAllocations.length} {pluralize('ticket', ticketAllocations.length)} allocated</CardDescription>
           </div>
-          <div className={"flex flex-col sm:flex-row gap-2 items-start sm:items-center justify-between"}>
-            <Button onClick={() => setTicketAssignmentDialogIsOpen(!ticketAssignmentDialogIsOpen)}>
-              <UserPlus />
-              <span>Assign Ticket</span>
-            </Button>
-          </div>
+          <ResponsiveModal
+            title="Assign Ticket"
+            trigger={
+              <Button onClick={() => setTicketAssignmentDialogIsOpen(!ticketAssignmentDialogIsOpen)}>
+                <UserPlus />
+                <span>Assign Ticket</span>
+              </Button>
+            }
+            open={ticketAssignmentDialogIsOpen}
+            onOpenChange={setTicketAssignmentDialogIsOpen}
+          >
+            <Form {...ticketAssignmentForm}>
+              <form onSubmit={ticketAssignmentForm.handleSubmit(submitTicketAssignmentForm)} className={"space-y-6"}>
+                <FormField
+                  control={ticketAssignmentForm.control}
+                  name={"eventTicket"}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Ticket</FormLabel>
+                      <FormControl>
+                        <Select
+                          {...field}
+                          defaultValue={field.value}
+                          onValueChange={field.onChange}
+                        >
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select option" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            { tickets.map((ticket) => (
+                              <SelectItem
+                                key={ticket.id}
+                                value={ticket.id}
+                              >
+                                {ticket.name}
+                              </SelectItem>
+                            )) }
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={ticketAssignmentForm.control}
+                  name={"racer"}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Racer</FormLabel>
+                      <FormControl>
+                        <RacerCombobox defaultValue={field.value} onValueChange={field.onChange} fullWidth={true} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <div className={"max-md:w-full"}>
+                  <LoadingButton
+                    loading={ticketAssignmentForm.formState.isLoading}
+                    className={"w-full md:w-fit md:float-right"}
+                    type={"submit"}
+                  >
+                    Add
+                  </LoadingButton>
+                </div>
+              </form>
+            </Form>
+          </ResponsiveModal>
         </CardHeader>
         <CardContent className={"flex flex-col gap-2"}>
           {ticketAllocations.map((ta) => {
@@ -81,68 +145,6 @@ export default function TicketHoldersCard({ tickets, eventStart }: { tickets: Ti
           })}
         </CardContent>
       </Card>
-      <Dialog open={ticketAssignmentDialogIsOpen} onOpenChange={setTicketAssignmentDialogIsOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Add New Ticket Assignment</DialogTitle>
-          </DialogHeader>
-          <Form {...ticketAssignmentForm}>
-            <form onSubmit={ticketAssignmentForm.handleSubmit(submitTicketAssignmentForm)} className={"space-y-6"}>
-              <FormField
-                control={ticketAssignmentForm.control}
-                name={"eventTicket"}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Ticket</FormLabel>
-                    <FormControl>
-                      <Select
-                        {...field}
-                        defaultValue={field.value}
-                        onValueChange={field.onChange}
-                      >
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Select option" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          { tickets.map((ticket) => (
-                            <SelectItem
-                              key={ticket.id}
-                              value={ticket.id}
-                            >
-                              {ticket.name}
-                            </SelectItem>
-                          )) }
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={ticketAssignmentForm.control}
-                name={"racer"}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Racer</FormLabel>
-                    <FormControl>
-                      <RacerCombobox defaultValue={field.value} onValueChange={field.onChange} fullWidth={true} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <LoadingButton
-                loading={ticketAssignmentForm.formState.isLoading}
-                className={"float-right"}
-                type={"submit"}
-              >
-                Add
-              </LoadingButton>
-            </form>
-          </Form>
-        </DialogContent>
-      </Dialog>
     </>
   )
 }

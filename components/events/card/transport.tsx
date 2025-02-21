@@ -36,6 +36,7 @@ import {
   AlertDialogTrigger
 } from "@/components/ui/alert-dialog";
 import pluralize from "pluralize";
+import { ResponsiveModal } from "@/components/ui/responsive-modal";
 
 const addDriverFormSchema = z.object({
   event: z.string().uuid().readonly(),
@@ -158,14 +159,259 @@ export default function TransportCard({ eventId, transport, ticketAllocations }:
             )}
           </div>
           <div className={"flex flex-col sm:flex-row gap-2 items-start sm:items-center justify-between"}>
-            <Button onClick={() => setAddDriverDialogOpen(true)}>
-              <Plus />
-              <span>Add Driver/Vehicle</span>
-            </Button>
-            <Button onClick={() => setAssignTixToVehDialogOpen(true)}>
-              <Bus />
-              <span>Assign Ticket Holder to Vehicle</span>
-            </Button>
+            <ResponsiveModal
+              title="Add Driver/Vehicle"
+              trigger={
+                <Button className={"w-full md:w-fit"} onClick={() => setAddDriverDialogOpen(true)}>
+                  <Plus />
+                  <span>Add Driver/Vehicle</span>
+                </Button>
+              }
+              open={addDriverDialogIsOpen}
+              onOpenChange={setAddDriverDialogOpen}
+            >
+              <Form {...addDriverForm}>
+                <form onSubmit={addDriverForm.handleSubmit(submitAddDriver)} className={"space-y-6"}>
+                  <FormField
+                    control={addDriverForm.control}
+                    name={"driver"}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Driver</FormLabel>
+                        <FormControl>
+                          <RacerCombobox
+                            defaultValue={field.value}
+                            onValueChange={field.onChange}
+                            fullWidth={true}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={addDriverForm.control}
+                    name={"maxCapacity"}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Maximum Capacity</FormLabel>
+                        <FormControl>
+                          <Input
+                            type={"number"}
+                            min={1}
+                            {...field}
+                            value={undefined}
+                            defaultValue={field.value}
+                            onChange={(event) => field.onChange(Number(event.target.value))}
+                          />
+                        </FormControl>
+                        <FormDescription>Include the driver in your capacity</FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={addDriverForm.control}
+                    name={"additionalDetails"}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Additional Details</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            className={"resize-none"}
+                            {...field}
+                            value={undefined}
+                            defaultValue={field.value}
+                            onChange={field.onChange}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <div className={"max-md:w-full"}>
+                    <LoadingButton
+                      loading={addDriverForm.formState.isLoading}
+                      className={"w-full md:w-fit md:float-right"}
+                      type={"submit"}
+                    >
+                      Add
+                    </LoadingButton>
+                  </div>
+                </form>
+              </Form>
+            </ResponsiveModal>
+            <ResponsiveModal
+              title="Assign Ticket Holder to Vehicle"
+              trigger={
+                <Button className={"w-full md:w-fit"} onClick={() => setAssignTixToVehDialogOpen(true)}>
+                  <Bus />
+                  <span>Assign Ticket Holder to Vehicle</span>
+                </Button>
+              }
+              open={assignTixToVehDialogIsOpen}
+              onOpenChange={setAssignTixToVehDialogOpen}
+            >
+              <Form {...assignTixToVehForm}>
+                <form onSubmit={assignTixToVehForm.handleSubmit(submitTixToVeh)} className={"space-y-6"}>
+                  <FormField
+                    control={assignTixToVehForm.control}
+                    name={"transport"}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Driver/Vehicle</FormLabel>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <FormControl>
+                              <Button
+                                variant="outline"
+                                role="combobox"
+                                className={cn(
+                                  "w-full justify-between",
+                                  !field.value && "text-muted-foreground"
+                                )}
+                              >
+                                {field.value
+                                 ? transport.find(
+                                    (t) => t.id === field.value
+                                  )?.Racers.fullName
+                                 : "Select driver/vehicle"}
+                                <ChevronsUpDown className="opacity-50" />
+                              </Button>
+                            </FormControl>
+                          </PopoverTrigger>
+                          <PopoverContent
+                            className="w-[200px] p-0"
+                            align={"start"}
+                          >
+                            <Command>
+                              <CommandInput
+                                placeholder="Search drivers/vehicles..."
+                                className="h-9"
+                              />
+                              <CommandList>
+                                <CommandEmpty>No drivers/vehicles found.</CommandEmpty>
+                                <CommandGroup>
+                                  {
+                                    transport.map((t) => (
+                                      <CommandItem
+                                        value={t.id}
+                                        key={t.id}
+                                        onSelect={() => {
+                                          field.onChange(t.id)
+                                        }}
+                                      >
+                                        {t.Racers.fullName}
+                                        <Check
+                                          className={cn(
+                                            "ml-auto",
+                                            t.id === field.value
+                                            ? "opacity-100"
+                                            : "opacity-0"
+                                          )}
+                                        />
+                                      </CommandItem>
+                                    ))
+                                  }
+                                </CommandGroup>
+                              </CommandList>
+                            </Command>
+                          </PopoverContent>
+                        </Popover>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={assignTixToVehForm.control}
+                    name={"ticketAllocation"}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Ticket Holder</FormLabel>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <FormControl>
+                              <Button
+                                disabled={assignTixToVehForm.getValues().transport === undefined}
+                                variant="outline"
+                                role="combobox"
+                                className={cn(
+                                  "w-full justify-between",
+                                  !field.value && "text-muted-foreground"
+                                )}
+                              >
+                                {field.value
+                                 ? unassignedTicketAllocations.find(
+                                    (uta) => uta.id === field.value
+                                  )?.Racers.fullName
+                                 : "Select ticket holder"}
+                                <ChevronsUpDown className="opacity-50" />
+                              </Button>
+                            </FormControl>
+                          </PopoverTrigger>
+                          <PopoverContent
+                            className="w-[200px] p-0"
+                            align={"end"}
+                          >
+                            <Command>
+                              <CommandInput
+                                placeholder="Search ticket holders..."
+                                className="h-9"
+                              />
+                              <CommandList>
+                                <CommandEmpty>No ticket holders found.</CommandEmpty>
+                                <CommandGroup>
+                                  {
+                                    unassignedTicketAllocations.map((uta) => {
+                                      if (uta.Racers.id === assignTixToVehForm.getValues().transport) { return null; }
+
+                                      return (
+                                        <CommandItem
+                                          value={uta.id}
+                                          key={uta.id}
+                                          onSelect={() => {
+                                            assignTixToVehForm.setValue("ticketAllocation", uta.id)
+                                          }}
+                                        >
+                                          {uta.Racers.fullName}
+                                          <Check
+                                            className={cn(
+                                              "ml-auto",
+                                              uta.id === field.value
+                                              ? "opacity-100"
+                                              : "opacity-0"
+                                            )}
+                                          />
+                                        </CommandItem>
+                                      )
+                                    })
+                                  }
+                                </CommandGroup>
+                              </CommandList>
+                            </Command>
+                          </PopoverContent>
+                        </Popover>
+                        <FormDescription>
+                          Note: The driver of the vehicle is already assigned to themselves.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <div className={"max-md:w-full"}>
+                    <LoadingButton
+                      loading={assignTixToVehForm.formState.isLoading}
+                      className={"w-full md:w-fit md:float-right"}
+                      type={"submit"}
+                    >
+                      Add
+                    </LoadingButton>
+                  </div>
+                </form>
+              </Form>
+            </ResponsiveModal>
+
+
           </div>
         </CardHeader>
         { transport.length > 0 && (
@@ -178,243 +424,243 @@ export default function TransportCard({ eventId, transport, ticketAllocations }:
           </CardContent>
         )}
       </Card>
-      <Dialog open={addDriverDialogIsOpen} onOpenChange={setAddDriverDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Add Driver/Vehicle</DialogTitle>
-          </DialogHeader>
-          <Form {...addDriverForm}>
-            <form onSubmit={addDriverForm.handleSubmit(submitAddDriver)} className={"space-y-6"}>
-              <FormField
-                control={addDriverForm.control}
-                name={"driver"}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Driver</FormLabel>
-                    <FormControl>
-                      <RacerCombobox
-                        defaultValue={field.value}
-                        onValueChange={field.onChange}
-                        fullWidth={true}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={addDriverForm.control}
-                name={"maxCapacity"}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Maximum Capacity</FormLabel>
-                    <FormControl>
-                      <Input
-                        type={"number"}
-                        min={1}
-                        {...field}
-                        value={undefined}
-                        defaultValue={field.value}
-                        onChange={(event) => field.onChange(Number(event.target.value))}
-                      />
-                    </FormControl>
-                    <FormDescription>Include the driver in your capacity</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={addDriverForm.control}
-                name={"additionalDetails"}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Additional Details</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        className={"resize-none"}
-                        {...field}
-                        value={undefined}
-                        defaultValue={field.value}
-                        onChange={field.onChange}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <LoadingButton
-                loading={addDriverForm.formState.isLoading}
-                className={"float-right"}
-                type="submit"
-              >
-                Add
-              </LoadingButton>
-            </form>
-          </Form>
-        </DialogContent>
-      </Dialog>
-      <Dialog open={assignTixToVehDialogIsOpen} onOpenChange={setAssignTixToVehDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Assign Ticket Holder to Vehicle</DialogTitle>
-          </DialogHeader>
-          <Form {...assignTixToVehForm}>
-            <form onSubmit={assignTixToVehForm.handleSubmit(submitTixToVeh)} className={"space-y-6"}>
-              <FormField
-                control={assignTixToVehForm.control}
-                name={"transport"}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Driver/Vehicle</FormLabel>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <FormControl>
-                          <Button
-                            variant="outline"
-                            role="combobox"
-                            className={cn(
-                              "w-full justify-between",
-                              !field.value && "text-muted-foreground"
-                            )}
-                          >
-                            {field.value
-                             ? transport.find(
-                                (t) => t.id === field.value
-                              )?.Racers.fullName
-                             : "Select driver/vehicle"}
-                            <ChevronsUpDown className="opacity-50" />
-                          </Button>
-                        </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent
-                        className="w-[200px] p-0"
-                        align={"start"}
-                      >
-                        <Command>
-                          <CommandInput
-                            placeholder="Search drivers/vehicles..."
-                            className="h-9"
-                          />
-                          <CommandList>
-                            <CommandEmpty>No drivers/vehicles found.</CommandEmpty>
-                            <CommandGroup>
-                              {
-                                transport.map((t) => (
-                                  <CommandItem
-                                    value={t.id}
-                                    key={t.id}
-                                    onSelect={() => {
-                                      field.onChange(t.id)
-                                    }}
-                                  >
-                                    {t.Racers.fullName}
-                                    <Check
-                                      className={cn(
-                                        "ml-auto",
-                                        t.id === field.value
-                                        ? "opacity-100"
-                                        : "opacity-0"
-                                      )}
-                                    />
-                                  </CommandItem>
-                                ))
-                              }
-                            </CommandGroup>
-                          </CommandList>
-                        </Command>
-                      </PopoverContent>
-                    </Popover>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={assignTixToVehForm.control}
-                name={"ticketAllocation"}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Ticket Holder</FormLabel>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <FormControl>
-                          <Button
-                            disabled={assignTixToVehForm.getValues().transport === undefined}
-                            variant="outline"
-                            role="combobox"
-                            className={cn(
-                              "w-full justify-between",
-                              !field.value && "text-muted-foreground"
-                            )}
-                          >
-                            {field.value
-                             ? unassignedTicketAllocations.find(
-                                (uta) => uta.id === field.value
-                              )?.Racers.fullName
-                             : "Select ticket holder"}
-                            <ChevronsUpDown className="opacity-50" />
-                          </Button>
-                        </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent
-                        className="w-[200px] p-0"
-                        align={"end"}
-                      >
-                        <Command>
-                          <CommandInput
-                            placeholder="Search ticket holders..."
-                            className="h-9"
-                          />
-                          <CommandList>
-                            <CommandEmpty>No ticket holders found.</CommandEmpty>
-                            <CommandGroup>
-                              {
-                                unassignedTicketAllocations.map((uta) => {
-                                  if (uta.Racers.id === assignTixToVehForm.getValues().transport) { return null; }
+      {/*<Dialog open={addDriverDialogIsOpen} onOpenChange={setAddDriverDialogOpen}>*/}
+      {/*  <DialogContent>*/}
+      {/*    <DialogHeader>*/}
+      {/*      <DialogTitle>Add Driver/Vehicle</DialogTitle>*/}
+      {/*    </DialogHeader>*/}
+      {/*    <Form {...addDriverForm}>*/}
+      {/*      <form onSubmit={addDriverForm.handleSubmit(submitAddDriver)} className={"space-y-6"}>*/}
+      {/*        <FormField*/}
+      {/*          control={addDriverForm.control}*/}
+      {/*          name={"driver"}*/}
+      {/*          render={({ field }) => (*/}
+      {/*            <FormItem>*/}
+      {/*              <FormLabel>Driver</FormLabel>*/}
+      {/*              <FormControl>*/}
+      {/*                <RacerCombobox*/}
+      {/*                  defaultValue={field.value}*/}
+      {/*                  onValueChange={field.onChange}*/}
+      {/*                  fullWidth={true}*/}
+      {/*                />*/}
+      {/*              </FormControl>*/}
+      {/*              <FormMessage />*/}
+      {/*            </FormItem>*/}
+      {/*          )}*/}
+      {/*        />*/}
+      {/*        <FormField*/}
+      {/*          control={addDriverForm.control}*/}
+      {/*          name={"maxCapacity"}*/}
+      {/*          render={({ field }) => (*/}
+      {/*            <FormItem>*/}
+      {/*              <FormLabel>Maximum Capacity</FormLabel>*/}
+      {/*              <FormControl>*/}
+      {/*                <Input*/}
+      {/*                  type={"number"}*/}
+      {/*                  min={1}*/}
+      {/*                  {...field}*/}
+      {/*                  value={undefined}*/}
+      {/*                  defaultValue={field.value}*/}
+      {/*                  onChange={(event) => field.onChange(Number(event.target.value))}*/}
+      {/*                />*/}
+      {/*              </FormControl>*/}
+      {/*              <FormDescription>Include the driver in your capacity</FormDescription>*/}
+      {/*              <FormMessage />*/}
+      {/*            </FormItem>*/}
+      {/*          )}*/}
+      {/*        />*/}
+      {/*        <FormField*/}
+      {/*          control={addDriverForm.control}*/}
+      {/*          name={"additionalDetails"}*/}
+      {/*          render={({ field }) => (*/}
+      {/*            <FormItem>*/}
+      {/*              <FormLabel>Additional Details</FormLabel>*/}
+      {/*              <FormControl>*/}
+      {/*                <Textarea*/}
+      {/*                  className={"resize-none"}*/}
+      {/*                  {...field}*/}
+      {/*                  value={undefined}*/}
+      {/*                  defaultValue={field.value}*/}
+      {/*                  onChange={field.onChange}*/}
+      {/*                />*/}
+      {/*              </FormControl>*/}
+      {/*              <FormMessage />*/}
+      {/*            </FormItem>*/}
+      {/*          )}*/}
+      {/*        />*/}
+      {/*        <LoadingButton*/}
+      {/*          loading={addDriverForm.formState.isLoading}*/}
+      {/*          className={"float-right"}*/}
+      {/*          type="submit"*/}
+      {/*        >*/}
+      {/*          Add*/}
+      {/*        </LoadingButton>*/}
+      {/*      </form>*/}
+      {/*    </Form>*/}
+      {/*  </DialogContent>*/}
+      {/*</Dialog>*/}
+      {/*<Dialog open={assignTixToVehDialogIsOpen} onOpenChange={setAssignTixToVehDialogOpen}>*/}
+      {/*  <DialogContent>*/}
+      {/*    <DialogHeader>*/}
+      {/*      <DialogTitle>Assign Ticket Holder to Vehicle</DialogTitle>*/}
+      {/*    </DialogHeader>*/}
+      {/*    <Form {...assignTixToVehForm}>*/}
+      {/*      <form onSubmit={assignTixToVehForm.handleSubmit(submitTixToVeh)} className={"space-y-6"}>*/}
+      {/*        <FormField*/}
+      {/*          control={assignTixToVehForm.control}*/}
+      {/*          name={"transport"}*/}
+      {/*          render={({ field }) => (*/}
+      {/*            <FormItem>*/}
+      {/*              <FormLabel>Driver/Vehicle</FormLabel>*/}
+      {/*              <Popover>*/}
+      {/*                <PopoverTrigger asChild>*/}
+      {/*                  <FormControl>*/}
+      {/*                    <Button*/}
+      {/*                      variant="outline"*/}
+      {/*                      role="combobox"*/}
+      {/*                      className={cn(*/}
+      {/*                        "w-full justify-between",*/}
+      {/*                        !field.value && "text-muted-foreground"*/}
+      {/*                      )}*/}
+      {/*                    >*/}
+      {/*                      {field.value*/}
+      {/*                       ? transport.find(*/}
+      {/*                          (t) => t.id === field.value*/}
+      {/*                        )?.Racers.fullName*/}
+      {/*                       : "Select driver/vehicle"}*/}
+      {/*                      <ChevronsUpDown className="opacity-50" />*/}
+      {/*                    </Button>*/}
+      {/*                  </FormControl>*/}
+      {/*                </PopoverTrigger>*/}
+      {/*                <PopoverContent*/}
+      {/*                  className="w-[200px] p-0"*/}
+      {/*                  align={"start"}*/}
+      {/*                >*/}
+      {/*                  <Command>*/}
+      {/*                    <CommandInput*/}
+      {/*                      placeholder="Search drivers/vehicles..."*/}
+      {/*                      className="h-9"*/}
+      {/*                    />*/}
+      {/*                    <CommandList>*/}
+      {/*                      <CommandEmpty>No drivers/vehicles found.</CommandEmpty>*/}
+      {/*                      <CommandGroup>*/}
+      {/*                        {*/}
+      {/*                          transport.map((t) => (*/}
+      {/*                            <CommandItem*/}
+      {/*                              value={t.id}*/}
+      {/*                              key={t.id}*/}
+      {/*                              onSelect={() => {*/}
+      {/*                                field.onChange(t.id)*/}
+      {/*                              }}*/}
+      {/*                            >*/}
+      {/*                              {t.Racers.fullName}*/}
+      {/*                              <Check*/}
+      {/*                                className={cn(*/}
+      {/*                                  "ml-auto",*/}
+      {/*                                  t.id === field.value*/}
+      {/*                                  ? "opacity-100"*/}
+      {/*                                  : "opacity-0"*/}
+      {/*                                )}*/}
+      {/*                              />*/}
+      {/*                            </CommandItem>*/}
+      {/*                          ))*/}
+      {/*                        }*/}
+      {/*                      </CommandGroup>*/}
+      {/*                    </CommandList>*/}
+      {/*                  </Command>*/}
+      {/*                </PopoverContent>*/}
+      {/*              </Popover>*/}
+      {/*              <FormMessage />*/}
+      {/*            </FormItem>*/}
+      {/*          )}*/}
+      {/*        />*/}
+      {/*        <FormField*/}
+      {/*          control={assignTixToVehForm.control}*/}
+      {/*          name={"ticketAllocation"}*/}
+      {/*          render={({ field }) => (*/}
+      {/*            <FormItem>*/}
+      {/*              <FormLabel>Ticket Holder</FormLabel>*/}
+      {/*              <Popover>*/}
+      {/*                <PopoverTrigger asChild>*/}
+      {/*                  <FormControl>*/}
+      {/*                    <Button*/}
+      {/*                      disabled={assignTixToVehForm.getValues().transport === undefined}*/}
+      {/*                      variant="outline"*/}
+      {/*                      role="combobox"*/}
+      {/*                      className={cn(*/}
+      {/*                        "w-full justify-between",*/}
+      {/*                        !field.value && "text-muted-foreground"*/}
+      {/*                      )}*/}
+      {/*                    >*/}
+      {/*                      {field.value*/}
+      {/*                       ? unassignedTicketAllocations.find(*/}
+      {/*                          (uta) => uta.id === field.value*/}
+      {/*                        )?.Racers.fullName*/}
+      {/*                       : "Select ticket holder"}*/}
+      {/*                      <ChevronsUpDown className="opacity-50" />*/}
+      {/*                    </Button>*/}
+      {/*                  </FormControl>*/}
+      {/*                </PopoverTrigger>*/}
+      {/*                <PopoverContent*/}
+      {/*                  className="w-[200px] p-0"*/}
+      {/*                  align={"end"}*/}
+      {/*                >*/}
+      {/*                  <Command>*/}
+      {/*                    <CommandInput*/}
+      {/*                      placeholder="Search ticket holders..."*/}
+      {/*                      className="h-9"*/}
+      {/*                    />*/}
+      {/*                    <CommandList>*/}
+      {/*                      <CommandEmpty>No ticket holders found.</CommandEmpty>*/}
+      {/*                      <CommandGroup>*/}
+      {/*                        {*/}
+      {/*                          unassignedTicketAllocations.map((uta) => {*/}
+      {/*                            if (uta.Racers.id === assignTixToVehForm.getValues().transport) { return null; }*/}
 
-                                  return (
-                                    <CommandItem
-                                      value={uta.id}
-                                      key={uta.id}
-                                      onSelect={() => {
-                                        assignTixToVehForm.setValue("ticketAllocation", uta.id)
-                                      }}
-                                    >
-                                      {uta.Racers.fullName}
-                                      <Check
-                                        className={cn(
-                                          "ml-auto",
-                                          uta.id === field.value
-                                          ? "opacity-100"
-                                          : "opacity-0"
-                                        )}
-                                      />
-                                    </CommandItem>
-                                  )
-                                })
-                              }
-                            </CommandGroup>
-                          </CommandList>
-                        </Command>
-                      </PopoverContent>
-                    </Popover>
-                    <FormDescription>
-                      Note: The driver of the vehicle is already assigned to themselves.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <LoadingButton
-                loading={assignTixToVehForm.formState.isLoading}
-                className={"float-right"}
-                type="submit"
-              >
-                Add
-              </LoadingButton>
-            </form>
-          </Form>
-        </DialogContent>
-      </Dialog>
+      {/*                            return (*/}
+      {/*                              <CommandItem*/}
+      {/*                                value={uta.id}*/}
+      {/*                                key={uta.id}*/}
+      {/*                                onSelect={() => {*/}
+      {/*                                  assignTixToVehForm.setValue("ticketAllocation", uta.id)*/}
+      {/*                                }}*/}
+      {/*                              >*/}
+      {/*                                {uta.Racers.fullName}*/}
+      {/*                                <Check*/}
+      {/*                                  className={cn(*/}
+      {/*                                    "ml-auto",*/}
+      {/*                                    uta.id === field.value*/}
+      {/*                                    ? "opacity-100"*/}
+      {/*                                    : "opacity-0"*/}
+      {/*                                  )}*/}
+      {/*                                />*/}
+      {/*                              </CommandItem>*/}
+      {/*                            )*/}
+      {/*                          })*/}
+      {/*                        }*/}
+      {/*                      </CommandGroup>*/}
+      {/*                    </CommandList>*/}
+      {/*                  </Command>*/}
+      {/*                </PopoverContent>*/}
+      {/*              </Popover>*/}
+      {/*              <FormDescription>*/}
+      {/*                Note: The driver of the vehicle is already assigned to themselves.*/}
+      {/*              </FormDescription>*/}
+      {/*              <FormMessage />*/}
+      {/*            </FormItem>*/}
+      {/*          )}*/}
+      {/*        />*/}
+      {/*        <LoadingButton*/}
+      {/*          loading={assignTixToVehForm.formState.isLoading}*/}
+      {/*          className={"float-right"}*/}
+      {/*          type="submit"*/}
+      {/*        >*/}
+      {/*          Add*/}
+      {/*        </LoadingButton>*/}
+      {/*      </form>*/}
+      {/*    </Form>*/}
+      {/*  </DialogContent>*/}
+      {/*</Dialog>*/}
     </>
   )
 }

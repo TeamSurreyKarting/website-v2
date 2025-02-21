@@ -78,7 +78,7 @@ export default async function Page({
   }
 
   return (
-    <>
+    <div className={"container mx-auto"}>
       <div className={"grid grid-cols-[1fr_auto] gap-2 items-center justify-between"}>
         <Suspense fallback={<p>Loading...</p>}>
           <AccountSelector accounts={accounts} value={accountDetails?.id} />
@@ -121,6 +121,6 @@ export default async function Page({
            </Card>
         )}
       </div>
-    </>
+    </div>
   );
 }
