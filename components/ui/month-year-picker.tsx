@@ -80,13 +80,13 @@ export default function MonthYearPicker({
 
   return (
     <>
-      <div className="flex items-center space-x-2">
+      <div className="grid grid-cols-2 gap-2 items-center space-x-2">
         <Select
           defaultValue={selectedMonth}
           disabled={disabled}
           onValueChange={(value) => updateValue(value, selectedYear || "")}
         >
-          <SelectTrigger id="month-select" className="w-[180px]">
+          <SelectTrigger id="month-select" className="md:w-[180px]">
             <SelectValue placeholder="Month" />
           </SelectTrigger>
           <SelectContent>
@@ -102,7 +102,7 @@ export default function MonthYearPicker({
           disabled={disabled}
           onValueChange={(value) => updateValue(selectedMonth || "", value)}
         >
-          <SelectTrigger id="year-select" className={"w-[120px]"}>
+          <SelectTrigger id="year-select" className={"md:w-[120px]"}>
             <SelectValue placeholder="Year" />
           </SelectTrigger>
           <SelectContent>
