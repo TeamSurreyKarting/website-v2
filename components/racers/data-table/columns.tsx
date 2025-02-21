@@ -20,8 +20,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal } from "lucide-react";
-import { FaEye } from "react-icons/fa";
+import { MoreHorizontal, Eye } from "lucide-react";
 import { RiMailSendLine } from "react-icons/ri";
 import { FaTrashCan } from "react-icons/fa6";
 import Link from "next/link";
@@ -51,7 +50,7 @@ export const columns: ColumnDef<
         <div className={"flex gap-2"}>
           <Link href={`/racers/${row.original.id}`}>
             <Button variant={"ghost"} className={"hidden lg:block"}>
-              <FaEye />
+              <Eye />
             </Button>
           </Link>
           <Dialog>
@@ -64,9 +63,9 @@ export const columns: ColumnDef<
               </DropdownMenuTrigger>
               <DropdownMenuContent align={"end"}>
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                <Link href={`/racers/${row.original.id}`}>
-                  <DropdownMenuItem className={"lg:hidden"}>
-                    <FaEye />
+                <Link href={`/racers/${row.original.id}`} className={"lg:hidden"}>
+                  <DropdownMenuItem>
+                    <Eye />
                     View Details
                   </DropdownMenuItem>
                 </Link>

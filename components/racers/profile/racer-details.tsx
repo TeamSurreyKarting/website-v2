@@ -23,6 +23,8 @@ import MonthYearPicker from "@/components/ui/month-year-picker";
 import { editUser } from "@/utils/actions/users/edit";
 import { editRacer } from "@/utils/actions/racers/edit";
 import { revalidatePath } from "next/cache";
+import { LoadingButton } from "@/components/ui/loading-button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const formSchema = z.object({
   email: z
@@ -41,7 +43,7 @@ const formSchema = z.object({
       required_error: "Last name is required",
     })
     .min(2),
-  graduationDate: z.date().min(new Date("2013-01-01")),
+  graduationDate: z.date(),
 });
 
 export default function RacerDetails({
@@ -50,8 +52,6 @@ export default function RacerDetails({
   details: Database["public"]["Views"]["RacerDetails"]["Row"];
 }) {
   const [isEditing, setIsEditing] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
-  const [changesMade, setChangesMade] = useState(true);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -65,9 +65,7 @@ export default function RacerDetails({
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // No need to submit form if no changes made
-    if (!changesMade) return;
-
-    setIsSaving(true);
+    if (!form.formState.isDirty) return;
 
     const userEdit = editUser(
       details.id!,
@@ -90,131 +88,114 @@ export default function RacerDetails({
     console.log("results", userEditResult, racerEditResult);
 
     setIsEditing(false);
-    setIsSaving(false);
 
-    revalidatePath(`/racers/${details.id!}`);
-  }
-
-  function handleCancel() {
-    // reload component
-    setIsEditing(false);
     revalidatePath(`/racers/${details.id!}`);
   }
 
   return (
-    <div
-      className={clsx(
-        "transition-colors my-6 rounded-lg bg-ts-blue-600 border-ts-blue-400 w-full border p-4",
-        {
-          "border-ts-gold-800 bg-ts-blue-400": isEditing,
-        },
-      )}
-    >
-      <div className={"h-10 flex gap-2 justify-between items-center"}>
-        <h4 className={"font-medium text-xl"}>Details</h4>
+    <Card>
+      <CardHeader className={"flex flex-row gap-2 justify-between items-center"}>
+        <CardTitle className={"font-medium text-xl"}>{isEditing ? "Edit Details" : "Details"}</CardTitle>
         <Button
-          variant={"outline"}
-          className={clsx("bg-ts-blue-400", {
+          variant={"secondary"}
+          className={clsx({
             hidden: isEditing,
           })}
           onClick={() => setIsEditing(true)}
-          disabled={isSaving}
+          disabled={form.formState.isLoading}
         >
           <MdEdit />
           Edit
         </Button>
-        <Spinner show={isSaving} />
-      </div>
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className={"space-y-4 mt-2"}
-        >
-          <div className={"grid grid-cols-1 gap-2 md:grid-cols-2"}>
+        <Spinner show={form.formState.isLoading} />
+      </CardHeader>
+      <CardContent>
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className={"space-y-4 mt-2"}
+          >
+            <div className={"grid grid-cols-1 gap-2 md:grid-cols-2"}>
+              <FormField
+                control={form.control}
+                name={"firstName"}
+                data-initialData={details.firstName}
+                disabled={!isEditing || form.formState.isLoading}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>First Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder={"First Name"} {...field} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name={"lastName"}
+                data-initialData={details.lastName}
+                disabled={!isEditing || form.formState.isLoading}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Last Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder={"Last Name"} {...field} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </div>
             <FormField
               control={form.control}
-              name={"firstName"}
-              data-initialData={details.firstName}
-              disabled={!isEditing || isSaving}
+              name={"email"}
+              data-initialData={details.email}
+              disabled={!isEditing || form.formState.isLoading}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>First Name</FormLabel>
+                  <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input placeholder={"First Name"} {...field} />
+                    <Input placeholder={"Email"} {...field} />
                   </FormControl>
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name={"lastName"}
-              data-initialData={details.lastName}
-              disabled={!isEditing || isSaving}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Last Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder={"Last Name"} {...field} />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-          </div>
-          <FormField
-            control={form.control}
-            name={"email"}
-            data-initialData={details.email}
-            disabled={!isEditing || isSaving}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input placeholder={"Email"} {...field} />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-          <div>
-            <FormField
-              disabled={!isEditing || isSaving}
-              control={form.control}
-              name={"graduationDate"}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Graduation Date</FormLabel>
-                  <FormControl>
-                    <MonthYearPicker {...field} />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className={"h-10 flex gap-2"}>
-            <Button
-              variant={"outline"}
-              className={clsx("bg-ts-blue-400", {
-                hidden: !isEditing,
-              })}
-              onClick={() => handleCancel()}
-              disabled={isSaving}
-            >
-              <FaXmark />
-              Cancel
-            </Button>
-            <Button
-              variant={"secondary"}
-              className={clsx("xs:w-full md:w-fit bg-white text-black", {
-                hidden: !isEditing,
-              })}
-              type={"submit"}
-              disabled={isSaving}
-            >
-              <FaSave />
-              {isSaving ? "Saving" : "Save"}
-            </Button>
-          </div>
-        </form>
-      </Form>
-    </div>
+            <div>
+              <FormField
+                disabled={!isEditing || form.formState.isLoading}
+                control={form.control}
+                name={"graduationDate"}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Graduation Date</FormLabel>
+                    <FormControl>
+                      <MonthYearPicker {...field} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className={clsx("h-10 flex gap-2 justify-end", {
+              'hidden': !isEditing
+            })}>
+              <Button
+                variant={"outline"}
+                onClick={() => { setIsEditing(false) }}
+                disabled={form.formState.isLoading}
+              >
+                <FaXmark />
+                Cancel
+              </Button>
+              <LoadingButton
+                type={"submit"}
+                loading={form.formState.isLoading}
+              >
+                <FaSave />
+                {form.formState.isLoading ? "Saving" : "Save"}
+              </LoadingButton>
+            </div>
+          </form>
+        </Form>
+      </CardContent>
+    </Card>
   );
 }

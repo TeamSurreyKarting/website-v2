@@ -1,6 +1,6 @@
 "use client";
 
-import { Database } from "@/database.types";
+import { Database, Tables } from "@/database.types";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -22,11 +22,13 @@ import {
 
 export default function RacerFilter({
   racers,
+  defaultValue,
 }: {
-  racers: Database["public"]["Tables"]["Racers"]["Row"][];
+  racers: Tables<"Racers">[],
+  defaultValue: Tables<"Racers"> | undefined,
 }) {
   const [open, setOpen] = useState(false);
-  let [selectedRacers, setSelectedRacers] = useState<Array<string>>([]);
+  let [selectedRacer, setSelectedRacer] = useState<Tables<"Racers"> | undefined>(undefined);
 
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -35,57 +37,54 @@ export default function RacerFilter({
   useEffect(() => {
     const params = new URLSearchParams(searchParams ?? undefined);
 
-    if (selectedRacers && selectedRacers.length > 0) {
+    if (selectedRacer) {
       // join membership ids with comma delimiter
-      params.set("racers", selectedRacers.join(","));
+      params.set("racers", selectedRacer.id);
     } else {
       params.delete("racers");
     }
     replace(`${pathname}?${params.toString()}`);
-  }, [selectedRacers]);
+  }, [selectedRacer]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
-          variant="outline"
+          variant={selectedRacer ? "default" : "secondary"}
           role="combobox"
           aria-expanded={open}
-          className="w-[225px] justify-between bg-ts-blue-600 border-white border-2"
+          className="w-[225px] justify-between"
         >
-          {selectedRacers.length > 0 ? (
-            <span>
-              {selectedRacers.length} Racer
-              {selectedRacers.length === 1 ? "" : "s"} Selected
-            </span>
+          {selectedRacer ? (
+            <span>{selectedRacer.fullName}</span>
           ) : (
             <span>All Racers</span>
           )}
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[225px] p-0 bg-ts-blue-600 text-white">
+      <PopoverContent className="w-[225px] p-0 ">
         <Command>
           <CommandInput
             className={"text-gray-100"}
-            placeholder="Search membership types..."
+            placeholder="Search racers..."
           />
           <CommandList>
-            <CommandEmpty>No membership types found.</CommandEmpty>
-            <CommandGroup className={"bg-ts-blue-500"}>
+            <CommandEmpty>No racers found.</CommandEmpty>
+            <CommandGroup>
               {racers.map((racer) => (
                 <CommandItem
                   key={racer.id}
                   value={racer.id}
                   onSelect={(racerId) => {
                     console.log(racerId);
-                    const isAlreadySelected = selectedRacers.includes(racerId);
+                    const isAlreadySelected = selectedRacer?.id === racerId;
 
-                    if (!isAlreadySelected) {
-                      setSelectedRacers([...selectedRacers, racerId]);
+                    if (isAlreadySelected) {
+                      setSelectedRacer(undefined);
                     } else {
-                      setSelectedRacers(
-                        selectedRacers.filter((x) => x !== racerId),
+                      setSelectedRacer(
+                        racers.find((r) => r.id === racerId)
                       );
                     }
 
@@ -96,7 +95,7 @@ export default function RacerFilter({
                   <Check
                     className={clsx(
                       "ml-auto",
-                      selectedRacers.includes(racer.id)
+                      selectedRacer?.id === racer.id
                         ? "opacity-100"
                         : "opacity-0",
                     )}

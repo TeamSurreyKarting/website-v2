@@ -25,7 +25,7 @@ export default async function TasksPage({
       <div className="mx-auto my-2 flex justify-between gap-x-2">
         <Search />
         <Link href={"/tasks/new"} className={"flex gap-2 items-center"}>
-          <Button variant={"secondary"}>
+          <Button>
             <FaPlus />
             Create
           </Button>

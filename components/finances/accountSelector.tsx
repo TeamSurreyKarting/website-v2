@@ -5,15 +5,11 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
 } from "@/components/ui/select";
-import { FaPlus } from "react-icons/fa6";
 import { Database } from "@/database.types";
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
 import clsx from "clsx";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 
 export default function AccountSelector({
   accounts,
@@ -43,35 +39,29 @@ export default function AccountSelector({
     maximumFractionDigits: 2,
   });
 
+  const selectedAccount = accounts.find((acc) => acc.id === value);
+
   return (
-    <div className={"flex gap-2 "}>
-      <Select value={value} onValueChange={handleSelectionChange}>
-        <SelectTrigger className="w-full md:w-[320px] bg-ts-blue-400">
-          <SelectValue placeholder="Account" />
-        </SelectTrigger>
-        <SelectContent>
-          {accounts.map((account) => (
-            <SelectItem
-              key={account.id}
-              value={account.id}
-              className={clsx("flex gap-2", {
-                "text-ts-gold-700 font-medium": account.id === value,
-              })}
-            >
-              <p>{account.name}</p>
-              <span className={"opacity-60"}>
-                {gbpFormat.format(account.endingBalance)}
-              </span>
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-      <Link href={"/finances/accounts/new"}>
-        <Button className={"bg-ts-blue-400  border border-white"}>
-          <FaPlus />
-          <span>Create Account</span>
-        </Button>
-      </Link>
-    </div>
+    <Select value={value} onValueChange={handleSelectionChange}>
+      <SelectTrigger className="w-full overflow-hidden text-nowrap text-ellipsis">
+        {selectedAccount ? selectedAccount.name : "Select Account..."}
+      </SelectTrigger>
+      <SelectContent>
+        {accounts.map((account) => (
+          <SelectItem
+            key={account.id}
+            value={account.id}
+            className={clsx("flex gap-2", {
+              "font-medium": account.id === value,
+            })}
+          >
+            <p className={"truncate"}>{account.name}</p>
+            <span className={"opacity-60"}>
+              {gbpFormat.format(account.endingBalance)}
+            </span>
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
   );
 }

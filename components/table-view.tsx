@@ -17,16 +17,20 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { ComponentProps } from "react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
 
-export function BaseDataTable<TData, TValue>({
+export function TableView<TData, TValue>({
   columns,
   data,
-}: DataTableProps<TData, TValue>) {
+  className,
+  ...props
+}: DataTableProps<TData, TValue> & ComponentProps<"div">) {
   const table = useReactTable({
     data,
     columns,
@@ -44,9 +48,9 @@ export function BaseDataTable<TData, TValue>({
 
   return (
     <>
-      <div className="rounded-md border overflow-hidden">
+      <div className={cn("rounded-md border overflow-hidden", className)} {...props}>
         <Table>
-          <TableHeader className={"bg-ts-blue-500"}>
+          <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
@@ -94,13 +98,11 @@ export function BaseDataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className={"flex items-center justify-between space-x-2 py-4"}>
-        <span className={"text-slate-600"}>
+      <div className={cn("flex items-center justify-between space-x-2 py-4", className)}>
+        <span className={"text-muted-foreground"}>
           Rows{" "}
-          <span className={"text-slate-500"}>
-            {displayedTableRowIndexStart}-{displayedTableRowIndexEnd}
-          </span>{" "}
-          of <span className={"text-slate-500"}>{totalRowCount}</span>
+            {displayedTableRowIndexStart}{" "}–{" "}{displayedTableRowIndexEnd}{" "}
+          of <span className={"text-muted-foreground"}>{totalRowCount}</span>
         </span>
         {(table.getCanPreviousPage() || table.getCanNextPage()) && (
           <div className={"flex items-center justify-between space-x-2 py-4"}>

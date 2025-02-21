@@ -92,7 +92,7 @@ export default function TicketsCard({ className, tickets, membershipTypes, event
 
   return (
     <>
-      <Card className={cn("bg-ts-blue", className)}>
+      <Card className={className}>
         <CardHeader className={"flex flex-col sm:flex-row gap-2 items-start sm:items-center justify-between"}>
           <div className={"flex flex-col space-y-1.5"}>
             <CardTitle>Tickets</CardTitle>
@@ -196,9 +196,9 @@ export default function TicketsCard({ className, tickets, membershipTypes, event
                         <PopoverTrigger asChild>
                           <FormControl>
                             <Button
-                              variant={"outline"}
+                              variant={"input"}
                               className={cn(
-                                "w-full text-left font-normal bg-ts-blue-500 border border-white",
+                                "w-full text-left font-normal",
                                 field.value && "text-muted-foreground"
                               )}
                             >
@@ -211,7 +211,7 @@ export default function TicketsCard({ className, tickets, membershipTypes, event
                             </Button>
                           </FormControl>
                         </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0 bg-ts-blue-500 text-white">
+                        <PopoverContent className="w-auto p-0">
                           <Calendar
                             mode={"single"}
                             selected={field.value}
@@ -233,9 +233,9 @@ export default function TicketsCard({ className, tickets, membershipTypes, event
                         <PopoverTrigger asChild>
                           <FormControl>
                             <Button
-                              variant={"outline"}
+                              variant={"input"}
                               className={cn(
-                                "w-full text-left font-normal bg-ts-blue-500 border border-white",
+                                "w-full text-left font-normal",
                                 field.value && "text-muted-foreground"
                               )}
                             >
@@ -248,7 +248,7 @@ export default function TicketsCard({ className, tickets, membershipTypes, event
                             </Button>
                           </FormControl>
                         </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0 bg-ts-blue-500 text-white">
+                        <PopoverContent className="w-auto p-0 ">
                           <Calendar
                             mode={"single"}
                             selected={field.value}
@@ -283,7 +283,7 @@ export default function TicketsCard({ className, tickets, membershipTypes, event
               />
               <LoadingButton
                 loading={ticketTypeForm.formState.isLoading}
-                className={"float-right bg-white text-black"}
+                className={"float-right"}
                 type={"submit"}
               >
                 Add

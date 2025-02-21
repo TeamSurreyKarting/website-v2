@@ -6,6 +6,7 @@ import { CommentWithAuthorDetails } from "@/utils/db-fns/tasks/types/comment-wit
 import { useEffect } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { redirect } from "next/navigation";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 export default function Comments({
   taskId,
@@ -37,17 +38,17 @@ export default function Comments({
   }, [supabase]);
 
   return (
-    <div className={className}>
-      <div className={"flex flex-row gap-2.5"}>
+    <Card className={className}>
+      <CardHeader className={"flex flex-row gap-2.5"}>
         <h3 className={"text-lg font-medium"}>Comments</h3>
         <Badge
           variant="default"
-          className={"rounded-full bg-ts-blue-200 border border-white"}
+          className={"rounded-full bg-ts-blue-200 border border-white text-foreground"}
         >
           {comments.length}
         </Badge>
-      </div>
-      <div className={"flex flex-col gap-1.5 mt-3"}>
+      </CardHeader>
+      <CardContent className={"flex flex-col gap-1.5"}>
         {comments.map((c) => (
           <div
             key={c.id}
@@ -64,8 +65,8 @@ export default function Comments({
             <p className={"text-sm"}>{c.content}</p>
           </div>
         ))}
-      </div>
-      <AddComment taskId={taskId} />
-    </div>
+        <AddComment taskId={taskId} />
+      </CardContent>
+    </Card>
   );
 }

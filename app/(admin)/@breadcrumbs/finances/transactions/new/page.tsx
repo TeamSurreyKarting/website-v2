@@ -27,7 +27,6 @@ export default async function BreadcrumbSlot({
   searchParams: Promise<{ accountId?: string }>;
 }) {
   const accountId = (await searchParams).accountId;
-  console.log("accountId", accountId);
 
   const accountName = accountId ? await fetchAccountName(accountId) : null;
 

@@ -5,6 +5,8 @@ export type MembershipNested = {
   MembershipTypes: {
     id: string;
     name: string;
+    validFrom: Date;
+    validUntil: Date;
   } | null;
   Racers: {
     id: string;

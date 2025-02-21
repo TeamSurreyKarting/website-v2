@@ -1,53 +1,61 @@
-import { createClient } from "@/utils/supabase/server";
-import { BaseDataTable } from "@/components/base-data-table";
+"use client";
+
+import { TableView } from "@/components/table-view";
 import { columns } from "@/components/finances/transactions/columns";
+import { Tables } from "@/database.types";
+import { WindowCollectionView } from "@/components/collection-view";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { format } from "date-fns";
+import { useState } from "react";
+import clsx from "clsx";
+import { Button } from "@/components/ui/button";
+import { CircleChevronUp } from "lucide-react";
 
-async function getData(accountId?: string) {
-  const supabase = await createClient();
-
-  // build query
-  const query = supabase
-    .from("Transactions")
-    .select("id, occurredAt, itemDescription, value, Accounts( id, name )");
-
-  // if filtering by account, apply
-  if (accountId) {
-    query.eq("account", accountId);
-  }
-
-  // sort by reverse chronological order
-  query.order("occurredAt", { ascending: false });
-
-  const { data: transactions, error } = await query;
-
-  if (error) {
-    throw error;
-  }
-
-  if (transactions === null) {
-    throw Error("Error finding transactions");
-  }
-
-  return transactions;
+export default function TransactionsDataTable({
+  data,
+}: {
+  data: Tables<'Transactions'>[];
+}) {
+  return (
+    <>
+      <WindowCollectionView data={data} renderItem={(item) => <TransactionCollectionViewItem item={item} />} />
+      <TableView columns={columns} data={data} className={"hidden md:block"} />
+    </>
+  );
 }
 
-export default async function TransactionsDataTable({
-  data,
-  accountId,
-}: {
-  data?: TxAccount[];
-  accountId?: string;
-}) {
-  if (!data && !accountId) {
-    throw Error(
-      "No data or account identifier was supplied to enable this component to operate correctly.",
-    );
-  }
+function TransactionCollectionViewItem({ item }: { item: Tables<'Transactions'> }) {
+  const [isExpanded, setExpanded] = useState<boolean>(false);
+
+  const gbpFormat = Intl.NumberFormat("en-GB", {
+    style: "currency",
+    currency: "GBP",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
 
   return (
-    <BaseDataTable
-      columns={columns}
-      data={data ?? (await getData(accountId))}
-    />
+    <Card className={"transform"}>
+      <CardHeader>
+        <div className={"flex flex-row items-center justify-between"}>
+          <CardTitle>{item.itemDescription}</CardTitle>
+          <Button variant={"ghost"} className={"h-fit w-9 p-0"} onClick={() => setExpanded(!isExpanded)}>
+            <span className={"sr-only"}>Actions</span>
+            <CircleChevronUp
+              className={clsx("transition-transform", {
+                "rotate-180": isExpanded,
+              })}
+            />
+          </Button>
+        </div>
+        <CardDescription>{gbpFormat.format(item.value)}</CardDescription>
+      </CardHeader>
+      <CardContent className={clsx("hidden text-sm text-foreground/75", {
+          "block": isExpanded
+        })}
+      >
+        <span>Occurred At: {format(item.occurredAt, 'HH:mm, dd/MM/yy')}</span>
+      </CardContent>
+    </Card>
   );
 }

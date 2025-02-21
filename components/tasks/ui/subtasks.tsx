@@ -6,6 +6,7 @@ import { getAuthedUserId } from "@/utils/db-fns/auth/get-user-id";
 import { FaPlus } from "react-icons/fa6";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 async function getSubtasks(
   parentTaskId: string,
@@ -35,33 +36,30 @@ export default async function Subtasks({
   const authedUserId = await getAuthedUserId();
 
   return (
-    <div className={className}>
-      <div className={"flex flex-row gap-3 items-center justify-between"}>
+    <Card className={className}>
+      <CardHeader className={"flex flex-row gap-3 items-center justify-between"}>
         <div className={"flex flex-row gap-2.5"}>
           <h3 className={"text-lg font-medium"}>Subtasks</h3>
           <Badge
             variant="default"
-            className={"rounded-full bg-ts-blue-200 border border-white"}
+            className={"rounded-full bg-ts-blue-200 border border-white text-foreground"}
           >
             {subtasks.length}
           </Badge>
         </div>
         <Link href={`/tasks/new?parentTask=${taskId}`}>
           <Button
-            className={
-              "bg-ts-blue-400 border border-ts-blue-300 hover:bg-ts-blue-200"
-            }
             size={"sm"}
           >
             <FaPlus />
           </Button>
         </Link>
-      </div>
-      <div className={"flex flex-col gap-2 mt-3"}>
+      </CardHeader>
+      <CardContent className={"flex flex-col gap-4"}>
         {subtasks.map((s) => (
           <TaskCard key={s.id} task={s} authedUserId={authedUserId} />
         ))}
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

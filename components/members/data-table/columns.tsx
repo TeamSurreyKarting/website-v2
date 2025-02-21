@@ -3,7 +3,6 @@
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { FaEye } from "react-icons/fa";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,7 +20,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { MoreHorizontal } from "lucide-react";
+import { Eye, MoreHorizontal } from "lucide-react";
 import { FaTrashCan } from "react-icons/fa6";
 import { Spinner } from "@/components/ui/spinner";
 import { useState } from "react";
@@ -69,7 +68,7 @@ export const columns: ColumnDef<MembershipNested>[] = [
         <div className={"flex gap-2"}>
           <Link href={`/members/${row.original.id}`}>
             <Button variant={"ghost"} className={"hidden lg:block"}>
-              <FaEye />
+              <Eye />
             </Button>
           </Link>
           <Dialog>
@@ -84,7 +83,7 @@ export const columns: ColumnDef<MembershipNested>[] = [
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                 <Link href={`/members/${row.original.id}`}>
                   <DropdownMenuItem className={"lg:hidden"}>
-                    <FaEye />
+                    <Eye />
                     View Details
                   </DropdownMenuItem>
                 </Link>

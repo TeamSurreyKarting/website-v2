@@ -163,8 +163,7 @@ export function NewRacerForm() {
           )}
         />
         <LoadingButton
-          className={"bg-ts-blue-700 float-right"}
-          variant={"outline"}
+          className={"float-right"}
           type={"submit"}
           loading={formIsSubmitting}
         >

@@ -10,6 +10,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 export default function TasksKanbanBoard({
   tasks,
@@ -51,9 +52,10 @@ export default function TasksKanbanBoard({
   ];
 
   return (
+    <div className={"w-full h-full overflow-x-auto"}>
       <div
         className={cn(
-          `grid grid-cols-5 gap-4 h-full w-full overflow-x-scroll`,
+          `grid grid-cols-5 gap-4 h-full w-full no-scrollbar overflow-x-auto`,
           className,
         )}
       >
@@ -66,15 +68,15 @@ export default function TasksKanbanBoard({
           }
 
           return (
-            <div
+            <Card
               key={group.name}
               className={
-                "rounded-lg bg-ts-blue-600 border border-ts-blue-300 text-white min-w-[200px]"
+                "min-w-[200px] overflow-hidden flex-shrink-0"
               }
             >
-              <div
+              <CardHeader
                 className={
-                  "bg-ts-blue-400 px-2 py-1 flex items-center justify-between"
+                  "bg-ts-blue-300 px-2 py-1 flex flex-row items-center justify-between"
                 }
               >
                 <div>
@@ -97,8 +99,8 @@ export default function TasksKanbanBoard({
                 >
                   {groupTasks.length}
                 </Badge>
-              </div>
-              <div
+              </CardHeader>
+              <CardContent
                 className={"p-2 flex flex-col gap-2"}
               >
                 {groupTasks.map((task) => (
@@ -108,10 +110,11 @@ export default function TasksKanbanBoard({
                     authedUserId={authedUserId}
                   />
                 ))}
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           );
         })}
       </div>
+    </div>
   );
 }

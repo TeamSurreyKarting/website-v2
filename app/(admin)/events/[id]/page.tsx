@@ -91,7 +91,7 @@ export default async function EventPage({ params }: { params?: Promise<{ id: str
         <h3 className={"text-xl font-medium text-ts-gold-700"}>
           {event.name}
         </h3>
-        <Card className={"mt-4 bg-ts-blue"}>
+        <Card className={"mt-4 "}>
           <CardHeader>
             <CardTitle>Event Details</CardTitle>
           </CardHeader>

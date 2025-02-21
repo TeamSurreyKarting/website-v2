@@ -1,15 +1,18 @@
-"use client";
+"use client"
+
 
 import {
   SidebarGroup,
   SidebarMenu,
   SidebarMenuButton,
-  SidebarMenuItem,
+  SidebarMenuItem, useSidebar
 } from "@/components/ui/sidebar";
+
 import { type IconType } from "react-icons";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { clsx } from "clsx";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export function NavMain({
   items,
@@ -21,6 +24,8 @@ export function NavMain({
   }[];
 }) {
   const pathname = usePathname();
+  const isMobile = useIsMobile();
+  const { setOpenMobile } = useSidebar()
 
   return (
     <SidebarGroup>
@@ -28,21 +33,22 @@ export function NavMain({
         {items.map((item) => {
           const itemRelatesToActivePath =
             item.url === "/"
-              ? pathname === item.url
-              : pathname.startsWith(item.url);
+            ? pathname === item.url
+            : pathname.startsWith(item.url);
 
           return (
             <SidebarMenuItem
-              className={clsx("rounded-lg border-2 border-transparent", {
-                "border-ts-gold-700 bg-ts-gold-700 text-black":
-                  itemRelatesToActivePath,
-                "border-2 border-ts-blue-600 bg-ts-blue-700/50 hover:bg-ts-blue-500 hover:border-ts-blue-500":
-                  !itemRelatesToActivePath,
-              })}
-              key={item.title}
+              key={item.url}
             >
-              <SidebarMenuButton asChild size={"lg"} tooltip={item.title}>
-                <Link href={item.url}>
+              <SidebarMenuButton
+                asChild
+                size={isMobile ? "xl" : "lg"}
+                tooltip={item.title}
+                className={clsx("transition-colors", {
+                  'bg-sidebar-active text-sidebar-active-foreground hover:bg-sidebar-active/80 hover:text-sidebar-active-foreground/80': itemRelatesToActivePath,
+                })}
+              >
+                <Link href={item.url} onClick={() => { setOpenMobile(false); }}>
                   <item.icon />
                   <span
                     className={clsx({
@@ -54,9 +60,9 @@ export function NavMain({
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
-          );
+          )
         })}
       </SidebarMenu>
     </SidebarGroup>
-  );
+  )
 }

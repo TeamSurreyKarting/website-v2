@@ -29,20 +29,19 @@ export function FormDatePicker({
         <PopoverTrigger asChild>
           <FormControl>
             <Button
-              variant={"outline"}
+              variant={"input"}
               className={cn(
                 "pl-3 text-left font-normal",
                 fullWidth ? "w-full" : "w-[240px]",
-                "bg-ts-blue-600",
                 !defaultValue && "text-muted-foreground",
               )}
             >
+              <CalendarIcon className="mr-auto h-4 w-4 opacity-50" />
               {defaultValue ? (
                 format(defaultValue, "HH:mm PPP")
               ) : (
-                <span>Pick a date</span>
-              )}
-              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                 <span>Pick a date</span>
+               )}
             </Button>
           </FormControl>
         </PopoverTrigger>

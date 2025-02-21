@@ -42,7 +42,6 @@ export default function RacerMultiSelect({
       }
       defaultValue={defaultValue}
       onValueChange={onValueChange}
-      className={"bg-ts-blue"}
       variant={"inverted"}
       bottomActionButtons={false}
       toggleAllButton={false}

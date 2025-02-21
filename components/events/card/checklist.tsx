@@ -84,7 +84,7 @@ export default function ChecklistCard({ checklistItems, eventId, }: { checklistI
 
   return (
     <Dialog open={modalOpen} onOpenChange={setModalOpen}>
-      <Card className={"bg-ts-blue"}>
+      <Card>
         <CardHeader className={"flex flex-row gap-2 items-center justify-between"}>
           <div className={"flex flex-col gap-2"}>
             <CardTitle>Checklist</CardTitle>
@@ -128,7 +128,7 @@ export default function ChecklistCard({ checklistItems, eventId, }: { checklistI
           <DialogHeader>
             <DialogTitle>Add Checklist Item</DialogTitle>
           </DialogHeader>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className={"space-y-6"}>
             <FormField
               control={form.control}
               name={"title"}
@@ -177,7 +177,7 @@ export default function ChecklistCard({ checklistItems, eventId, }: { checklistI
               <LoadingButton
                 loading={form.formState.isLoading}
                 type={"submit"}
-                className={"bg-white text-black float-right"}
+                className={"float-right"}
               >
                 Add
               </LoadingButton>

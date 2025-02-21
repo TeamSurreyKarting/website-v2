@@ -1,25 +1,7 @@
 "use client";
 
-import {
-  Label,
-  PolarGrid,
-  PolarRadiusAxis,
-  RadialBar,
-  RadialBarChart,
-} from "recharts";
-
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { ChartConfig, ChartContainer } from "@/components/ui/chart";
-
-const chartConfig = {
-  starting: {
-    label: "Starting Balance",
-  },
-  remaining: {
-    label: "Remaining Balance",
-    color: "#fcc133",
-  },
-} satisfies ChartConfig;
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 
 export function AccountBalanceRemaining({
   remaining,
@@ -35,72 +17,17 @@ export function AccountBalanceRemaining({
     maximumFractionDigits: 2,
   });
 
-  const chartData = [
-    {
-      remaining: remaining,
-      starting: starting,
-      fill: "var(--color-remaining)",
-    },
-  ];
-
   return (
     <Card className="flex flex-col">
+      <CardHeader className={"text-left"}>
+        <CardTitle className={"text-xl"}>Remaining Balance</CardTitle>
+        <CardDescription className={"text-lg"}><span className={"font-bold"}>{gbpFormat.format(remaining)}</span>&nbsp;({100-Math.round(remaining/starting)}%)</CardDescription>
+      </CardHeader>
       <CardContent className="flex-1 pb-0">
-        <ChartContainer
-          config={chartConfig}
-          className="mx-auto aspect-square min-h-[100px] max-h-[250px]"
-        >
-          <RadialBarChart
-            data={chartData}
-            startAngle={360}
-            endAngle={0}
-            innerRadius={80}
-            outerRadius={135}
-          >
-            <PolarGrid
-              gridType="circle"
-              radialLines={false}
-              stroke="#"
-              className="first:fill-muted last:fill-background"
-              polarRadius={[86, 74]}
-            />
-            <RadialBar dataKey="remaining" background cornerRadius={10} />
-            <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
-              <Label
-                content={({ viewBox }) => {
-                  if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                    return (
-                      <text
-                        x={viewBox.cx}
-                        y={viewBox.cy}
-                        textAnchor="middle"
-                        dominantBaseline="middle"
-                      >
-                        <tspan
-                          x={viewBox.cx}
-                          y={viewBox.cy}
-                          className="fill-foreground text-2xl font-bold"
-                        >
-                          {gbpFormat.format(chartData[0].remaining)}
-                        </tspan>
-                        <tspan
-                          x={viewBox.cx}
-                          y={(viewBox.cy || 0) + 24}
-                          className="fill-muted-foreground"
-                        >
-                          Remaining
-                        </tspan>
-                      </text>
-                    );
-                  }
-                }}
-              />
-            </PolarRadiusAxis>
-          </RadialBarChart>
-        </ChartContainer>
+        <Progress max={Math.max(remaining, starting)} value={remaining} />
       </CardContent>
-      <CardFooter>
-        <span></span>
+      <CardFooter className={"mt-4"}>
+        <p>Starting Balance: {gbpFormat.format(starting)}</p>
       </CardFooter>
     </Card>
   );

@@ -6,25 +6,30 @@ import { FaPlus } from "react-icons/fa6";
 import Search from "@/components/search";
 import ShowPastEventsToggle from "@/components/events/show-past-events-toggle";
 import { Tables } from "@/database.types";
-import { columns } from "@/components/events/data-table/columns";
-import { BaseDataTable } from "@/components/base-data-table";
+import EventsDataTable from "@/components/events/data-table/data-table";
+import { notFound } from "next/navigation";
 
 async function getEvents(search?: string, showPastEvents?: boolean): Promise<Tables<'Events'>[]> {
-  const supabase = await createClient();
+  try {
+    const supabase = await createClient();
 
-  const query = supabase.from("Events").select("*").order("startsAt");
+    const query = supabase.from("Events").select("*").order("startsAt");
 
-  if (search) {
-    query.ilike("name", `%${search}%`);
+    if (search) {
+      query.ilike("name", `%${search}%`);
+    }
+
+    if (showPastEvents) {
+      query.lt("endsAt", new Date().toISOString());
+    }
+
+    const { data } = await query.throwOnError();
+
+    return data;
+  } catch (error) {
+    console.error(error);
+    notFound();
   }
-
-  if (!showPastEvents) {
-    query.gte("startsAt", new Date().toISOString());
-  }
-
-  const { data } = await query.throwOnError();
-
-  return data;
 }
 
 export default async function EventsListPage({ searchParams }: { searchParams?: Promise<{ q: string, showPastEvents: boolean }> }) {
@@ -43,9 +48,9 @@ export default async function EventsListPage({ searchParams }: { searchParams?: 
           </div>
           <div className={"flex flex-row gap-2"}>
             <Link href={"/events/new"} className={"flex gap-2 items-center"}>
-              <Button variant={"secondary"}>
+              <Button>
                 <FaPlus />
-                Create
+                <span className={"hidden md:block"}>Create</span>
               </Button>
             </Link>
           </div>
@@ -54,7 +59,7 @@ export default async function EventsListPage({ searchParams }: { searchParams?: 
           key={`${sp?.q}_${sp?.showPastEvents}}`}
           fallback={<p>Loading...</p>}
         >
-          <BaseDataTable columns={columns} data={events} />
+          <EventsDataTable events={events} />
         </Suspense>
       </div>
     )

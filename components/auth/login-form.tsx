@@ -18,7 +18,7 @@ import { createClient } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
-  email: z.string().email(),
+  email: z.string().email().trim(),
 });
 
 export function LoginForm({

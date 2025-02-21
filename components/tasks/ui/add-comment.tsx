@@ -88,7 +88,7 @@ export default function AddComment({ taskId }: { taskId: string }) {
               <FormControl>
                 <Textarea
                   className={
-                    "rounded-lg resize-none bg-ts-blue-400 border-ts-blue-200"
+                    "rounded-lg resize-none "
                   }
                   wrap={"soft"}
                   rows={1}
@@ -102,7 +102,7 @@ export default function AddComment({ taskId }: { taskId: string }) {
         />
         <LoadingButton
           className={
-            "rounded-full m-0 p-2 h-full aspect-square border border-ts-blue-200 bg-ts-blue-200 hover:bg-ts-blue-100 hover:border-ts-blue-50 text-white"
+            "rounded-full m-0 p-2 h-full aspect-square border border-ts-blue-200 bg-ts-blue-200 hover:bg-ts-gold-500 hover:border-border text-foreground hover:text-black"
           }
           variant={"outline"}
           loading={form.formState.isSubmitting}

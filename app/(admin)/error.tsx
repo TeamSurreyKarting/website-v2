@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { FaRedo } from "react-icons/fa";
 import { LoadingButton } from "@/components/ui/loading-button";
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
 function formatErrorMessage(error: string) {
   try {
@@ -31,23 +32,20 @@ export default function Error({
   };
 
   return (
-    <div className="w-full h-full bg-nile-blue-900 rounded-xl p-4 flex flex-col items-center justify-center">
-      <h1 className="text-2xl font-bold">Error</h1>
-      <p
-        className={
-          "my-4 w-full rounded-lg bg-ts-blue-600 border border-ts-blue-300 font-mono text-sm p-4"
-        }
-      >
-        {formatErrorMessage(error.message)}
-      </p>
-      <LoadingButton
-        onClick={performRetry}
-        variant={"secondary"}
-        loading={isRetrying}
-      >
-        <FaRedo />
-        Retry
-      </LoadingButton>
-    </div>
+    <Card>
+      <CardHeader>
+        <CardTitle>Error</CardTitle>
+        <CardDescription>{formatErrorMessage(error.message)}</CardDescription>
+      </CardHeader>
+      <CardFooter>
+        <LoadingButton
+            onClick={performRetry}
+            loading={isRetrying}
+          >
+          <FaRedo />
+          Retry
+        </LoadingButton>
+      </CardFooter>
+    </Card>
   );
 }

@@ -145,7 +145,7 @@ export default function TransportCard({ eventId, transport, ticketAllocations }:
 
   return (
     <>
-      <Card className={"bg-ts-blue"}>
+      <Card>
         <CardHeader className={"flex flex-col sm:flex-row gap-2 items-start sm:items-center justify-between"}>
           <div className={"flex flex-col space-y-1.5"}>
             <CardTitle>Transport</CardTitle>
@@ -244,7 +244,7 @@ export default function TransportCard({ eventId, transport, ticketAllocations }:
               />
               <LoadingButton
                 loading={addDriverForm.formState.isLoading}
-                className={"float-right bg-white text-black"}
+                className={"float-right"}
                 type="submit"
               >
                 Add
@@ -273,7 +273,7 @@ export default function TransportCard({ eventId, transport, ticketAllocations }:
                             variant="outline"
                             role="combobox"
                             className={cn(
-                              "w-full justify-between bg-ts-blue-600 text-white mt-2",
+                              "w-full justify-between",
                               !field.value && "text-muted-foreground"
                             )}
                           >
@@ -287,8 +287,8 @@ export default function TransportCard({ eventId, transport, ticketAllocations }:
                         </FormControl>
                       </PopoverTrigger>
                       <PopoverContent
-                        className="w-[200px] p-0 bg-ts-blue-600 text-white"
-                        align={"end"}
+                        className="w-[200px] p-0"
+                        align={"start"}
                       >
                         <Command>
                           <CommandInput
@@ -342,7 +342,7 @@ export default function TransportCard({ eventId, transport, ticketAllocations }:
                             variant="outline"
                             role="combobox"
                             className={cn(
-                              "w-full justify-between bg-ts-blue-600 text-white mt-2",
+                              "w-full justify-between",
                               !field.value && "text-muted-foreground"
                             )}
                           >
@@ -356,7 +356,7 @@ export default function TransportCard({ eventId, transport, ticketAllocations }:
                         </FormControl>
                       </PopoverTrigger>
                       <PopoverContent
-                        className="w-[200px] p-0 bg-ts-blue-600 text-white"
+                        className="w-[200px] p-0"
                         align={"end"}
                       >
                         <Command>
@@ -406,7 +406,7 @@ export default function TransportCard({ eventId, transport, ticketAllocations }:
               />
               <LoadingButton
                 loading={assignTixToVehForm.formState.isLoading}
-                className={"float-right bg-white text-black"}
+                className={"float-right"}
                 type="submit"
               >
                 Add

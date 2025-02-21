@@ -43,7 +43,7 @@ export function NavUser() {
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
-              className="h-16 border-2 border-ts-blue-600 bg-ts-blue-700/50 data-[state=open]:bg-ts-blue-600"
+              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <div className="grid flex-1 text-left text-sm leading-tight">
                 {user ? (
@@ -51,13 +51,13 @@ export function NavUser() {
                     {user.user_metadata.firstName} {user.user_metadata.lastName}
                   </span>
                 ) : (
-                  <Skeleton />
-                )}
+                   <Skeleton />
+                 )}
                 {user ? (
                   <span className="truncate text-xs">{user.email}</span>
                 ) : (
-                  <Skeleton />
-                )}
+                   <Skeleton />
+                 )}
               </div>
               <PiDotsNineBold className="ml-auto size-6" />
             </SidebarMenuButton>

@@ -3,14 +3,6 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Database } from "@/database.types";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -20,10 +12,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal } from "lucide-react";
-import { FaEye } from "react-icons/fa";
 import { FaTrashCan } from "react-icons/fa6";
-import Link from "next/link";
 import { deleteMembership } from "@/utils/actions/memberships/delete";
 import { useState } from "react";
 import { Spinner } from "@/components/ui/spinner";
@@ -60,43 +49,21 @@ export const columns: ColumnDef<
     header: "Actions",
     cell: ({ row }) => {
       const [isDeleting, setIsDeleting] = useState(false);
+      const [dialogIsOpen, setDialogOpenState] = useState(false);
 
       return (
         <div className={"flex gap-2"}>
-          <Link href={`/members/memberships/${row.original.id}`}>
-            <Button variant={"ghost"} className={"hidden lg:block"}>
-              <FaEye />
-            </Button>
-          </Link>
-          <Dialog>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant={"ghost"} className={"h-9 w-9 p-0"}>
-                  <span className={"sr-only"}>Actions</span>
-                  <MoreHorizontal className={"h-4 w-4"} />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align={"end"}>
-                <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                <Link href={`/members/memberships/${row.original.id}`}>
-                  <DropdownMenuItem className={"lg:hidden"}>
-                    <FaEye />
-                    View Details
-                  </DropdownMenuItem>
-                </Link>
-                <DropdownMenuSeparator />
-                <DialogTrigger asChild>
-                  <DropdownMenuItem
-                    className={
-                      "text-red-500 hover:text-red-50 focus:text-red-50 hover:bg-red-500 focus:bg-red-500 "
-                    }
-                  >
-                    <FaTrashCan />
-                    Delete
-                  </DropdownMenuItem>
-                </DialogTrigger>
-              </DropdownMenuContent>
-            </DropdownMenu>
+          <Dialog open={dialogIsOpen} onOpenChange={setDialogOpenState}>
+            <DialogTrigger asChild>
+              <Button
+                variant={"ghost"}
+                className={
+                  "text-destructive-foreground hover:bg-destructive focus:bg-destructive"
+                }
+              >
+                <FaTrashCan />
+              </Button>
+            </DialogTrigger>
             <DialogContent>
               <DialogHeader>
                 <DialogTitle>Are you absolutely sure?</DialogTitle>
@@ -106,16 +73,18 @@ export const columns: ColumnDef<
               </DialogHeader>
               <DialogFooter>
                 <Button
-                  className={"bg-red-700 hover:bg-red-500"}
+                  className={"bg-destructive hover:bg-destructive focus:bg-destructive text-destructive-foreground"}
                   disabled={isDeleting}
                   onClick={async () => {
-                    setIsDeleting(true);
                     try {
+                      setIsDeleting(true);
                       await deleteMembership(row.original.id);
+                      setDialogOpenState(false);
                     } catch (e) {
                       console.error(e);
+                    } finally {
+                      setIsDeleting(false);
                     }
-                    setIsDeleting(false);
                   }}
                 >
                   <Spinner show={isDeleting} />

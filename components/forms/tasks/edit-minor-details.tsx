@@ -30,6 +30,7 @@ import FormPriorityPicker from "@/components/tasks/ui/form/priority-picker";
 import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { redirect } from "next/navigation";
+import { Pencil } from "lucide-react";
 
 const formSchema = z.object({
   dueAt: z.date(),
@@ -118,13 +119,13 @@ export function EditTaskDetails(
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
-          variant="outline"
+          variant={"secondary"}
           type={"button"}
           className={
-            "bg-ts-blue-400 hover:bg-white hover:text-black float-right"
+            "float-right"
           }
         >
-          Edit Details
+          <Pencil />
         </Button>
       </DialogTrigger>
       <DialogContent>

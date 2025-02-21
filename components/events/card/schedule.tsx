@@ -89,7 +89,7 @@ export default function ScheduleCard({ schedule, eventId }: { schedule: Tables<'
 
   return (
     <>
-      <Card className={"bg-ts-blue"}>
+      <Card>
         <CardHeader className={"flex flex-row gap-2 items-center justify-between"}>
           <CardTitle>Schedule</CardTitle>
           <div className={"flex flex-col sm:flex-row gap-2 items-start sm:items-center justify-between"}>
@@ -151,9 +151,9 @@ export default function ScheduleCard({ schedule, eventId }: { schedule: Tables<'
                       <PopoverTrigger asChild>
                         <FormControl>
                           <Button
-                            variant={"outline"}
+                            variant={"input"}
                             className={cn(
-                              "w-full text-left font-normal bg-ts-blue-500 border border-white",
+                              "w-full text-left font-normal",
                               field.value && "text-muted-foreground"
                             )}
                           >
@@ -166,7 +166,7 @@ export default function ScheduleCard({ schedule, eventId }: { schedule: Tables<'
                           </Button>
                         </FormControl>
                       </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0 bg-ts-blue-500 text-white">
+                      <PopoverContent className="w-auto p-0">
                         <Calendar
                           mode={"single"}
                           selected={field.value}
@@ -180,7 +180,7 @@ export default function ScheduleCard({ schedule, eventId }: { schedule: Tables<'
               />
               <LoadingButton
                 loading={addToScheduleForm.formState.isLoading}
-                className={"float-right bg-white text-black"}
+                className={"float-right"}
                 type={"submit"}
               >
                 Add

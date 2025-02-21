@@ -21,32 +21,30 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Spinner } from "@/components/ui/spinner";
-import { FaEye, FaTrashCan } from "react-icons/fa6";
-import { MoreHorizontal } from "lucide-react";
+import { FaTrashCan } from "react-icons/fa6";
+import { Eye, MoreHorizontal } from "lucide-react";
 import { useState } from "react";
 import { deleteTransaction } from "@/utils/actions/finances/transactions/delete";
+import { format } from "date-fns";
+import { Tables } from "@/database.types";
 
-export const columns: ColumnDef<TxAccount>[] = [
+export const columns: ColumnDef<Tables<'Transactions'>>[] = [
   // {
-  // 	header: "Transaction ID",
-  // 	accessorKey: 'id',
+  //   header: "Account",
+  //   accessorKey: "Accounts.name",
+  //   cell: ({ row }) => {
+  //     return (
+  //       <Link href={`/finances?account=${row.original.Accounts?.id}`}>
+  //         {row.original.Accounts?.name}
+  //       </Link>
+  //     );
+  //   },
   // },
-  {
-    header: "Account",
-    accessorKey: "Accounts.name",
-    cell: ({ row }) => {
-      return (
-        <Link href={`/finances?account=${row.original.Accounts?.id}`}>
-          {row.original.Accounts?.name}
-        </Link>
-      );
-    },
-  },
   {
     header: "Timestamp",
     accessorKey: "occurredAt",
     cell: ({ row }) => {
-      return new Date(row.original.occurredAt).toLocaleString("en-GB");
+      return format(new Date(row.original.occurredAt), 'd/M/y HH:mm');
     },
   },
   {
@@ -73,7 +71,7 @@ export const columns: ColumnDef<TxAccount>[] = [
         <div className={"flex gap-2"}>
           <Link href={`/finances/transactions/${row.original.id}`}>
             <Button variant={"ghost"} className={"hidden lg:block"}>
-              <FaEye />
+              <Eye />
             </Button>
           </Link>
           <Dialog>
@@ -88,7 +86,7 @@ export const columns: ColumnDef<TxAccount>[] = [
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                 <Link href={`/members/${row.original.id}`}>
                   <DropdownMenuItem className={"lg:hidden"}>
-                    <FaEye />
+                    <Eye />
                     View Details
                   </DropdownMenuItem>
                 </Link>
@@ -117,13 +115,14 @@ export const columns: ColumnDef<TxAccount>[] = [
                   className={"bg-red-700 hover:bg-red-500"}
                   disabled={isDeleting}
                   onClick={async () => {
-                    setIsDeleting(true);
                     try {
                       await deleteTransaction(row.original.id);
+                      setIsDeleting(true);
                     } catch (e) {
                       console.error(e);
+                    } finally {
+                      setIsDeleting(false);
                     }
-                    setIsDeleting(false);
                   }}
                 >
                   <Spinner show={isDeleting} />
