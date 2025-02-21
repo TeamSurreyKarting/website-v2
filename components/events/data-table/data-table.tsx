@@ -24,6 +24,7 @@ export default function EventsDataTable({
     <WindowCollectionView
       data={collectionData}
       renderItem={(item) => <MembersCollectionViewCard item={item} />}
+      className={"md:hidden"}
     />
     <TableView
       columns={columns}

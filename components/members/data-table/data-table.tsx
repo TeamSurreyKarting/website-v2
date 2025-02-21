@@ -9,7 +9,6 @@ import { format } from "date-fns";
 import {
   DropdownMenu,
   DropdownMenuContent, DropdownMenuItem,
-  DropdownMenuLabel, DropdownMenuSeparator,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
@@ -24,7 +23,6 @@ import {
 } from "@/components/ui/dialog";
 import { revokeMembership } from "@/utils/actions/memberships/revoke";
 import { Spinner } from "@/components/ui/spinner";
-import Link from "next/link";
 import { Eye, MoreHorizontal } from "lucide-react";
 import { FaTrashCan } from "react-icons/fa6";
 import { useState } from "react";
@@ -35,7 +33,11 @@ export default function MembersDataTable({
   members: MembershipNested[];
 }) {
   return <>
-    <WindowCollectionView data={members} renderItem={(item) => <MembersCollectionViewCard item={item} />} />
+    <WindowCollectionView
+      data={members}
+      renderItem={(item) => <MembersCollectionViewCard item={item} />}
+      className={"md:hidden"}
+    />
     <TableView columns={columns} data={members} className={"hidden md:block"} />
   </>
 }

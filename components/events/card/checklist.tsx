@@ -21,6 +21,7 @@ import RacerCombobox from "@/components/racers/combobox";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { ChevronsRight, ChevronsUpDown } from "lucide-react";
 import pluralize from "pluralize";
+import { ResponsiveModal } from "@/components/ui/responsive-modal";
 
 const formSchema = z.object({
   event: z.string().uuid(),
@@ -83,109 +84,107 @@ export default function ChecklistCard({ checklistItems, eventId, }: { checklistI
   const completeChecklistItems = checklistItems.filter((item) => item.isDone);
 
   return (
-    <Dialog open={modalOpen} onOpenChange={setModalOpen}>
-      <Card>
-        <CardHeader className={"flex flex-row gap-2 items-center justify-between"}>
-          <div className={"flex flex-col gap-2"}>
-            <CardTitle>Checklist</CardTitle>
-            <CardDescription>
-              {incompleteChecklistItems.length === 0 ? "No" : incompleteChecklistItems.length} {pluralize('task', incompleteChecklistItems.length)} to-do
-            </CardDescription>
-          </div>
-          <DialogTrigger asChild>
+    <Card>
+      <CardHeader className={"flex flex-row gap-2 items-center justify-between"}>
+        <div className={"flex flex-col gap-2"}>
+          <CardTitle>Checklist</CardTitle>
+          <CardDescription>
+            {incompleteChecklistItems.length === 0 ? "No" : incompleteChecklistItems.length} {pluralize('task', incompleteChecklistItems.length)} to-do
+          </CardDescription>
+        </div>
+        <ResponsiveModal
+          title="Add To Checklist"
+          trigger={
             <Button>
               <FaPlus />
               <span>Add</span>
             </Button>
-          </DialogTrigger>
-        </CardHeader>
-        <CardContent className={"flex flex-col gap-2"}>
-          {
-            incompleteChecklistItems.length
-             ? incompleteChecklistItems.map((item) => (<ChecklistItem key={item.id} item={item} updateItemState={updateChecklistItemState} />))
-             : (<em>No incomplete items</em>)
           }
-          {completeChecklistItems.length > 0 && (
-            <Collapsible>
-              <div className="flex items-center justify-between space-x-4 px-4 my-2">
-                <span>Completed Items</span>
-                <CollapsibleTrigger asChild>
-                  <Button variant="ghost" size="sm">
-                    <ChevronsUpDown className="h-4 w-4" />
-                    <span className="sr-only">Toggle</span>
-                  </Button>
-                </CollapsibleTrigger>
+          open={modalOpen}
+          onOpenChange={setModalOpen}
+        >
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className={"space-y-6"}>
+              <FormField
+                control={form.control}
+                name={"title"}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Title</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name={"description"}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Description</FormLabel>
+                    <FormControl>
+                      <Textarea {...field} className={"resize-none"} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name={"assignedTo"}
+                render={({ field }) => (
+                  <FormItem className={"flex flex-col"}>
+                    <FormLabel>Assigned To</FormLabel>
+                    <RacerCombobox
+                      defaultValue={field.value}
+                      onValueChange={field.onChange}
+                      fullWidth={true}
+                    />
+                    <FormDescription>
+                      The person that will oversee this task&apos;s completion.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <div className={"max-md:w-full"}>
+                <LoadingButton
+                  loading={form.formState.isLoading}
+                  className={"w-full md:w-fit md:float-right"}
+                  type={"submit"}
+                >
+                  Add
+                </LoadingButton>
               </div>
-              <CollapsibleContent className={"flex flex-col gap-2"}>
-                {completeChecklistItems.length && completeChecklistItems.map((item) => (<ChecklistItem key={item.id} item={item} updateItemState={updateChecklistItemState} />))}
-              </CollapsibleContent>
-            </Collapsible>
-          )}
-        </CardContent>
-      </Card>
-      <DialogContent>
-        <Form {...form}>
-          <DialogHeader>
-            <DialogTitle>Add Checklist Item</DialogTitle>
-          </DialogHeader>
-          <form onSubmit={form.handleSubmit(onSubmit)} className={"space-y-6"}>
-            <FormField
-              control={form.control}
-              name={"title"}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Title</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name={"description"}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Description</FormLabel>
-                  <FormControl>
-                    <Textarea {...field} className={"resize-none"} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name={"assignedTo"}
-              render={({ field }) => (
-                <FormItem className={"flex flex-col"}>
-                  <FormLabel>Assigned To</FormLabel>
-                  <RacerCombobox
-                    defaultValue={field.value}
-                    onValueChange={field.onChange}
-                    fullWidth={true}
-                  />
-                  <FormDescription>
-                    The person that will oversee this task&apos;s completion.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <DialogFooter>
-              <LoadingButton
-                loading={form.formState.isLoading}
-                type={"submit"}
-                className={"float-right"}
-              >
-                Add
-              </LoadingButton>
-            </DialogFooter>
-          </form>
-        </Form>
-      </DialogContent>
-    </Dialog>
+            </form>
+          </Form>
+        </ResponsiveModal>
+      </CardHeader>
+      <CardContent className={"flex flex-col gap-2"}>
+        {
+          incompleteChecklistItems.length > 0
+           && incompleteChecklistItems.map((item) => (<ChecklistItem key={item.id} item={item} updateItemState={updateChecklistItemState} />))
+        }
+        {completeChecklistItems.length > 0 && (
+          <Collapsible>
+            <div className="flex items-center justify-between space-x-4 px-4 my-2">
+              <span>Completed Items</span>
+              <CollapsibleTrigger asChild>
+                <Button variant="ghost" size="sm">
+                  <ChevronsUpDown className="h-4 w-4" />
+                  <span className="sr-only">Toggle</span>
+                </Button>
+              </CollapsibleTrigger>
+            </div>
+            <CollapsibleContent className={"flex flex-col gap-2"}>
+              {completeChecklistItems.length && completeChecklistItems.map((item) => (<ChecklistItem key={item.id} item={item} updateItemState={updateChecklistItemState} />))}
+            </CollapsibleContent>
+          </Collapsible>
+        )}
+      </CardContent>
+    </Card>
   );
 }
 

@@ -29,6 +29,7 @@ import {
   DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
+import { ResponsiveModal } from "@/components/ui/responsive-modal";
 
 const addToScheduleFormSchema = z.object({
   event: z.string().uuid(),
@@ -92,103 +93,104 @@ export default function ScheduleCard({ schedule, eventId }: { schedule: Tables<'
       <Card>
         <CardHeader className={"flex flex-row gap-2 items-center justify-between"}>
           <CardTitle>Schedule</CardTitle>
-          <div className={"flex flex-col sm:flex-row gap-2 items-start sm:items-center justify-between"}>
-            <Button onClick={() => setAddToScheduleDialogOpen(!addToScheduleDialogIsOpen)}>
-              <CalendarPlus />
-              <span className={"hidden md:block"}>Add To Schedule</span>
-            </Button>
-          </div>
+          <ResponsiveModal
+            title="Add To Schedule"
+            trigger={
+              <Button>
+                <CalendarPlus />
+                <span>Add To Schedule</span>
+              </Button>
+            }
+            open={addToScheduleDialogIsOpen}
+            onOpenChange={setAddToScheduleDialogOpen}
+          >
+            <Form {...addToScheduleForm}>
+              <form onSubmit={addToScheduleForm.handleSubmit(onAddToScheduleFormSubmit)} className={"space-y-6"}>
+                <FormField
+                  control={addToScheduleForm.control}
+                  name={"title"}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Title</FormLabel>
+                      <FormControl>
+                        <Input
+                          defaultValue={field.value}
+                          onChange={field.onChange}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={addToScheduleForm.control}
+                  name={"description"}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Description</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          className={"resize-none"}
+                          defaultValue={field.value}
+                          onChange={field.onChange}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={addToScheduleForm.control}
+                  name={"scheduledFor"}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Occuring At</FormLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant={"input"}
+                              className={cn(
+                                "w-full text-left font-normal",
+                                field.value && "text-muted-foreground"
+                              )}
+                            >
+                              {field.value ? (
+                                format(field.value, "PPP HH:mm")
+                              ) : (
+                                 <span>Pick a date</span>
+                               )}
+                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0">
+                          <Calendar
+                            mode={"single"}
+                            selected={field.value}
+                            onSelect={field.onChange}
+                          />
+                          <TimePicker date={field.value} dateDidSet={field.onChange} />
+                        </PopoverContent>
+                      </Popover>
+                    </FormItem>
+                  )}
+                />
+                <div className={"max-md:w-full"}>
+                  <LoadingButton
+                    loading={addToScheduleForm.formState.isLoading}
+                    className={"w-full md:w-fit md:float-right"}
+                    type={"submit"}
+                  >
+                    Add
+                  </LoadingButton>
+                </div>
+              </form>
+            </Form>
+          </ResponsiveModal>
         </CardHeader>
         <CardContent className={"flex flex-col gap-2"}>
           {timelineItems.map((item) => <TimelineItem key={item.id} item={item} />)}
         </CardContent>
       </Card>
-      <Dialog open={addToScheduleDialogIsOpen} onOpenChange={setAddToScheduleDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Add To Schedule</DialogTitle>
-          </DialogHeader>
-          <Form {...addToScheduleForm}>
-            <form onSubmit={addToScheduleForm.handleSubmit(onAddToScheduleFormSubmit)} className={"space-y-6"}>
-              <FormField
-                control={addToScheduleForm.control}
-                name={"title"}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Title</FormLabel>
-                    <FormControl>
-                      <Input
-                        defaultValue={field.value}
-                        onChange={field.onChange}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={addToScheduleForm.control}
-                name={"description"}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Description</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        className={"resize-none"}
-                        defaultValue={field.value}
-                        onChange={field.onChange}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={addToScheduleForm.control}
-                name={"scheduledFor"}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Occuring At</FormLabel>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <FormControl>
-                          <Button
-                            variant={"input"}
-                            className={cn(
-                              "w-full text-left font-normal",
-                              field.value && "text-muted-foreground"
-                            )}
-                          >
-                            {field.value ? (
-                              format(field.value, "PPP HH:mm")
-                            ) : (
-                               <span>Pick a date</span>
-                             )}
-                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                          </Button>
-                        </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0">
-                        <Calendar
-                          mode={"single"}
-                          selected={field.value}
-                          onSelect={field.onChange}
-                        />
-                        <TimePicker date={field.value} dateDidSet={field.onChange} />
-                      </PopoverContent>
-                    </Popover>
-                  </FormItem>
-                )}
-              />
-              <LoadingButton
-                loading={addToScheduleForm.formState.isLoading}
-                className={"float-right"}
-                type={"submit"}
-              >
-                Add
-              </LoadingButton>
-            </form>
-          </Form>
-        </DialogContent>
-      </Dialog>
     </>
   )
 }
@@ -283,10 +285,10 @@ export function TimelineItem({ item }: { item: ScheduleItem } ) {
   }
 
   return (
-    <div className={"grid grid-cols-[1fr_7fr] gap-4 items-center"} data-complete={isComplete}>
-      <div className={"flex flex-col gap-1"}>
-        <div className={"flex flex-row gap-2 items-center"}><Clock className={"h-4 w-4"} /> <span>{format(new Date(item.date), 'HH:mm')}</span></div>
-        <div className={"flex flex-row gap-2 items-center"}><CalendarIcon className={"h-4 w-4"} /> <span>{format(new Date(item.date), 'd/M')}</span></div>
+    <div className={"grid grid-cols-[1fr_7fr] gap-4 md:items-center"} data-complete={isComplete}>
+      <div className={"flex flex-col gap-1 max-md:mt-6"}>
+        <div className={"flex flex-row gap-2 items-center max-md:text-sm"}><Clock className={"h-4 w-4"} /> <span>{format(new Date(item.date), 'HH:mm')}</span></div>
+        <div className={"flex flex-row gap-2 items-center max-md:text-sm"}><CalendarIcon className={"h-4 w-4"} /> <span>{format(new Date(item.date), 'd/M')}</span></div>
       </div>
       <Card className={clsx("w-full bg-ts-blue-400 flex flex-row gap-2 items-center justify-between", {
         'bg-ts-blue-800': isComplete,
@@ -296,7 +298,7 @@ export function TimelineItem({ item }: { item: ScheduleItem } ) {
             'text-gray-800': isComplete
           })}>
             <CardTitle className={"text-inherit"}>{item.title}</CardTitle>
-            {item.description && (<CardDescription><p>{item.description}</p></CardDescription>)}
+            {item.description && (<CardDescription className={"text-sm"}>{item.description}</CardDescription>)}
           </div>
         </CardHeader>
         <CardContent className={"p-0 pr-6"}>

@@ -50,8 +50,9 @@ export async function assignMembershipToUser(
     );
   }
 
-  // if racer is current user, prevent
-  if (user.id === racer) {
+  // if racer is current user, prevent unless is admin user
+  const isAdminUser = user.app_metadata['isAdmin'] === true;
+  if (!isAdminUser && user.id === racer) {
     throw new Error(
       "You cannot set memberships for yourself. Get someone else to perform this action.",
     );

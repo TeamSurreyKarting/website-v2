@@ -12,7 +12,7 @@ export default function MembershipListFilters({ membershipTypes, defaultMembersh
   const isMobile = useIsMobile();
 
   const content = (
-    <div className={"flex flex-col gap-2 items-center"}>
+    <div className={"flex flex-col md:flex-row gap-2 items-center"}>
       <MembershipTypeFilter
         membershipTypes={membershipTypes}
         defaultValue={membershipTypes.find((mt) => mt.id === defaultMembershipType)}

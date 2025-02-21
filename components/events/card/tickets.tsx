@@ -37,6 +37,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger
 } from "@/components/ui/alert-dialog";
+import { ResponsiveModal } from "@/components/ui/responsive-modal";
 
 type Ticket = (Tables<'EventTicket'> & { EventTicketAllocation: Tables<'EventTicketAllocation'>[] });
 
@@ -93,205 +94,206 @@ export default function TicketsCard({ className, tickets, membershipTypes, event
   return (
     <>
       <Card className={className}>
-        <CardHeader className={"flex flex-col sm:flex-row gap-2 items-start sm:items-center justify-between"}>
+        <CardHeader className={"flex flex-row gap-2 items-start sm:items-center justify-between"}>
           <div className={"flex flex-col space-y-1.5"}>
             <CardTitle>Tickets</CardTitle>
             <CardDescription>{tickets.length} ticket {pluralize('type', tickets.length)}</CardDescription>
           </div>
-          <div className={"flex flex-col sm:flex-row gap-2 items-start sm:items-center justify-between"}>
-            <Button onClick={() => setTicketTypeDialogOpen(!ticketTypeDialogIsOpen)}>
-              <Tickets />
-              <span>Add Ticket Type</span>
-            </Button>
-          </div>
+          <ResponsiveModal
+            title="Add Ticket Type"
+            trigger={
+              <Button onClick={() => setTicketTypeDialogOpen(!ticketTypeDialogIsOpen)}>
+                <Tickets />
+                <span>Add Ticket Type</span>
+              </Button>
+            }
+            open={ticketTypeDialogIsOpen}
+            onOpenChange={setTicketTypeDialogOpen}
+          >
+            <Form {...ticketTypeForm}>
+              <form onSubmit={ticketTypeForm.handleSubmit(submitTicketTypeForm)} className={"space-y-6"}>
+                <FormField
+                  control={ticketTypeForm.control}
+                  name={"name"}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Ticket Name</FormLabel>
+                      <FormControl>
+                        <Input
+                          defaultValue={field.value}
+                          onChange={field.onChange}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={ticketTypeForm.control}
+                  name={"price"}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Price</FormLabel>
+                      <FormControl>
+                        <CurrencyInput
+                          customInput={Input}
+                          placeholder={'£'}
+                          prefix={"£"}
+                          decimalsLimit={2}
+                          decimalScale={2}
+                          intlConfig={{ locale: "en-GB", currency: "GBP" }}
+                          defaultValue={field.value}
+                          onValueChange={(value) => field.onChange(Number(value))}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={ticketTypeForm.control}
+                  name={"membershipType"}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Membership Restriction</FormLabel>
+                      <FormControl>
+                        <Select
+                          {...field}
+                          defaultValue={field.value}
+                          onValueChange={field.onChange}
+                        >
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Membership" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value={ZERO_UUID}>Non-Member</SelectItem>
+                            <SelectSeparator />
+                            { membershipTypes.map((membershipType) => (
+                              <SelectItem
+                                key={membershipType.id}
+                                value={membershipType.id}
+                              >
+                                {membershipType.name}
+                              </SelectItem>
+                            )) }
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <div className={"grid grid-cols-1 md:grid-cols-2 gap-2"}>
+                  <FormField
+                    control={ticketTypeForm.control}
+                    name={"availableFrom"}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Available From</FormLabel>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <FormControl>
+                              <Button
+                                variant={"input"}
+                                className={cn(
+                                  "w-full text-left font-normal",
+                                  field.value && "text-muted-foreground"
+                                )}
+                              >
+                                {field.value ? (
+                                  format(field.value, "PPP HH:mm")
+                                ) : (
+                                   <span>Pick a date</span>
+                                 )}
+                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                              </Button>
+                            </FormControl>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0">
+                            <Calendar
+                              mode={"single"}
+                              selected={field.value}
+                              onSelect={field.onChange}
+                            />
+                            <TimePicker date={field.value} dateDidSet={field.onChange} />
+                          </PopoverContent>
+                        </Popover>
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={ticketTypeForm.control}
+                    name={"availableUntil"}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Available Until</FormLabel>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <FormControl>
+                              <Button
+                                variant={"input"}
+                                className={cn(
+                                  "w-full text-left font-normal",
+                                  field.value && "text-muted-foreground"
+                                )}
+                              >
+                                {field.value ? (
+                                  format(field.value, "PPP HH:mm")
+                                ) : (
+                                   <span>Pick a date</span>
+                                 )}
+                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                              </Button>
+                            </FormControl>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0 ">
+                            <Calendar
+                              mode={"single"}
+                              selected={field.value}
+                              onSelect={field.onChange}
+                            />
+                            <TimePicker date={field.value} dateDidSet={field.onChange} />
+                          </PopoverContent>
+                        </Popover>
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <FormField
+                  control={ticketTypeForm.control}
+                  name={"maxAvailable"}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Number Available</FormLabel>
+                      <FormControl>
+                        <Input
+                          type={"number"}
+                          min={0}
+                          {...field}
+                          defaultValue={field.value}
+                          onChange={(event) => field.onChange(Number(event.target.value))}
+                        />
+                      </FormControl>
+                      <FormDescription>Set to zero to have unlimited tickets</FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <div className={"max-md:w-full"}>
+                  <LoadingButton
+                    loading={ticketTypeForm.formState.isLoading}
+                    className={"w-full md:w-fit md:float-right"}
+                    type={"submit"}
+                  >
+                    Add
+                  </LoadingButton>
+                </div>
+              </form>
+            </Form>
+          </ResponsiveModal>
         </CardHeader>
         <CardContent className={"flex flex-col gap-2"}>
           {sortedTickets.map((ticket) => <TicketItem key={ticket.id} ticket={ticket} membershipTypes={membershipTypes} />)}
         </CardContent>
       </Card>
-      <Dialog open={ticketTypeDialogIsOpen} onOpenChange={setTicketTypeDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Add Ticket Type</DialogTitle>
-          </DialogHeader>
-          <Form {...ticketTypeForm}>
-            <form onSubmit={ticketTypeForm.handleSubmit(submitTicketTypeForm)} className={"space-y-6"}>
-              <FormField
-                control={ticketTypeForm.control}
-                name={"name"}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Ticket Name</FormLabel>
-                    <FormControl>
-                      <Input
-                        defaultValue={field.value}
-                        onChange={field.onChange}
-                      />
-                    </FormControl>
-                  </FormItem>
-                  )}
-              />
-              <FormField
-                control={ticketTypeForm.control}
-                name={"price"}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Price</FormLabel>
-                    <FormControl>
-                      <CurrencyInput
-                        customInput={Input}
-                        placeholder={'£'}
-                        prefix={"£"}
-                        decimalsLimit={2}
-                        decimalScale={2}
-                        intlConfig={{ locale: "en-GB", currency: "GBP" }}
-                        defaultValue={field.value}
-                        onValueChange={(value) => field.onChange(Number(value))}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={ticketTypeForm.control}
-                name={"membershipType"}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Membership Restriction</FormLabel>
-                    <FormControl>
-                      <Select
-                        {...field}
-                        defaultValue={field.value}
-                        onValueChange={field.onChange}
-                      >
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Membership" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value={ZERO_UUID}>Non-Member</SelectItem>
-                          <SelectSeparator />
-                          { membershipTypes.map((membershipType) => (
-                            <SelectItem
-                              key={membershipType.id}
-                              value={membershipType.id}
-                            >
-                              {membershipType.name}
-                            </SelectItem>
-                          )) }
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <div className={"grid grid-cols-1 md:grid-cols-2 gap-2"}>
-                <FormField
-                  control={ticketTypeForm.control}
-                  name={"availableFrom"}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Available From</FormLabel>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <FormControl>
-                            <Button
-                              variant={"input"}
-                              className={cn(
-                                "w-full text-left font-normal",
-                                field.value && "text-muted-foreground"
-                              )}
-                            >
-                              {field.value ? (
-                                format(field.value, "PPP HH:mm")
-                              ) : (
-                                 <span>Pick a date</span>
-                               )}
-                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                            </Button>
-                          </FormControl>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0">
-                          <Calendar
-                            mode={"single"}
-                            selected={field.value}
-                            onSelect={field.onChange}
-                          />
-                          <TimePicker date={field.value} dateDidSet={field.onChange} />
-                        </PopoverContent>
-                      </Popover>
-                    </FormItem>
-                    )}
-                />
-                <FormField
-                  control={ticketTypeForm.control}
-                  name={"availableUntil"}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Available Until</FormLabel>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <FormControl>
-                            <Button
-                              variant={"input"}
-                              className={cn(
-                                "w-full text-left font-normal",
-                                field.value && "text-muted-foreground"
-                              )}
-                            >
-                              {field.value ? (
-                                format(field.value, "PPP HH:mm")
-                              ) : (
-                                 <span>Pick a date</span>
-                               )}
-                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                            </Button>
-                          </FormControl>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0 ">
-                          <Calendar
-                            mode={"single"}
-                            selected={field.value}
-                            onSelect={field.onChange}
-                          />
-                          <TimePicker date={field.value} dateDidSet={field.onChange} />
-                        </PopoverContent>
-                      </Popover>
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <FormField
-                control={ticketTypeForm.control}
-                name={"maxAvailable"}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Number Available</FormLabel>
-                    <FormControl>
-                      <Input
-                        type={"number"}
-                        min={0}
-                        {...field}
-                        defaultValue={field.value}
-                        onChange={(event) => field.onChange(Number(event.target.value))}
-                      />
-                    </FormControl>
-                    <FormDescription>Set to zero to have unlimited tickets</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <LoadingButton
-                loading={ticketTypeForm.formState.isLoading}
-                className={"float-right"}
-                type={"submit"}
-              >
-                Add
-              </LoadingButton>
-            </form>
-          </Form>
-        </DialogContent>
-      </Dialog>
     </>
   )
 }
