@@ -2,12 +2,10 @@
 
 import { columns } from "@/components/memberships/data-table/columns";
 import { TableView } from "@/components/table-view";
-import { Database, Tables } from "@/database.types";
-import { createClient } from "@/utils/supabase/server";
-import { notFound } from "next/navigation";
+import { Tables } from "@/database.types";
 import { WindowCollectionView } from "@/components/collection-view";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { CircleChevronRight, MoreHorizontal } from "lucide-react";
+import { MoreHorizontal } from "lucide-react";
 import { format } from "date-fns";
 import {
   Dialog,
@@ -29,7 +27,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
-import { revokeMembership } from "@/utils/actions/memberships/revoke";
 
 export default function MembershipsDataTable({
   memberships,
@@ -91,7 +88,7 @@ function MembershipsCollectionViewCard({ item }: { item: Tables<'MembershipTypes
                   onClick={async () => {
                     setIsDeleting(true);
                     try {
-                      await revokeMembership(item.id);
+                      await deleteMembership(item.id);
                       setDialogOpenState(false);
                     } catch (e) {
                       console.error(e);
