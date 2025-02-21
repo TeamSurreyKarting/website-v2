@@ -5,6 +5,33 @@ import { Suspense } from "react";
 import Search from "@/components/search";
 import RacersTableSkeleton from "@/components/racers/data-table/skeleton";
 import RacersDataTable from "@/components/racers/data-table/data-table";
+import { Database, Tables } from "@/database.types";
+import { createClient } from "@/utils/supabase/server";
+import { notFound } from "next/navigation";
+
+async function getRacers(
+  searchQuery?: string,
+): Promise<Tables<"RacerDetails">[]> {
+  try {
+    // Obtain list of racers
+    const supabase = await createClient();
+
+    // Build query
+    const query = supabase.from("RacerDetails").select();
+
+    if (searchQuery && searchQuery.trim().length > 0) {
+      // If search query, do filter
+      query.ilike("fullName", `%${searchQuery.trim()}%`);
+    }
+
+    const { data } = await query.throwOnError();
+
+    return data;
+  } catch (error) {
+    console.error(error);
+    notFound();
+  }
+}
 
 export default async function Page(props: {
   searchParams?: Promise<{
@@ -12,7 +39,9 @@ export default async function Page(props: {
   }>;
 }) {
   const searchParams = await props.searchParams;
-  const query = searchParams?.q ?? "";
+  const query = searchParams?.q;
+
+  const racers = await getRacers(query);
 
   return (
     <div className={"container mx-auto"}>
@@ -27,7 +56,7 @@ export default async function Page(props: {
         </Link>
       </div>
       <Suspense key={query} fallback={<RacersTableSkeleton />}>
-        <RacersDataTable query={query} />
+        <RacersDataTable data={racers} />
       </Suspense>
     </div>
   );

@@ -1,35 +1,35 @@
+"use client";
+
 import { columns } from "@/components/racers/data-table/columns";
-import { BaseDataTable } from "@/components/base-data-table";
-import { Database } from "@/database.types";
-import { createClient } from "@/utils/supabase/server";
-import { notFound } from "next/navigation";
+import { TableView } from "@/components/table-view";
+import { WindowCollectionView } from "@/components/collection-view";
+import { Tables } from "@/database.types";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { CircleChevronRight } from "lucide-react";
 
-async function getData(
-  searchQuery?: string,
-): Promise<Database["public"]["Views"]["RacerDetails"]["Row"][]> {
-  // Obtain list of racers
-  const supabase = await createClient();
+export default function RacersDataTable({ data }: { data: Tables<'RacerDetails'>[] }) {
+  const collectionData = data.map((item) => {
+    return {
+      href: `/racers/${item.id}`,
+      ...item,
+    }
+  })
 
-  // Build query
-  const query = supabase.from("RacerDetails").select();
-
-  if (searchQuery && searchQuery.trim().length > 0) {
-    // If search query, do filter
-    query.ilike("fullName", `%${searchQuery.trim()}%`);
-  }
-
-  const { data: racers } = await query;
-
-  if (racers === null) {
-    notFound();
-    return [];
-  }
-
-  return racers;
+  return (
+    <>
+      <WindowCollectionView data={collectionData} renderItem={RacersCollectionViewCard} className={"md:hidden mt-4 mb-16 h-full"}/>
+      <TableView columns={columns} data={data} className={"hidden md:block"} />
+    </>
+  );
 }
 
-export default async function RacersDataTable({ query }: { query?: string }) {
-  const data = await getData(query);
-
-  return <BaseDataTable columns={columns} data={data} />;
+function RacersCollectionViewCard(item: Tables<'RacerDetails'>) {
+  return (
+    <Card>
+      <CardHeader className={"flex flex-row gap-1 items-center justify-between text-foreground"}>
+        <CardTitle className={"font-bold text-xl"}>{item.fullName}</CardTitle>
+        <CircleChevronRight />
+      </CardHeader>
+    </Card>
+  );
 }
