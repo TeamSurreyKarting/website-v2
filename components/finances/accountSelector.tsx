@@ -47,7 +47,7 @@ export default function AccountSelector({
 
   return (
     <Select value={value} onValueChange={handleSelectionChange}>
-      <SelectTrigger className="w-full overflow-hidden">
+      <SelectTrigger className="w-full overflow-hidden text-nowrap text-ellipsis">
         {selectedAccount ? selectedAccount.name : "Select Account..."}
       </SelectTrigger>
       <SelectContent>

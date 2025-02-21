@@ -26,8 +26,9 @@ import { Eye, MoreHorizontal } from "lucide-react";
 import { useState } from "react";
 import { deleteTransaction } from "@/utils/actions/finances/transactions/delete";
 import { format } from "date-fns";
+import { Tables } from "@/database.types";
 
-export const columns: ColumnDef<TxAccount>[] = [
+export const columns: ColumnDef<Tables<'Transactions'>>[] = [
   // {
   //   header: "Account",
   //   accessorKey: "Accounts.name",
