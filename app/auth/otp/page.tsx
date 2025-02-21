@@ -1,4 +1,5 @@
 import { OtpVerifyForm } from "@/components/auth/otp-verify-form";
+import { redirect } from "next/navigation";
 
 export default async function AuthOTPPage(props: {
   searchParams?: Promise<{
@@ -9,7 +10,9 @@ export default async function AuthOTPPage(props: {
   const email = searchParams?.email ?? null;
 
   if (!email) {
-    throw new Error("No email was supplied.");
+    console.error("No email was supplied.");
+    redirect('/auth');
+    return;
   }
 
   return <OtpVerifyForm email={email} />;
