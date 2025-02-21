@@ -1,11 +1,11 @@
 import { columns } from "@/components/tasks/data-table/columns";
 import { Database } from "@/database.types";
-import { BaseDataTable } from "@/components/base-data-table";
+import { TableView } from "@/components/table-view";
 
 export default async function TasksDataTable({
   tasks,
 }: {
   tasks: Database["public"]["Views"]["TaskDetailsView"]["Row"][];
 }) {
-  return <BaseDataTable columns={columns} data={tasks} />;
+  return <TableView columns={columns} data={tasks} />;
 }
