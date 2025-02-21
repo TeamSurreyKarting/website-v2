@@ -8,13 +8,19 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Button } from "@/components/ui/button";
 import { Filter } from "lucide-react";
 
-export default function MembershipListFilters({ membershipTypes, racers }: { membershipTypes: Tables<'MembershipTypes'>[]; racers: Tables<'Racers'>[] }) {
+export default function MembershipListFilters({ membershipTypes, defaultMembershipType, racers, defaultRacer }: { membershipTypes: Tables<'MembershipTypes'>[], defaultMembershipType?: string, racers: Tables<'Racers'>[], defaultRacer?: string, }) {
   const isMobile = useIsMobile();
 
   const content = (
     <div className={"flex flex-col gap-2 items-center"}>
-      <MembershipTypeFilter membershipTypes={membershipTypes} />
-      <RacerFilter racers={racers} />
+      <MembershipTypeFilter
+        membershipTypes={membershipTypes}
+        defaultValue={membershipTypes.find((mt) => mt.id === defaultMembershipType)}
+      />
+      <RacerFilter
+        racers={racers}
+        defaultValue={racers.find((r) => r.id === defaultRacer)}
+      />
     </div>
   );
 

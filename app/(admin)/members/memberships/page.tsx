@@ -4,6 +4,32 @@ import { Button } from "@/components/ui/button";
 import { FaPlus } from "react-icons/fa6";
 import { Suspense } from "react";
 import MembershipsDataTable from "@/components/memberships/data-table/data-table";
+import { Database, Tables } from "@/database.types";
+import { createClient } from "@/utils/supabase/server";
+import { notFound } from "next/navigation";
+
+async function getMemberships(
+  searchQuery?: string,
+): Promise<Tables<"MembershipTypes">[]> {
+  try {
+    const supabase = await createClient();
+
+    // Build query
+    const query = supabase.from("MembershipTypes").select();
+
+    if (searchQuery && searchQuery.trim().length > 0) {
+      // If search query, do filter
+      query.like("name", `%${searchQuery.trim()}%`);
+    }
+
+    const { data: membershipTypes } = await query.throwOnError();
+
+    return membershipTypes
+  } catch (error) {
+    console.error(error);
+    notFound();
+  }
+}
 
 export default async function Page(props: {
   searchParams?: Promise<{
@@ -12,6 +38,8 @@ export default async function Page(props: {
 }) {
   const searchParams = await props.searchParams;
   const query = searchParams?.q ?? "";
+
+  const memberships = await getMemberships(query);
 
   return (
     <div className={"container mx-auto"}>
@@ -35,7 +63,7 @@ export default async function Page(props: {
           <p>Loading...</p>
         }
       >
-        <MembershipsDataTable query={query} />
+        <MembershipsDataTable memberships={memberships} />
       </Suspense>
     </div>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { Database } from "@/database.types";
+import { Database, Tables } from "@/database.types";
 import {
   Command,
   CommandEmpty,
@@ -22,13 +22,13 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 export default function MembershipTypeFilter({
   membershipTypes,
+  defaultValue,
 }: {
-  membershipTypes: Database["public"]["Tables"]["MembershipTypes"]["Row"][];
+  membershipTypes: Tables<"MembershipTypes">[],
+  defaultValue: Tables<"MembershipTypes"> | undefined
 }) {
   const [open, setOpen] = useState(false);
-  let [selectedMemberships, setSelectedMemberships] = useState<Array<string>>(
-    [],
-  );
+  let [selectedMembership, setSelectedMembership] = useState<Tables<"MembershipTypes"> | undefined>(defaultValue);
 
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -37,26 +37,26 @@ export default function MembershipTypeFilter({
   useEffect(() => {
     const params = new URLSearchParams(searchParams ?? undefined);
 
-    if (selectedMemberships && selectedMemberships.length > 0) {
+    if (selectedMembership) {
       // join membership ids with comma delimiter
-      params.set("memberships", selectedMemberships.join(","));
+      params.set("memberships", selectedMembership.id);
     } else {
       params.delete("memberships");
     }
     replace(`${pathname}?${params.toString()}`);
-  }, [selectedMemberships]);
+  }, [selectedMembership]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
-          variant={selectedMemberships.length > 0 ? "default" : "secondary"}
+          variant={selectedMembership ? "default" : "secondary"}
           role="combobox"
           aria-expanded={open}
           className="w-[225px] justify-between"
         >
-          {selectedMemberships.length > 0 ? (
-            <span>{selectedMemberships.length} Membership Selected</span>
+          {selectedMembership ? (
+            <span>{selectedMembership.name}</span>
           ) : (
             <span>All Membership Types</span>
           )}
@@ -75,16 +75,13 @@ export default function MembershipTypeFilter({
                   onSelect={(newMembership) => {
                     console.log(newMembership);
                     const isAlreadySelected =
-                      selectedMemberships.includes(newMembership);
+                      selectedMembership?.id === newMembership;
 
-                    if (!isAlreadySelected) {
-                      setSelectedMemberships([
-                        ...selectedMemberships,
-                        newMembership,
-                      ]);
+                    if (isAlreadySelected) {
+                      setSelectedMembership(undefined);
                     } else {
-                      setSelectedMemberships(
-                        selectedMemberships.filter((x) => x !== newMembership),
+                      setSelectedMembership(
+                        membershipTypes.find((mt) => mt.id === newMembership)
                       );
                     }
 
@@ -95,7 +92,7 @@ export default function MembershipTypeFilter({
                   <Check
                     className={clsx(
                       "ml-auto",
-                      selectedMemberships.includes(membershipType.id)
+                      selectedMembership?.id === membershipType.id
                         ? "opacity-100"
                         : "opacity-0",
                     )}

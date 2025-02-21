@@ -9,33 +9,76 @@ import { notFound } from "next/navigation";
 import MembershipListFilters from "@/components/memberships/list-filters";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { UserPlus } from "lucide-react";
+import { MembershipNested } from "@/utils/types/membership-nested";
 
-async function getMembershipTypes(): Promise<
-  Tables<'MembershipTypes'>[] | null
-> {
-  const supabase = await createClient();
+async function getMembershipTypes(): Promise<Tables<'MembershipTypes'>[]> {
+  try {
+    const supabase = await createClient();
 
-  const { data, error } = await supabase.from("MembershipTypes").select();
+    const { data } = await supabase
+      .from("MembershipTypes")
+      .select()
+      .throwOnError();
 
-  if (error) {
-    throw error;
+    return data;
+  } catch (error) {
+    console.error(error);
+    notFound();
   }
-
-  return data;
 }
 
-async function getRacers(): Promise<
-  Tables<'Racers'>[] | null
-> {
-  const supabase = await createClient();
+async function getRacers(): Promise<Tables<'Racers'>[]> {
+  try {
+    const supabase = await createClient();
 
-  const { data, error } = await supabase.from("Racers").select();
+    const { data } = await supabase
+      .from("Racers")
+      .select()
+      .throwOnError();
 
-  if (error) {
-    throw error;
+    return data;
+  } catch (error) {
+    console.error(error);
+    notFound();
   }
+}
 
-  return data;
+async function getMembers(membershipTypeId?: string, racerId?: string): Promise<MembershipNested[]> {
+  try {
+    const supabase = await createClient();
+
+    const query = supabase
+      .from("Members")
+      .select(
+        "id, addedAt, addedBy, MembershipTypes!inner( id, name, validFrom, validUntil ), Racers!inner( id, fullName )",
+      )
+
+    // Filter by selected membership type
+    if (membershipTypeId) {
+      query.eq("membership", membershipTypeId);
+    }
+
+    // Filter by selected racer
+    if (racerId) {
+      query.eq("racer", racerId);
+    }
+
+    const { data } = await query.throwOnError();
+
+    return data.map((m) => {
+      return {
+        ...m,
+        MembershipTypes: {
+          ...m.MembershipTypes,
+          validFrom: new Date(m.MembershipTypes.validFrom),
+          validUntil: new Date(m.MembershipTypes.validUntil),
+        }
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    notFound();
+  }
 }
 
 export default async function Page(props: {
@@ -45,28 +88,24 @@ export default async function Page(props: {
   }>;
 }) {
   const searchParams = await props.searchParams;
-  const membershipTypeFilterParam = searchParams?.memberships
-    ? searchParams.memberships.split(",")
-    : [];
-  const racersFilterParams = searchParams?.racers
-    ? searchParams.racers.split(",")
-    : [];
+  const membershipTypeFilterParam = searchParams?.memberships ?? undefined
+  const racersFilterParams = searchParams?.racers ?? undefined
 
-  const [membershipTypes, racers] = await Promise.all([
+  const [membershipTypes, racers, members] = await Promise.all([
     getMembershipTypes(),
     getRacers(),
+    getMembers(membershipTypeFilterParam, racersFilterParams),
   ]);
-
-  if (!membershipTypes || !racers) {
-    console.error("Error getting data")
-    notFound();
-  }
 
   return (
     <div className={"container mx-auto"}>
       <h2 className={"text-2xl font-bold"}>Members</h2>
       <div className="mx-auto my-2 flex justify-between gap-x-2">
-        <MembershipListFilters membershipTypes={membershipTypes} racers={racers} />
+        <MembershipListFilters
+          membershipTypes={membershipTypes}
+          defaultMembershipType={membershipTypeFilterParam}
+          racers={racers}
+        />
         <div className={"flex flex-row gap-2"}>
           <Link
             href={"/members/memberships"}
@@ -101,10 +140,7 @@ export default async function Page(props: {
           <p>Loading...</p>
         }
       >
-        <MembersDataTable
-          membershipTypeIds={membershipTypeFilterParam}
-          racerIds={racersFilterParams}
-        />
+        <MembersDataTable members={members}/>
       </Suspense>
     </div>
   );
