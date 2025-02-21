@@ -5,15 +5,11 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
 } from "@/components/ui/select";
-import { FaPlus } from "react-icons/fa6";
 import { Database } from "@/database.types";
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
 import clsx from "clsx";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 
 export default function AccountSelector({
   accounts,

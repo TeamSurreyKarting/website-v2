@@ -2,13 +2,13 @@ import AccountSelector from "@/components/finances/accountSelector";
 import AccountsSummary from "@/components/finances/accountsSummary";
 import TransactionsDataTable from "@/components/finances/transactions/data-table";
 import { Suspense } from "react";
-import { Database, Tables } from "@/database.types";
+import { Tables } from "@/database.types";
 import { createClient } from "@/utils/supabase/server";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { FaPlus } from "react-icons/fa6";
 import { notFound } from "next/navigation";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 
 async function getAccounts(onlyActive: boolean = true) {
   try {
