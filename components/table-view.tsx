@@ -17,16 +17,20 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { ComponentProps } from "react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
 
-export function BaseDataTable<TData, TValue>({
+export function TableView<TData, TValue>({
   columns,
   data,
-}: DataTableProps<TData, TValue>) {
+  className,
+  ...props
+}: DataTableProps<TData, TValue> & ComponentProps<"div">) {
   const table = useReactTable({
     data,
     columns,
@@ -44,7 +48,7 @@ export function BaseDataTable<TData, TValue>({
 
   return (
     <>
-      <div className="rounded-md border overflow-hidden">
+      <div className={cn("rounded-md border overflow-hidden", className)} {...props}>
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -94,7 +98,7 @@ export function BaseDataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className={"flex items-center justify-between space-x-2 py-4"}>
+      <div className={cn("flex items-center justify-between space-x-2 py-4", className)}>
         <span className={"text-muted-foreground"}>
           Rows{" "}
             {displayedTableRowIndexStart}{" "}–{" "}{displayedTableRowIndexEnd}{" "}
