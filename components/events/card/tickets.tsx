@@ -380,7 +380,7 @@ function TicketItem({ ticket, membershipTypes }: { ticket: Ticket, membershipTyp
       <AlertDialog>
         <DropdownMenu>
           <Card
-            className={"bg-ts-blue-400 p-2 rounded-lg border border-ts-gold-700"}
+            className={"bg-ts-gold-300 dark:bg-ts-blue-400 p-2 rounded-lg border border-ts-gold-700"}
           >
             <CardHeader className={"flex-row gap-x-3 justify-between"}>
               <div className={"flex flex-col space-y-1.5"}>

@@ -5,7 +5,6 @@ import { ComponentProps } from "react"
 import TSKC from "@/public/logos/tskc.svg";
 
 import { NavMain } from "@/components/nav-main"
-import { NavSecondary } from "@/components/nav-secondary"
 import { NavUser } from "@/components/nav-user"
 import {
   Sidebar,
@@ -69,7 +68,7 @@ export function AppSidebar({ ...props }: ComponentProps<typeof Sidebar>) {
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild>
+            <SidebarMenuButton size="lg" asChild className={"bg-ts-blue-500 dark:bg-transparent"}>
               <TSKC className={"h-auto hover:bg-none"} />
             </SidebarMenuButton>
           </SidebarMenuItem>

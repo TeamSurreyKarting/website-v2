@@ -288,7 +288,7 @@ export default function NewEventForm({ membershipTypes }: { membershipTypes: Tab
 
             return (
               <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-                <Card className={"p-2 bg-ts-blue-600"}>
+                <Card className={"p-2"}>
                   <CardHeader className={"flex flex-row gap-x-2 items-center justify-between"}>
                     <CardTitle>Tickets</CardTitle>
                     <DialogTrigger asChild>
@@ -300,7 +300,7 @@ export default function NewEventForm({ membershipTypes }: { membershipTypes: Tab
                   </CardHeader>
                   <CardContent className={"space-y-6 flex flex-col gap-2"}>
                     {form.watch("tickets") && field.value.map((ticket) => (
-                      <Card key={ticket.membershipType} className={"bg-ts-blue-700"}>
+                      <Card key={ticket.membershipType}>
                         <CardHeader className={"flex flex-row gap-x-2 items-center justify-between"}>
                           <div>
                             <CardTitle>{ticket.name}</CardTitle>
@@ -464,10 +464,10 @@ export default function NewEventForm({ membershipTypes }: { membershipTypes: Tab
           }}
         />
         <LoadingButton
-          variant={"secondary"}
+          className={"float-right"}
           loading={form.formState.isLoading}
         >
-          Submit
+          Create
         </LoadingButton>
       </form>
     </Form>

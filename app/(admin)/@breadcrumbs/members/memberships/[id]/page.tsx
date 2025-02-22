@@ -6,6 +6,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { createClient } from "@/utils/supabase/server";
+import { AdminBreadcrumbLink, AdminBreadcrumbPage } from "@/components/admin-breadcrumbs";
 
 async function fetchMembershipName(userId: string): Promise<string | null> {
   const supabase = await createClient();
@@ -28,24 +29,23 @@ export default async function BreadcrumbSlot(props: {
   return (
     <BreadcrumbList>
       <BreadcrumbItem>
-        <BreadcrumbLink className={"text-gray-300"} href={"/members"}>
+        <AdminBreadcrumbLink href={"/members"}>
           Members
-        </BreadcrumbLink>
+        </AdminBreadcrumbLink>
       </BreadcrumbItem>
       <BreadcrumbSeparator />
       <BreadcrumbItem>
-        <BreadcrumbLink
-          className={"text-gray-300"}
+        <AdminBreadcrumbLink
           href={"/members/memberships"}
         >
           Memberships
-        </BreadcrumbLink>
+        </AdminBreadcrumbLink>
       </BreadcrumbItem>
       <BreadcrumbSeparator />
       <BreadcrumbItem>
-        <BreadcrumbPage className={"text-white capitalize"}>
+        <AdminBreadcrumbPage>
           {membershipName ?? params.id}
-        </BreadcrumbPage>
+        </AdminBreadcrumbPage>
       </BreadcrumbItem>
     </BreadcrumbList>
   );

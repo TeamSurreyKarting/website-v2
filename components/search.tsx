@@ -22,7 +22,7 @@ export default function Search({ placeholder }: { placeholder?: string }) {
 
   return (
     <Input
-      className={"w-fit bg-ts-blue-600"}
+      className={"w-fit"}
       placeholder={placeholder || "Search"}
       onChange={(e) => {
         handleSearch(e.target.value);

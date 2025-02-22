@@ -4,43 +4,55 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-/*  --background: 206 75% 95%;*/
-/*  --foreground: 206 3.8% 7.5%;*/
-/*  --card: 206 37.5% 95%;*/
-/*  --card-foreground: 206 3.8% 12.5%;*/
-/*  --popover: 206 75% 97.5%;*/
-/*  --popover-foreground: 206 98.8% 5%;*/
-/*  --primary: 206, 60%, 17%;*/
-/*  --primary-foreground: 0 0% 100%;*/
-/*  --secondary: 42, 97%, 59%;*/
-/*  --secondary-foreground: 0 0% 0%;*/
-/*  --muted: 244 25% 90%;*/
-/*  --muted-foreground: 206 3.8% 37.5%;*/
-/*  --accent: 244 25% 85%;*/
-/*  --accent-foreground: 206 3.8% 12.5%;*/
-/*  --destructive: 0 87.5% 40%;*/
-/*  --destructive-foreground: 206 3.8% 95%;*/
-/*  --border: 206 27.5% 66%;*/
-/*  --input: 206 27.5% 34%;*/
-/*  --ring: 206 88.7% 45.3%;*/
-/*  --radius: 0.5rem;*/
-/*  --sidebar-background: 206, 75%, 90%;*/
-/*  --sidebar-foreground: 206, 4%, 7%;*/
-/*  --sidebar-primary: 206, 60%, 16%;*/
-/*  --sidebar-primary-foreground: 0, 0%, 100%;*/
-/*  --sidebar-accent: 244, 25%, 81%;*/
-/*  --sidebar-accent-foreground: 0 0% 0%;*/
-/*  --sidebar-border: 206, 28%, 63%;*/
-/*  --sidebar-ring: 196, 98%, 45%;*/
-/*}*/
+  --background: oklch(100% 0 0);
+  --foreground: oklch(0% 0 0);
+  --card: var(--color-ts-gold-50);
+  --card-foreground: var(--color-ts-blue-900);
+  --popover: var(--color-ts-gold-500);
+  --popover-foreground: oklch(100% 0 0);
+  --popover-item-focus: var(--color-ts-blue-500);
+  --popover-item-focus-foreground: var(--color-ts-gold-50);
+  --primary: var(--color-ts-blue-500);
+  --primary-foreground: var(--color-ts-gold-500);
+  --secondary: var(--color-ts-gold-500);
+  --secondary-foreground: var(--color-ts-blue-900);
+  --muted: 244 25% 20%;
+  --muted-foreground: 206 3.8% 62.5%;
+  --accent: var(--color-ts-gold-500);
+  --accent-foreground: 206 3.8% 92.5%;
+  --destructive: oklch(50.97% 0.2035 28.64);
+  --destructive-foreground: oklch(0% 0 0);
+  --border: var(--color-ts-blue-600);
+  --input: var(--color-ts-gold-400);
+  --input-border: var(--color-ts-gold-600);
+  --input-focus: var(--color-ts-gold-600);
+  --input-focus-border: var(--color-ts-gold-700);
+  --switch-active: var(--color-ts-gold-500);
+  --switch-inactive: var(--color-ts-blue-50);
+  --switch-toggle: var(--color-ts-blue-400);
+  --ring: var(--color-ts-blue-200);
+  --radius: 0.5rem;
+  --sidebar-background: oklch(97.5% 0 0);
+  --sidebar-foreground: var(--color-ts-blue-950);
+  --sidebar-primary: var(--color-ts-blue-500);
+  --sidebar-primary-foreground: oklch(100% 0 0);
+  --sidebar-accent: var(--color-ts-blue-500);
+  --sidebar-accent-foreground: oklch(100% 0 0);
+  --sidebar-active: var(--color-ts-gold-500);
+  --sidebar-active-foreground: var(--color-ts-blue-900);
+  --sidebar-border: var(--color-ts-gold-700);
+  --sidebar-ring: var(--color-ts-blue-200);
+}
 
-/*.dark {*/
+.dark {
   --background: var(--color-ts-blue-700);
   --foreground: oklch(100% 0 0);
   --card: var(--color-ts-blue-600);
   --card-foreground: oklch(100% 0 0);
   --popover: var(--color-ts-blue-400);
   --popover-foreground: oklch(100% 0 0);
+  --popover-item-focus: var(--color-ts-gold-500);
+  --popover-item-focus-foreground: var(--color-ts-blue-500);
   --primary: var(--color-ts-gold-500);
   --primary-foreground: var(--color-ts-blue-900);
   --secondary: var(--color-ts-blue-500);
@@ -121,6 +133,8 @@
 
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
+  --color-popover-item-focus: var(--popover-item-focus);
+  --color-popover-item-focus-foreground: var(--popover-item-focus-foreground);
 
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
