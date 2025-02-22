@@ -690,7 +690,7 @@ function TransportVehicleCard({ transportVehicle, ticketAllocations }: { transpo
   return (
     <AlertDialog>
       <DropdownMenu>
-        <Card className={"bg-ts-blue-400"}>
+        <Card className={"bg-ts-gold-300 dark:bg-ts-blue-400"}>
           <CardHeader>
             <div className={"flex flex-row justify-between items-center gap-2"}>
               <div className={"flex flex-col space-y-1.5"}>
@@ -734,7 +734,7 @@ function TransportVehicleCard({ transportVehicle, ticketAllocations }: { transpo
           </AlertDialogTrigger>
         </DropdownMenuContent>
       </DropdownMenu>
-      <AlertDialogContent className={"bg-ts-blue-700 text-white"}>
+      <AlertDialogContent className={"text-white"}>
         <AlertDialogHeader>
           <AlertDialogTitle>Confirm Driver Removal</AlertDialogTitle>
           <AlertDialogDescription>
@@ -783,7 +783,7 @@ function TransportVehicleAssignment({ isDriver, transportAllocationId, ticketAll
   return (
     <AlertDialog>
       <DropdownMenu>
-        <div className={"bg-ts-blue-600 p-2 rounded-xl border border-ts-gold-700 flex flex-row gap-2 items-center justify-between"}>
+        <div className={"bg-ts-gold-500 dark:bg-ts-blue-600 p-2 rounded-xl border border-ts-gold-700 flex flex-row gap-2 items-center justify-between"}>
           <div className={"flex flex-row gap-2 items-center"}>
             { isDriver ? (<PiSteeringWheelFill />) : (<IoPerson />) }
             <span>{ticketAllocation?.Racers.fullName}</span>
@@ -809,7 +809,7 @@ function TransportVehicleAssignment({ isDriver, transportAllocationId, ticketAll
           </AlertDialogTrigger>
         </DropdownMenuContent>
       </DropdownMenu>
-      <AlertDialogContent className={"bg-ts-blue-700 text-white"}>
+      <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Confirm Unlinking</AlertDialogTitle>
           <AlertDialogDescription>

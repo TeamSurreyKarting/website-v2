@@ -290,13 +290,11 @@ export function TimelineItem({ item }: { item: ScheduleItem } ) {
         <div className={"flex flex-row gap-2 items-center max-md:text-sm"}><Clock className={"h-4 w-4"} /> <span>{format(new Date(item.date), 'HH:mm')}</span></div>
         <div className={"flex flex-row gap-2 items-center max-md:text-sm"}><CalendarIcon className={"h-4 w-4"} /> <span>{format(new Date(item.date), 'd/M')}</span></div>
       </div>
-      <Card className={clsx("w-full bg-ts-blue-400 flex flex-row gap-2 items-center justify-between", {
-        'bg-ts-blue-800': isComplete,
+      <Card className={clsx("w-full bg-ts-gold-300 dark:bg-ts-blue-400 flex flex-row gap-2 items-center justify-between", {
+        'opacity-25': isComplete,
       })}>
         <CardHeader className={"flex flex-row justify-between items-start gap-2"}>
-          <div className={clsx("flex flex-col justify-evenly", {
-            'text-gray-800': isComplete
-          })}>
+          <div className={"flex flex-col justify-evenly"}>
             <CardTitle className={"text-inherit"}>{item.title}</CardTitle>
             {item.description && (<CardDescription className={"text-sm"}>{item.description}</CardDescription>)}
           </div>
