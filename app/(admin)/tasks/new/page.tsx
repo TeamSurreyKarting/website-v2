@@ -28,7 +28,7 @@ export default async function NewTaskPage({
       : null;
 
     return (
-      <>
+      <div className={"container mx-auto"}>
         <h2 className={"text-2xl font-bold"}>
           New {parentTaskId ? "Subtask" : "Task"}
         </h2>
@@ -38,7 +38,7 @@ export default async function NewTaskPage({
           </h3>
         )}
         <TaskForm parentTaskId={parentTaskId} />
-      </>
+      </div>
     );
   } catch {
     notFound();

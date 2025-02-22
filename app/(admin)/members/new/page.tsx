@@ -63,7 +63,7 @@ export default async function NewMemberPage(props: {
   const defaultRacerInFetchedRacers = racers.filter((x) => x.id === racerId);
 
   return (
-    <>
+    <div className={"container mx-auto"}>
       <h2 className={"text-2xl font-bold"}>Assign Membership</h2>
       <AssignMembershipForm
         memberships={membershipTypes}
@@ -74,6 +74,6 @@ export default async function NewMemberPage(props: {
             : null
         }
       />
-    </>
+    </div>
   );
 }

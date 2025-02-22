@@ -73,7 +73,7 @@ export default async function TaskDetailPage({
   ]);
 
   return (
-    <>
+    <div className={"container mx-auto"}>
       <TitleEdit defaultValue={task.title!} taskId={taskId} />
       <Card
         className={"my-2"}
@@ -136,6 +136,6 @@ export default async function TaskDetailPage({
           />
         )}
       </div>
-    </>
+    </div>
   );
 }

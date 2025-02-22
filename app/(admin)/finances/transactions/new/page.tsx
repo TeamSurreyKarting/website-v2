@@ -14,8 +14,8 @@ export default async function Page(props: {
   }
 
   return (
-    <>
+    <div className={"container mx-auto"}>
       <NewFinancialTransactionForm accountId={accountId} />
-    </>
+    </div>
   );
 }
