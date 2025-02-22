@@ -5,7 +5,6 @@ import { ComponentProps } from "react"
 import TSKC from "@/public/logos/tskc.svg";
 
 import { NavMain } from "@/components/nav-main"
-import { NavSecondary } from "@/components/nav-secondary"
 import { NavUser } from "@/components/nav-user"
 import {
   Sidebar,
@@ -20,7 +19,7 @@ import { FaHome, FaTasks } from "react-icons/fa"
 import { GiFullMotorcycleHelmet } from "react-icons/gi"
 import { IoIdCard } from "react-icons/io5"
 import { PiPiggyBankFill } from "react-icons/pi"
-import { FaCalendar } from "react-icons/fa6"
+import { FaCalendar, FaTrophy } from "react-icons/fa6"
 
 const sidebarItems = {
   navMain: [
@@ -58,6 +57,12 @@ const sidebarItems = {
       title: "Events",
       url: "/events",
       icon: FaCalendar,
+      items: [],
+    },
+    {
+      title: "Competitions",
+      url: "/competitions",
+      icon: FaTrophy,
       items: [],
     },
   ],
