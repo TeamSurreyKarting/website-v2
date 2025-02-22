@@ -28,7 +28,11 @@ export default function AdminLayout({
             {breadcrumbs}
           </div>
         </header>
-        <div className={"m-4 mt-0"}>{children}</div>
+        <div className={"m-4 mt-0"}>
+          <div className={"container mx-auto"}>
+            {children}
+          </div>
+        </div>
         <Toaster />
       </SidebarInset>
     </SidebarProvider>

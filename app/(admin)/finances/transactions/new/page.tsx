@@ -35,10 +35,10 @@ export default async function Page(props: {
   const account  = await getAccount(accountId);
 
   return (
-    <div className={"container mx-auto"}>
+    <>
       <h2 className={"text-2xl font-medium"}>New Transaction</h2>
       <h3 className={"text-lg font-medium text-accent"}>{account.name}</h3>
       <NewFinancialTransactionForm accountId={accountId} />
-    </div>
+    </>
   );
 }

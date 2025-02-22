@@ -98,7 +98,7 @@ export default async function Page(props: {
   ]);
 
   return (
-    <div className={"container mx-auto"}>
+    <>
       <h2 className={"text-2xl font-bold"}>Members</h2>
       <div className="mx-auto my-2 flex justify-between gap-x-2">
         <MembershipListFilters
@@ -142,7 +142,7 @@ export default async function Page(props: {
       >
         <MembersDataTable members={members}/>
       </Suspense>
-    </div>
+    </>
   );
 }
 
