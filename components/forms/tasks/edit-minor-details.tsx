@@ -15,22 +15,22 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { LoadingButton } from "@/components/ui/loading-button";
-import { FormDatePicker } from "@/components/ui/datetime-picker";
 import FormStatusPicker from "@/components/tasks/ui/form/status-picker";
 import RacerCombobox from "@/components/racers/combobox";
 import { useToast } from "@/hooks/use-toast";
 import {
-  Form,
+  Form, FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
+  FormMessage
 } from "@/components/ui/form";
 import FormPriorityPicker from "@/components/tasks/ui/form/priority-picker";
 import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { redirect } from "next/navigation";
 import { Pencil } from "lucide-react";
+import { DateTimePicker } from "@/components/ui/datetime-picker";
 
 const formSchema = z.object({
   dueAt: z.date(),
@@ -141,15 +141,16 @@ export function EditTaskDetails(
               control={form.control}
               name={"dueAt"}
               render={({ field }) => (
-                <>
-                  <FormDatePicker
-                    label={"Due At"}
-                    defaultValue={field.value}
-                    onValueChange={field.onChange}
-                    fullWidth={true}
-                  />
+                <FormItem>
+                  <FormLabel>Due At</FormLabel>
+                  <FormControl>
+                    <DateTimePicker
+                      datetime={field.value}
+                      onDatetimeChange={field.onChange}
+                    />
+                  </FormControl>
                   <FormMessage />
-                </>
+                </FormItem>
               )}
             />
             <FormField
