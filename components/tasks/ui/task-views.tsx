@@ -1,7 +1,6 @@
 import TaskViewSwitcher from "@/components/tasks/ui/task-view-switcher";
 import { createClient } from "@/utils/supabase/server";
 import TasksDataTable from "@/components/tasks/data-table/data-table";
-import clsx from "clsx";
 import { ChartViewType, isChartViewType } from "@/utils/types/chart-view-type";
 import TasksKanbanBoard from "@/components/tasks/kanban-board/board";
 import { notFound } from "next/navigation";
@@ -71,7 +70,7 @@ export default async function TaskViews({
       <div
         className={viewType === ChartViewType.list ? "block" : "hidden"}
       >
-        <TasksDataTable tasks={tasks} />
+        <TasksDataTable tasks={tasks} authedUserId={authedUserId} />
       </div>
     </>
   );
