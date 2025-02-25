@@ -61,6 +61,333 @@ export type Database = {
         }
         Relationships: []
       }
+      CompetitionEventLapTimes: {
+        Row: {
+          createdAt: string
+          id: string
+          lapNumber: number
+          lapTime: number
+          race: string
+          racer: string
+          sector1Time: number
+          sector2Time: number
+          sector3Time: number
+        }
+        Insert: {
+          createdAt?: string
+          id?: string
+          lapNumber: number
+          lapTime: number
+          race: string
+          racer: string
+          sector1Time: number
+          sector2Time: number
+          sector3Time: number
+        }
+        Update: {
+          createdAt?: string
+          id?: string
+          lapNumber?: number
+          lapTime?: number
+          race?: string
+          racer?: string
+          sector1Time?: number
+          sector2Time?: number
+          sector3Time?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "competitioneventlaptimes_race_fkey"
+            columns: ["race"]
+            isOneToOne: false
+            referencedRelation: "CompetitionEventRaces"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "competitioneventlaptimes_racer_fkey"
+            columns: ["racer"]
+            isOneToOne: false
+            referencedRelation: "CompetitionEventRaceEntrants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      CompetitionEventRaceEntrants: {
+        Row: {
+          createdAt: string
+          createdBy: string | null
+          id: string
+          race: string
+          teamRacer: string
+        }
+        Insert: {
+          createdAt?: string
+          createdBy?: string | null
+          id?: string
+          race: string
+          teamRacer: string
+        }
+        Update: {
+          createdAt?: string
+          createdBy?: string | null
+          id?: string
+          race?: string
+          teamRacer?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "CompetitionEventRaceEntrants_race_fkey"
+            columns: ["race"]
+            isOneToOne: false
+            referencedRelation: "CompetitionEventRaces"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "CompetitionEventRaceEntrants_teamRacer_fkey"
+            columns: ["teamRacer"]
+            isOneToOne: false
+            referencedRelation: "CompetitionEventTeamSelection"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      CompetitionEventRacerAvailability: {
+        Row: {
+          createdAt: string
+          id: string
+          isAvailable: boolean
+          racer: string | null
+        }
+        Insert: {
+          createdAt?: string
+          id?: string
+          isAvailable?: boolean
+          racer?: string | null
+        }
+        Update: {
+          createdAt?: string
+          id?: string
+          isAvailable?: boolean
+          racer?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "CompetitionEventRacerAvailability_racer_fkey"
+            columns: ["racer"]
+            isOneToOne: false
+            referencedRelation: "RacerDetails"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "CompetitionEventRacerAvailability_racer_fkey"
+            columns: ["racer"]
+            isOneToOne: false
+            referencedRelation: "Racers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "CompetitionEventRacerAvailability_racer_fkey"
+            columns: ["racer"]
+            isOneToOne: false
+            referencedRelation: "TaskDetailsView"
+            referencedColumns: ["primarily_responsible_person_id"]
+          },
+          {
+            foreignKeyName: "CompetitionEventRacerAvailability_racer_fkey"
+            columns: ["racer"]
+            isOneToOne: false
+            referencedRelation: "TaskDetailsView"
+            referencedColumns: ["created_by_id"]
+          },
+        ]
+      }
+      CompetitionEventRaces: {
+        Row: {
+          createdAt: string
+          createdBy: string | null
+          duration: number
+          event: string
+          id: string
+          startsAt: string
+        }
+        Insert: {
+          createdAt?: string
+          createdBy?: string | null
+          duration: number
+          event: string
+          id?: string
+          startsAt: string
+        }
+        Update: {
+          createdAt?: string
+          createdBy?: string | null
+          duration?: number
+          event?: string
+          id?: string
+          startsAt?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "CompetitionEventRaces_event_fkey"
+            columns: ["event"]
+            isOneToOne: false
+            referencedRelation: "CompetitionEvents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      CompetitionEvents: {
+        Row: {
+          createdAt: string
+          createdBy: string | null
+          eventId: string | null
+          id: string
+          name: string
+          track: string
+        }
+        Insert: {
+          createdAt?: string
+          createdBy?: string | null
+          eventId?: string | null
+          id?: string
+          name: string
+          track: string
+        }
+        Update: {
+          createdAt?: string
+          createdBy?: string | null
+          eventId?: string | null
+          id?: string
+          name?: string
+          track?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "CompetitionEvents_eventId_fkey"
+            columns: ["eventId"]
+            isOneToOne: false
+            referencedRelation: "Events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "CompetitionEvents_track_fkey"
+            columns: ["track"]
+            isOneToOne: false
+            referencedRelation: "Tracks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      CompetitionEventTeams: {
+        Row: {
+          createdAt: string
+          event: string
+          id: string
+          name: string
+        }
+        Insert: {
+          createdAt?: string
+          event: string
+          id?: string
+          name: string
+        }
+        Update: {
+          createdAt?: string
+          event?: string
+          id?: string
+          name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "competitioneventteams_event_fkey"
+            columns: ["event"]
+            isOneToOne: false
+            referencedRelation: "CompetitionEvents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      CompetitionEventTeamSelection: {
+        Row: {
+          createdAt: string
+          createdBy: string | null
+          id: string
+          racer: string | null
+          team: string | null
+        }
+        Insert: {
+          createdAt?: string
+          createdBy?: string | null
+          id?: string
+          racer?: string | null
+          team?: string | null
+        }
+        Update: {
+          createdAt?: string
+          createdBy?: string | null
+          id?: string
+          racer?: string | null
+          team?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "CompetitionEventTeamSelection_racer_fkey"
+            columns: ["racer"]
+            isOneToOne: false
+            referencedRelation: "RacerDetails"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "CompetitionEventTeamSelection_racer_fkey"
+            columns: ["racer"]
+            isOneToOne: false
+            referencedRelation: "Racers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "CompetitionEventTeamSelection_racer_fkey"
+            columns: ["racer"]
+            isOneToOne: false
+            referencedRelation: "TaskDetailsView"
+            referencedColumns: ["primarily_responsible_person_id"]
+          },
+          {
+            foreignKeyName: "CompetitionEventTeamSelection_racer_fkey"
+            columns: ["racer"]
+            isOneToOne: false
+            referencedRelation: "TaskDetailsView"
+            referencedColumns: ["created_by_id"]
+          },
+          {
+            foreignKeyName: "CompetitionEventTeamSelection_team_fkey"
+            columns: ["team"]
+            isOneToOne: false
+            referencedRelation: "CompetitionEventTeams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      Competitions: {
+        Row: {
+          createdAt: string
+          createdBy: string | null
+          id: string
+          name: string
+        }
+        Insert: {
+          createdAt?: string
+          createdBy?: string | null
+          id?: string
+          name: string
+        }
+        Update: {
+          createdAt?: string
+          createdBy?: string | null
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
       EventChecklist: {
         Row: {
           assignedTo: string
@@ -870,21 +1197,21 @@ export type Database = {
       Tracks: {
         Row: {
           created_at: string
-          id: number
+          id: string
           name: string | null
           track_map_upload_path: string | null
           type: Database["public"]["Enums"]["track_type"] | null
         }
         Insert: {
           created_at?: string
-          id?: number
+          id?: string
           name?: string | null
           track_map_upload_path?: string | null
           type?: Database["public"]["Enums"]["track_type"] | null
         }
         Update: {
           created_at?: string
-          id?: number
+          id?: string
           name?: string | null
           track_map_upload_path?: string | null
           type?: Database["public"]["Enums"]["track_type"] | null
@@ -1031,6 +1358,31 @@ export type Database = {
       license_type: "bukc_test" | "bukc_full"
       points_allocations: "formula1_top10" | "linear_top10"
       race_format: "practice" | "sprint" | "endurance"
+      RacePenalty:
+        | "Kart Change Penalty"
+        | "Excessive Weaving"
+        | "Jump Start"
+        | "Breaking Formation"
+        | "Fuel Pipe Pinching"
+        | "Adjusting Radiator Cover"
+        | "Carburettor Adjustment"
+        | "Contact Warning"
+        | "Contact Advantage"
+        | "Forcing Driver Wide"
+        | "Causing Spin"
+        | "Multiple Kart Contact"
+        | "Deliberate Forcing Off Track"
+        | "Blocking"
+        | "Overtaking Under Yellow"
+        | "Speeding Under Yellow"
+        | "Pit Lane Speeding"
+        | "Track Limits Violation"
+        | "Restarting on Grass"
+        | "Rolling Back Across Track"
+        | "Abandoning Kart"
+        | "Underweight"
+        | "Deliberate Contact After Race"
+        | "Multiple Severe Incidents"
       task_priority: "High" | "Medium" | "Low"
       task_status:
         | "Open"
