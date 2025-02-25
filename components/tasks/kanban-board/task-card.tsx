@@ -1,6 +1,6 @@
 "use client";
 
-import { Database } from "@/database.types";
+import { Tables } from "@/database.types";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import clsx from "clsx";
@@ -20,8 +20,8 @@ export default function TaskCard({
   task,
   authedUserId,
 }: {
-  task: Database["public"]["Views"]["TaskDetailsView"]["Row"];
-  authedUserId: string | undefined;
+  task: Tables<'TaskDetailsView'>,
+  authedUserId: string | undefined,
 }) {
   const dueAt = task.due_at ? new Date(task.due_at) : null;
   const isPastDue = dueAt ? new Date() > dueAt : false;

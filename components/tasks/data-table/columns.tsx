@@ -25,6 +25,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Eye, MoreHorizontal } from "lucide-react";
 import { deleteTask } from "@/utils/actions/tasks/delete";
+import { format } from "date-fns";
 function FaTrashCan() {
   return null;
 }
@@ -39,6 +40,9 @@ export const columns: ColumnDef<
   {
     accessorKey: "due_at",
     header: "Due Date",
+    cell: ({ row }) => {
+      return row.original.due_at ? format(row.original.due_at, 'd/M/y HH:mm') : "";
+    },
   },
   {
     accessorKey: "status",
