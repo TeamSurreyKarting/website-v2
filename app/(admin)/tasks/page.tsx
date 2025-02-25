@@ -20,7 +20,7 @@ export default async function TasksPage({
   const assignedTo = awaitedSearchParams?.assignedTo ?? "";
 
   return (
-    <div className={"container mx-auto"}>
+    <>
       <h2 className={"text-2xl font-bold"}>Tasks</h2>
       <div className="mx-auto my-2 flex justify-between gap-x-2">
         <Search />
@@ -38,6 +38,6 @@ export default async function TasksPage({
           assignedTo={assignedTo}
         />
       </Suspense>
-    </div>
+    </>
   );
 }

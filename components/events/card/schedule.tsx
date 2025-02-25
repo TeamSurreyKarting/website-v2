@@ -3,26 +3,20 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tables } from "@/database.types";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
-import { CalendarIcon, CalendarPlus, Check, CircleCheck, CircleX, Clock, EllipsisVertical, Loader2, Pencil, Trash2 } from "lucide-react";
+import { useState } from "react";
+import { CalendarIcon, CalendarPlus, CircleCheck, CircleX, Clock, EllipsisVertical, Loader2, Pencil, Trash2 } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { createClient } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { LoadingButton } from "@/components/ui/loading-button";
 import { Input } from "@/components/ui/input";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
-import { Calendar } from "@/components/ui/calendar";
-import { TimePicker } from "@/components/ui/time-picker/picker";
 import { format } from "date-fns";
 import { Textarea } from "@/components/ui/textarea";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import clsx from "clsx";
-import { useDebouncedCallback } from "use-debounce";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,6 +24,7 @@ import {
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { ResponsiveModal } from "@/components/ui/responsive-modal";
+import { DateTimePicker } from "@/components/ui/datetime-picker";
 
 const addToScheduleFormSchema = z.object({
   event: z.string().uuid(),
@@ -142,35 +137,14 @@ export default function ScheduleCard({ schedule, eventId }: { schedule: Tables<'
                   name={"scheduledFor"}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Occuring At</FormLabel>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <FormControl>
-                            <Button
-                              variant={"input"}
-                              className={cn(
-                                "w-full text-left font-normal",
-                                field.value && "text-muted-foreground"
-                              )}
-                            >
-                              {field.value ? (
-                                format(field.value, "PPP HH:mm")
-                              ) : (
-                                 <span>Pick a date</span>
-                               )}
-                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                            </Button>
-                          </FormControl>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0">
-                          <Calendar
-                            mode={"single"}
-                            selected={field.value}
-                            onSelect={field.onChange}
-                          />
-                          <TimePicker date={field.value} dateDidSet={field.onChange} />
-                        </PopoverContent>
-                      </Popover>
+                      <FormLabel>Scheduled For</FormLabel>
+                      <FormControl>
+                        <DateTimePicker
+                          datetime={field.value}
+                          onDatetimeChange={field.onChange}
+                        />
+                      </FormControl>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -386,41 +360,20 @@ export function TimelineItem({ item }: { item: ScheduleItem } ) {
                     name={"scheduledFor"}
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Occuring At</FormLabel>
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <FormControl>
-                              <Button
-                                variant={"outline"}
-                                className={cn(
-                                  "w-full text-left font-normal bg-ts-blue-500 border border-white",
-                                  field.value && "text-muted-foreground"
-                                )}
-                              >
-                                {field.value ? (
-                                  format(field.value, "PPP HH:mm")
-                                ) : (
-                                   <span>Pick a date</span>
-                                 )}
-                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                              </Button>
-                            </FormControl>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-auto p-0 bg-ts-blue-500 text-white">
-                            <Calendar
-                              mode={"single"}
-                              selected={field.value}
-                              onSelect={field.onChange}
-                            />
-                            <TimePicker date={field.value} dateDidSet={field.onChange} />
-                          </PopoverContent>
-                        </Popover>
+                        <FormLabel>Scheduled For</FormLabel>
+                        <FormControl>
+                          <DateTimePicker
+                            datetime={field.value}
+                            onDatetimeChange={field.onChange}
+                          />
+                        </FormControl>
+                        <FormMessage />
                       </FormItem>
                     )}
                   />
                   <LoadingButton
                     loading={editScheduleItemForm.formState.isLoading}
-                    className={"float-right bg-white text-black"}
+                    className={"float-right"}
                     type={"submit"}
                   >
                     Update

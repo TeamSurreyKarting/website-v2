@@ -47,13 +47,15 @@ const formSchema = z
 
 export function NewMembershipTypeForm() {
   const dateNow = new Date();
+  const dateRangeMin = new Date(dateNow.getFullYear() - 1, 8, 1);
+  const dateRangeMax = new Date(dateNow.getFullYear() + 5, 7, 31);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      validFrom: dateNow,
-      validTo: new Date(dateNow.getTime() + 31536000000),
+      validFrom: new Date(dateNow.getMonth() >= 8 ? dateNow.getFullYear() : dateNow.getFullYear() - 1, 8, 1),
+      validTo: new Date(dateNow.getMonth() < 8 ? dateNow.getFullYear() : dateNow.getFullYear() - 1, 7, 31),
       price: 0,
     },
   });
@@ -97,7 +99,8 @@ export function NewMembershipTypeForm() {
                 <FormLabel>Valid From</FormLabel>
                 <FormControl>
                   <MonthYearPicker
-                    minDate={dateNow}
+                    minDate={dateRangeMin}
+                    maxDate={dateRangeMax}
                     bypassValidation={true}
                     {...field}
                   />
@@ -114,7 +117,8 @@ export function NewMembershipTypeForm() {
                 <FormLabel>Valid To</FormLabel>
                 <FormControl>
                   <MonthYearPicker
-                    minDate={dateNow}
+                    minDate={dateRangeMin}
+                    maxDate={dateRangeMax}
                     bypassValidation={true}
                     {...field}
                   />

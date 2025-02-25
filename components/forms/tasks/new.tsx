@@ -18,7 +18,7 @@ import { Textarea } from "@/components/ui/textarea";
 import RacerCombobox from "@/components/racers/combobox";
 import RacerMultiSelect from "@/components/racers/multi-select";
 import { createNewTask } from "@/utils/actions/tasks/new";
-import { FormDatePicker } from "@/components/ui/datetime-picker";
+import { DateTimePicker } from "@/components/ui/datetime-picker";
 import FormStatusPicker from "@/components/tasks/ui/form/status-picker";
 import FormPriorityPicker from "@/components/tasks/ui/form/priority-picker";
 
@@ -125,15 +125,16 @@ export function TaskForm({
           control={form.control}
           name={"dueAt"}
           render={({ field }) => (
-            <>
-              <FormDatePicker
-                label={"Due At"}
-                defaultValue={field.value}
-                onValueChange={field.onChange}
-                fullWidth={false}
-              />
+            <FormItem>
+              <FormLabel>Due At</FormLabel>
+              <FormControl>
+                <DateTimePicker
+                  datetime={field.value}
+                  onDatetimeChange={field.onChange}
+                />
+              </FormControl>
               <FormMessage />
-            </>
+            </FormItem>
           )}
         />
         <div className={"grid grid-cols-1 md:grid-cols-2 gap-3"}>
