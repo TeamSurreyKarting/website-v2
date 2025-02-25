@@ -5,7 +5,6 @@ import { Tables } from "@/database.types";
 import { Button } from "@/components/ui/button";
 import { Plus, Bus, OctagonAlert, ChevronsUpDown, Check, EllipsisVertical, Unlink, UserMinus } from "lucide-react";
 import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -25,7 +24,7 @@ import { IoPerson } from "react-icons/io5";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem, DropdownMenuSeparator,
+  DropdownMenuItem,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import {
@@ -410,8 +409,6 @@ export default function TransportCard({ eventId, transport, ticketAllocations }:
                 </form>
               </Form>
             </ResponsiveModal>
-
-
           </div>
         </CardHeader>
         { transport.length > 0 && (
@@ -424,243 +421,6 @@ export default function TransportCard({ eventId, transport, ticketAllocations }:
           </CardContent>
         )}
       </Card>
-      {/*<Dialog open={addDriverDialogIsOpen} onOpenChange={setAddDriverDialogOpen}>*/}
-      {/*  <DialogContent>*/}
-      {/*    <DialogHeader>*/}
-      {/*      <DialogTitle>Add Driver/Vehicle</DialogTitle>*/}
-      {/*    </DialogHeader>*/}
-      {/*    <Form {...addDriverForm}>*/}
-      {/*      <form onSubmit={addDriverForm.handleSubmit(submitAddDriver)} className={"space-y-6"}>*/}
-      {/*        <FormField*/}
-      {/*          control={addDriverForm.control}*/}
-      {/*          name={"driver"}*/}
-      {/*          render={({ field }) => (*/}
-      {/*            <FormItem>*/}
-      {/*              <FormLabel>Driver</FormLabel>*/}
-      {/*              <FormControl>*/}
-      {/*                <RacerCombobox*/}
-      {/*                  defaultValue={field.value}*/}
-      {/*                  onValueChange={field.onChange}*/}
-      {/*                  fullWidth={true}*/}
-      {/*                />*/}
-      {/*              </FormControl>*/}
-      {/*              <FormMessage />*/}
-      {/*            </FormItem>*/}
-      {/*          )}*/}
-      {/*        />*/}
-      {/*        <FormField*/}
-      {/*          control={addDriverForm.control}*/}
-      {/*          name={"maxCapacity"}*/}
-      {/*          render={({ field }) => (*/}
-      {/*            <FormItem>*/}
-      {/*              <FormLabel>Maximum Capacity</FormLabel>*/}
-      {/*              <FormControl>*/}
-      {/*                <Input*/}
-      {/*                  type={"number"}*/}
-      {/*                  min={1}*/}
-      {/*                  {...field}*/}
-      {/*                  value={undefined}*/}
-      {/*                  defaultValue={field.value}*/}
-      {/*                  onChange={(event) => field.onChange(Number(event.target.value))}*/}
-      {/*                />*/}
-      {/*              </FormControl>*/}
-      {/*              <FormDescription>Include the driver in your capacity</FormDescription>*/}
-      {/*              <FormMessage />*/}
-      {/*            </FormItem>*/}
-      {/*          )}*/}
-      {/*        />*/}
-      {/*        <FormField*/}
-      {/*          control={addDriverForm.control}*/}
-      {/*          name={"additionalDetails"}*/}
-      {/*          render={({ field }) => (*/}
-      {/*            <FormItem>*/}
-      {/*              <FormLabel>Additional Details</FormLabel>*/}
-      {/*              <FormControl>*/}
-      {/*                <Textarea*/}
-      {/*                  className={"resize-none"}*/}
-      {/*                  {...field}*/}
-      {/*                  value={undefined}*/}
-      {/*                  defaultValue={field.value}*/}
-      {/*                  onChange={field.onChange}*/}
-      {/*                />*/}
-      {/*              </FormControl>*/}
-      {/*              <FormMessage />*/}
-      {/*            </FormItem>*/}
-      {/*          )}*/}
-      {/*        />*/}
-      {/*        <LoadingButton*/}
-      {/*          loading={addDriverForm.formState.isLoading}*/}
-      {/*          className={"float-right"}*/}
-      {/*          type="submit"*/}
-      {/*        >*/}
-      {/*          Add*/}
-      {/*        </LoadingButton>*/}
-      {/*      </form>*/}
-      {/*    </Form>*/}
-      {/*  </DialogContent>*/}
-      {/*</Dialog>*/}
-      {/*<Dialog open={assignTixToVehDialogIsOpen} onOpenChange={setAssignTixToVehDialogOpen}>*/}
-      {/*  <DialogContent>*/}
-      {/*    <DialogHeader>*/}
-      {/*      <DialogTitle>Assign Ticket Holder to Vehicle</DialogTitle>*/}
-      {/*    </DialogHeader>*/}
-      {/*    <Form {...assignTixToVehForm}>*/}
-      {/*      <form onSubmit={assignTixToVehForm.handleSubmit(submitTixToVeh)} className={"space-y-6"}>*/}
-      {/*        <FormField*/}
-      {/*          control={assignTixToVehForm.control}*/}
-      {/*          name={"transport"}*/}
-      {/*          render={({ field }) => (*/}
-      {/*            <FormItem>*/}
-      {/*              <FormLabel>Driver/Vehicle</FormLabel>*/}
-      {/*              <Popover>*/}
-      {/*                <PopoverTrigger asChild>*/}
-      {/*                  <FormControl>*/}
-      {/*                    <Button*/}
-      {/*                      variant="outline"*/}
-      {/*                      role="combobox"*/}
-      {/*                      className={cn(*/}
-      {/*                        "w-full justify-between",*/}
-      {/*                        !field.value && "text-muted-foreground"*/}
-      {/*                      )}*/}
-      {/*                    >*/}
-      {/*                      {field.value*/}
-      {/*                       ? transport.find(*/}
-      {/*                          (t) => t.id === field.value*/}
-      {/*                        )?.Racers.fullName*/}
-      {/*                       : "Select driver/vehicle"}*/}
-      {/*                      <ChevronsUpDown className="opacity-50" />*/}
-      {/*                    </Button>*/}
-      {/*                  </FormControl>*/}
-      {/*                </PopoverTrigger>*/}
-      {/*                <PopoverContent*/}
-      {/*                  className="w-[200px] p-0"*/}
-      {/*                  align={"start"}*/}
-      {/*                >*/}
-      {/*                  <Command>*/}
-      {/*                    <CommandInput*/}
-      {/*                      placeholder="Search drivers/vehicles..."*/}
-      {/*                      className="h-9"*/}
-      {/*                    />*/}
-      {/*                    <CommandList>*/}
-      {/*                      <CommandEmpty>No drivers/vehicles found.</CommandEmpty>*/}
-      {/*                      <CommandGroup>*/}
-      {/*                        {*/}
-      {/*                          transport.map((t) => (*/}
-      {/*                            <CommandItem*/}
-      {/*                              value={t.id}*/}
-      {/*                              key={t.id}*/}
-      {/*                              onSelect={() => {*/}
-      {/*                                field.onChange(t.id)*/}
-      {/*                              }}*/}
-      {/*                            >*/}
-      {/*                              {t.Racers.fullName}*/}
-      {/*                              <Check*/}
-      {/*                                className={cn(*/}
-      {/*                                  "ml-auto",*/}
-      {/*                                  t.id === field.value*/}
-      {/*                                  ? "opacity-100"*/}
-      {/*                                  : "opacity-0"*/}
-      {/*                                )}*/}
-      {/*                              />*/}
-      {/*                            </CommandItem>*/}
-      {/*                          ))*/}
-      {/*                        }*/}
-      {/*                      </CommandGroup>*/}
-      {/*                    </CommandList>*/}
-      {/*                  </Command>*/}
-      {/*                </PopoverContent>*/}
-      {/*              </Popover>*/}
-      {/*              <FormMessage />*/}
-      {/*            </FormItem>*/}
-      {/*          )}*/}
-      {/*        />*/}
-      {/*        <FormField*/}
-      {/*          control={assignTixToVehForm.control}*/}
-      {/*          name={"ticketAllocation"}*/}
-      {/*          render={({ field }) => (*/}
-      {/*            <FormItem>*/}
-      {/*              <FormLabel>Ticket Holder</FormLabel>*/}
-      {/*              <Popover>*/}
-      {/*                <PopoverTrigger asChild>*/}
-      {/*                  <FormControl>*/}
-      {/*                    <Button*/}
-      {/*                      disabled={assignTixToVehForm.getValues().transport === undefined}*/}
-      {/*                      variant="outline"*/}
-      {/*                      role="combobox"*/}
-      {/*                      className={cn(*/}
-      {/*                        "w-full justify-between",*/}
-      {/*                        !field.value && "text-muted-foreground"*/}
-      {/*                      )}*/}
-      {/*                    >*/}
-      {/*                      {field.value*/}
-      {/*                       ? unassignedTicketAllocations.find(*/}
-      {/*                          (uta) => uta.id === field.value*/}
-      {/*                        )?.Racers.fullName*/}
-      {/*                       : "Select ticket holder"}*/}
-      {/*                      <ChevronsUpDown className="opacity-50" />*/}
-      {/*                    </Button>*/}
-      {/*                  </FormControl>*/}
-      {/*                </PopoverTrigger>*/}
-      {/*                <PopoverContent*/}
-      {/*                  className="w-[200px] p-0"*/}
-      {/*                  align={"end"}*/}
-      {/*                >*/}
-      {/*                  <Command>*/}
-      {/*                    <CommandInput*/}
-      {/*                      placeholder="Search ticket holders..."*/}
-      {/*                      className="h-9"*/}
-      {/*                    />*/}
-      {/*                    <CommandList>*/}
-      {/*                      <CommandEmpty>No ticket holders found.</CommandEmpty>*/}
-      {/*                      <CommandGroup>*/}
-      {/*                        {*/}
-      {/*                          unassignedTicketAllocations.map((uta) => {*/}
-      {/*                            if (uta.Racers.id === assignTixToVehForm.getValues().transport) { return null; }*/}
-
-      {/*                            return (*/}
-      {/*                              <CommandItem*/}
-      {/*                                value={uta.id}*/}
-      {/*                                key={uta.id}*/}
-      {/*                                onSelect={() => {*/}
-      {/*                                  assignTixToVehForm.setValue("ticketAllocation", uta.id)*/}
-      {/*                                }}*/}
-      {/*                              >*/}
-      {/*                                {uta.Racers.fullName}*/}
-      {/*                                <Check*/}
-      {/*                                  className={cn(*/}
-      {/*                                    "ml-auto",*/}
-      {/*                                    uta.id === field.value*/}
-      {/*                                    ? "opacity-100"*/}
-      {/*                                    : "opacity-0"*/}
-      {/*                                  )}*/}
-      {/*                                />*/}
-      {/*                              </CommandItem>*/}
-      {/*                            )*/}
-      {/*                          })*/}
-      {/*                        }*/}
-      {/*                      </CommandGroup>*/}
-      {/*                    </CommandList>*/}
-      {/*                  </Command>*/}
-      {/*                </PopoverContent>*/}
-      {/*              </Popover>*/}
-      {/*              <FormDescription>*/}
-      {/*                Note: The driver of the vehicle is already assigned to themselves.*/}
-      {/*              </FormDescription>*/}
-      {/*              <FormMessage />*/}
-      {/*            </FormItem>*/}
-      {/*          )}*/}
-      {/*        />*/}
-      {/*        <LoadingButton*/}
-      {/*          loading={assignTixToVehForm.formState.isLoading}*/}
-      {/*          className={"float-right"}*/}
-      {/*          type="submit"*/}
-      {/*        >*/}
-      {/*          Add*/}
-      {/*        </LoadingButton>*/}
-      {/*      </form>*/}
-      {/*    </Form>*/}
-      {/*  </DialogContent>*/}
-      {/*</Dialog>*/}
     </>
   )
 }
@@ -690,7 +450,7 @@ function TransportVehicleCard({ transportVehicle, ticketAllocations }: { transpo
   return (
     <AlertDialog>
       <DropdownMenu>
-        <Card className={"bg-ts-blue-400"}>
+        <Card className={"bg-ts-gold-300 dark:bg-ts-blue-400"}>
           <CardHeader>
             <div className={"flex flex-row justify-between items-center gap-2"}>
               <div className={"flex flex-col space-y-1.5"}>
@@ -734,7 +494,7 @@ function TransportVehicleCard({ transportVehicle, ticketAllocations }: { transpo
           </AlertDialogTrigger>
         </DropdownMenuContent>
       </DropdownMenu>
-      <AlertDialogContent className={"bg-ts-blue-700 text-white"}>
+      <AlertDialogContent className={"text-white"}>
         <AlertDialogHeader>
           <AlertDialogTitle>Confirm Driver Removal</AlertDialogTitle>
           <AlertDialogDescription>
@@ -783,7 +543,7 @@ function TransportVehicleAssignment({ isDriver, transportAllocationId, ticketAll
   return (
     <AlertDialog>
       <DropdownMenu>
-        <div className={"bg-ts-blue-600 p-2 rounded-xl border border-ts-gold-700 flex flex-row gap-2 items-center justify-between"}>
+        <div className={"bg-ts-gold-500 dark:bg-ts-blue-600 p-2 rounded-xl border border-ts-gold-700 flex flex-row gap-2 items-center justify-between"}>
           <div className={"flex flex-row gap-2 items-center"}>
             { isDriver ? (<PiSteeringWheelFill />) : (<IoPerson />) }
             <span>{ticketAllocation?.Racers.fullName}</span>
@@ -809,7 +569,7 @@ function TransportVehicleAssignment({ isDriver, transportAllocationId, ticketAll
           </AlertDialogTrigger>
         </DropdownMenuContent>
       </DropdownMenu>
-      <AlertDialogContent className={"bg-ts-blue-700 text-white"}>
+      <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Confirm Unlinking</AlertDialogTitle>
           <AlertDialogDescription>

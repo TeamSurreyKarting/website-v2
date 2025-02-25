@@ -6,6 +6,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { createClient } from "@/utils/supabase/server";
+import { AdminBreadcrumbLink, AdminBreadcrumbPage } from "@/components/admin-breadcrumbs";
 
 async function fetchAccountName(
   accountId: string,
@@ -34,17 +35,24 @@ export default async function BreadcrumbSlot({
   return (
     <BreadcrumbList>
       <BreadcrumbItem>
-        <BreadcrumbLink className={"text-gray-300"} href={"/finances"}>
-          Finances
-        </BreadcrumbLink>
+        {accountName ? (
+          <AdminBreadcrumbLink href={"/finances"}>
+            Finances
+          </AdminBreadcrumbLink>
+        ) : (
+          <AdminBreadcrumbPage>
+            Finances
+          </AdminBreadcrumbPage>
+        )}
+
       </BreadcrumbItem>
       {accountName && (
         <>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage className={"text-white capitalize"}>
+            <AdminBreadcrumbPage>
               {accountName ?? accountId}
-            </BreadcrumbPage>
+            </AdminBreadcrumbPage>
           </BreadcrumbItem>
         </>
       )}

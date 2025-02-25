@@ -74,7 +74,7 @@ export function AppSidebar({ ...props }: ComponentProps<typeof Sidebar>) {
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild>
+            <SidebarMenuButton size="lg" asChild className={"bg-ts-blue-500 dark:bg-transparent"}>
               <TSKC className={"h-auto hover:bg-none"} />
             </SidebarMenuButton>
           </SidebarMenuItem>

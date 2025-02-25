@@ -1,6 +1,51 @@
 import { AssignMembershipForm } from "@/components/forms/memberships/assign";
 import { Database } from "@/database.types";
-import { createClient } from "@/utils/supabase/client";
+import { createClient } from "@/utils/supabase/server";
+
+async function getMembershipTypes(): Promise<
+  Database["public"]["Tables"]["MembershipTypes"]["Row"][]
+> {
+  const supabase = await createClient();
+  const now = new Date().toISOString();
+
+  const query = supabase
+    .from("MembershipTypes")
+    .select()
+    .lt("validFrom", now)
+    .gt("validUntil", now);
+
+  const { data, error } = await query;
+
+  if (error) {
+    throw error;
+  }
+
+  if (data === null) {
+    throw Error("Could not get membership types");
+  }
+
+  return data;
+}
+
+async function getRacers(): Promise<
+  Database["public"]["Tables"]["Racers"]["Row"][]
+> {
+  const supabase = await createClient();
+
+  const query = supabase.from("Racers").select();
+
+  const { data, error } = await query;
+
+  if (error) {
+    throw error;
+  }
+
+  if (data === null) {
+    throw Error("Could not get racers");
+  }
+
+  return data;
+}
 
 export default async function NewMemberPage(props: {
   searchParams?: Promise<{
@@ -9,51 +54,6 @@ export default async function NewMemberPage(props: {
 }) {
   const searchParams = await props.searchParams;
   const racerId = searchParams?.racer ?? null;
-
-  const now = new Date().toISOString();
-  async function getMembershipTypes(): Promise<
-    Database["public"]["Tables"]["MembershipTypes"]["Row"][]
-  > {
-    const supabase = await createClient();
-
-    const query = supabase
-      .from("MembershipTypes")
-      .select()
-      .lt("validFrom", now)
-      .gt("validUntil", now);
-
-    const { data, error } = await query;
-
-    if (error) {
-      throw error;
-    }
-
-    if (data === null) {
-      throw Error("Could not get membership types");
-    }
-
-    return data;
-  }
-
-  async function getRacers(): Promise<
-    Database["public"]["Tables"]["Racers"]["Row"][]
-  > {
-    const supabase = await createClient();
-
-    const query = supabase.from("Racers").select();
-
-    const { data, error } = await query;
-
-    if (error) {
-      throw error;
-    }
-
-    if (data === null) {
-      throw Error("Could not get racers");
-    }
-
-    return data;
-  }
 
   const [membershipTypes, racers] = await Promise.all([
     getMembershipTypes(),

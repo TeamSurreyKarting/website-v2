@@ -5,20 +5,21 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { AdminBreadcrumbLink, AdminBreadcrumbPage } from "@/components/admin-breadcrumbs";
 
 export default function BreadcrumbSlot() {
   return (
     <BreadcrumbList>
       <BreadcrumbItem>
-        <BreadcrumbLink className={"text-gray-300"} href={"/finances"}>
+        <AdminBreadcrumbLink href={"/finances"}>
           Finances
-        </BreadcrumbLink>
+        </AdminBreadcrumbLink>
       </BreadcrumbItem>
       <BreadcrumbSeparator />
       <BreadcrumbItem>
-        <BreadcrumbPage className={"text-white capitalize"}>
+        <AdminBreadcrumbPage>
           New Account
-        </BreadcrumbPage>
+        </AdminBreadcrumbPage>
       </BreadcrumbItem>
     </BreadcrumbList>
   );

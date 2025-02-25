@@ -101,10 +101,7 @@ export default function NewFinancialTransactionForm({
           }}
         />
         <LoadingButton
-          className={
-            "bg-ts-blue-700 hover:bg-white hover:text-black float-right"
-          }
-          variant={"outline"}
+          className={"float-right"}
           type={"submit"}
           loading={form.formState.isSubmitting}
         >

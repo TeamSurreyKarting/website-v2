@@ -1,3 +1,4 @@
+import { AdminBreadcrumbLink, AdminBreadcrumbPage } from "@/components/admin-breadcrumbs";
 import {
   BreadcrumbItem,
   BreadcrumbLink,
@@ -28,15 +29,15 @@ export default async function BreadcrumbSlot(props: {
   return (
     <BreadcrumbList>
       <BreadcrumbItem>
-        <BreadcrumbLink className={"text-gray-300"} href={"/racers"}>
+        <AdminBreadcrumbLink href={"/racers"}>
           Racers
-        </BreadcrumbLink>
+        </AdminBreadcrumbLink>
       </BreadcrumbItem>
       <BreadcrumbSeparator />
       <BreadcrumbItem>
-        <BreadcrumbPage className={"text-white capitalize"}>
+        <AdminBreadcrumbPage>
           {racerName ?? params.id}
-        </BreadcrumbPage>
+        </AdminBreadcrumbPage>
       </BreadcrumbItem>
     </BreadcrumbList>
   );

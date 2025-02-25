@@ -2,10 +2,10 @@
 
 import { Tables } from "@/database.types";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { EllipsisVertical, Pencil, Tickets, Trash2, UserPlus } from "lucide-react";
+import { EllipsisVertical, Pencil, Tickets, Trash2 } from "lucide-react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,13 +13,7 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { createClient } from "@/utils/supabase/client";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectSeparator, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
-import { Calendar } from "@/components/ui/calendar";
-import { TimePicker } from "@/components/ui/time-picker/picker";
 import CurrencyInput from "react-currency-input-field";
-import { format } from "date-fns";
-import { CalendarIcon } from "@radix-ui/react-icons";
 import { LoadingButton } from "@/components/ui/loading-button";
 import { useRouter } from "next/navigation";
 import { Progress } from "@/components/ui/progress";
@@ -38,6 +32,7 @@ import {
   AlertDialogTrigger
 } from "@/components/ui/alert-dialog";
 import { ResponsiveModal } from "@/components/ui/responsive-modal";
+import { DateTimePicker } from "@/components/ui/datetime-picker";
 
 type Ticket = (Tables<'EventTicket'> & { EventTicketAllocation: Tables<'EventTicketAllocation'>[] });
 
@@ -188,34 +183,13 @@ export default function TicketsCard({ className, tickets, membershipTypes, event
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Available From</FormLabel>
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <FormControl>
-                              <Button
-                                variant={"input"}
-                                className={cn(
-                                  "w-full text-left font-normal",
-                                  field.value && "text-muted-foreground"
-                                )}
-                              >
-                                {field.value ? (
-                                  format(field.value, "PPP HH:mm")
-                                ) : (
-                                   <span>Pick a date</span>
-                                 )}
-                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                              </Button>
-                            </FormControl>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-auto p-0">
-                            <Calendar
-                              mode={"single"}
-                              selected={field.value}
-                              onSelect={field.onChange}
-                            />
-                            <TimePicker date={field.value} dateDidSet={field.onChange} />
-                          </PopoverContent>
-                        </Popover>
+                        <FormControl>
+                          <DateTimePicker
+                            datetime={field.value}
+                            onDatetimeChange={field.onChange}
+                          />
+                        </FormControl>
+                        <FormMessage />
                       </FormItem>
                     )}
                   />
@@ -225,34 +199,13 @@ export default function TicketsCard({ className, tickets, membershipTypes, event
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Available Until</FormLabel>
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <FormControl>
-                              <Button
-                                variant={"input"}
-                                className={cn(
-                                  "w-full text-left font-normal",
-                                  field.value && "text-muted-foreground"
-                                )}
-                              >
-                                {field.value ? (
-                                  format(field.value, "PPP HH:mm")
-                                ) : (
-                                   <span>Pick a date</span>
-                                 )}
-                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                              </Button>
-                            </FormControl>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-auto p-0 ">
-                            <Calendar
-                              mode={"single"}
-                              selected={field.value}
-                              onSelect={field.onChange}
-                            />
-                            <TimePicker date={field.value} dateDidSet={field.onChange} />
-                          </PopoverContent>
-                        </Popover>
+                        <FormControl>
+                          <DateTimePicker
+                            datetime={field.value}
+                            onDatetimeChange={field.onChange}
+                          />
+                        </FormControl>
+                        <FormMessage />
                       </FormItem>
                     )}
                   />
@@ -380,7 +333,7 @@ function TicketItem({ ticket, membershipTypes }: { ticket: Ticket, membershipTyp
       <AlertDialog>
         <DropdownMenu>
           <Card
-            className={"bg-ts-blue-400 p-2 rounded-lg border border-ts-gold-700"}
+            className={"bg-ts-gold-300 dark:bg-ts-blue-400 p-2 rounded-lg border border-ts-gold-700"}
           >
             <CardHeader className={"flex-row gap-x-3 justify-between"}>
               <div className={"flex flex-col space-y-1.5"}>
@@ -527,34 +480,12 @@ function TicketItem({ ticket, membershipTypes }: { ticket: Ticket, membershipTyp
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Available From</FormLabel>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <FormControl>
-                            <Button
-                              variant={"outline"}
-                              className={cn(
-                                "w-full text-left font-normal bg-ts-blue-500 border border-white",
-                                field.value && "text-muted-foreground"
-                              )}
-                            >
-                              {field.value ? (
-                                format(field.value, "PPP HH:mm")
-                              ) : (
-                                 <span>Pick a date</span>
-                               )}
-                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                            </Button>
-                          </FormControl>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0 bg-ts-blue-500 text-white">
-                          <Calendar
-                            mode={"single"}
-                            selected={field.value}
-                            onSelect={field.onChange}
-                          />
-                          <TimePicker date={field.value} dateDidSet={field.onChange} />
-                        </PopoverContent>
-                      </Popover>
+                      <FormControl>
+                        <DateTimePicker
+                          datetime={field.value}
+                          onDatetimeChange={field.onChange}
+                        />
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -565,34 +496,12 @@ function TicketItem({ ticket, membershipTypes }: { ticket: Ticket, membershipTyp
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Available Until</FormLabel>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <FormControl>
-                            <Button
-                              variant={"outline"}
-                              className={cn(
-                                "w-full text-left font-normal bg-ts-blue-500 border border-white",
-                                field.value && "text-muted-foreground"
-                              )}
-                            >
-                              {field.value ? (
-                                format(field.value, "PPP HH:mm")
-                              ) : (
-                                 <span>Pick a date</span>
-                               )}
-                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                            </Button>
-                          </FormControl>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0 bg-ts-blue-500 text-white">
-                          <Calendar
-                            mode={"single"}
-                            selected={field.value}
-                            onSelect={field.onChange}
-                          />
-                          <TimePicker date={field.value} dateDidSet={field.onChange} />
-                        </PopoverContent>
-                      </Popover>
+                      <FormControl>
+                        <DateTimePicker
+                          datetime={field.value}
+                          onDatetimeChange={field.onChange}
+                        />
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -621,7 +530,7 @@ function TicketItem({ ticket, membershipTypes }: { ticket: Ticket, membershipTyp
               />
               <LoadingButton
                 loading={ticketEditForm.formState.isLoading}
-                className={"float-right bg-white text-black"}
+                className={"float-right"}
                 type="submit"
               >
                 Update

@@ -18,7 +18,7 @@ export default function TransactionsDataTable({
 }) {
   return (
     <>
-      <WindowCollectionView data={data} renderItem={(item) => <TransactionCollectionViewItem item={item} />} />
+      <WindowCollectionView data={data} renderItem={(item) => <TransactionCollectionViewItem item={item} />} className={"md:hidden"} />
       <TableView columns={columns} data={data} className={"hidden md:block"} />
     </>
   );

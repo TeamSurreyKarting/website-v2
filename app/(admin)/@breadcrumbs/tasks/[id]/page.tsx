@@ -7,6 +7,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { AdminBreadcrumbLink, AdminBreadcrumbPage } from "@/components/admin-breadcrumbs";
 
 async function getTask(
   id: string,
@@ -39,15 +40,15 @@ export default async function BreadcrumbSlot({
     return (
       <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink className={"text-gray-300"} href={"/tasks"}>
+          <AdminBreadcrumbLink className={"text-gray-300"} href={"/tasks"}>
             Tasks
-          </BreadcrumbLink>
+          </AdminBreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
-          <BreadcrumbPage className={"text-white capitalize"}>
+          <AdminBreadcrumbPage>
             {task.title ?? taskId}
-          </BreadcrumbPage>
+          </AdminBreadcrumbPage>
         </BreadcrumbItem>
       </BreadcrumbList>
     );
@@ -58,24 +59,23 @@ export default async function BreadcrumbSlot({
   return (
     <BreadcrumbList>
       <BreadcrumbItem>
-        <BreadcrumbLink className={"text-gray-300"} href={"/tasks"}>
+        <AdminBreadcrumbLink href={"/tasks"}>
           Tasks
-        </BreadcrumbLink>
+        </AdminBreadcrumbLink>
       </BreadcrumbItem>
       <BreadcrumbSeparator />
       <BreadcrumbItem>
-        <BreadcrumbLink
-          className={"text-gray-300"}
+        <AdminBreadcrumbLink
           href={`/tasks/${parentTask.id}`}
         >
           {parentTask.title ?? taskId}
-        </BreadcrumbLink>
+        </AdminBreadcrumbLink>
       </BreadcrumbItem>
       <BreadcrumbSeparator />
       <BreadcrumbItem>
-        <BreadcrumbPage className={"text-white capitalize"}>
+        <AdminBreadcrumbPage>
           {task.title ?? taskId}
-        </BreadcrumbPage>
+        </AdminBreadcrumbPage>
       </BreadcrumbItem>
     </BreadcrumbList>
   );

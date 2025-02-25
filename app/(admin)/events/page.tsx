@@ -39,7 +39,7 @@ export default async function EventsListPage({ searchParams }: { searchParams?: 
     const events = await getEvents(sp?.q, sp?.showPastEvents);
 
     return (
-      <div className={"container mx-auto"}>
+      <>
         <h2 className={"text-2xl font-bold"}>Events</h2>
         <div className="mx-auto my-2 flex justify-between gap-x-2">
           <div className={"flex flex-row gap-4 items-center"}>
@@ -61,7 +61,7 @@ export default async function EventsListPage({ searchParams }: { searchParams?: 
         >
           <EventsDataTable events={events} />
         </Suspense>
-      </div>
+      </>
     )
   } catch (e) {
     console.error(e);

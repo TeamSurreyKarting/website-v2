@@ -6,6 +6,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { AdminBreadcrumbLink, AdminBreadcrumbPage } from "@/components/admin-breadcrumbs";
 
 async function fetchTaskName(taskId: string): Promise<string> {
   const supabase = await createClient();
@@ -29,33 +30,32 @@ export default async function BreadcrumbSlot({
   const parentTaskId = (await searchParams)?.parentTask;
   const parentTaskName = parentTaskId
     ? await fetchTaskName(parentTaskId)
-    : null;
+    : (parentTaskId ?? "");
 
   return (
     <BreadcrumbList>
       <BreadcrumbItem>
-        <BreadcrumbLink className={"text-gray-300"} href={"/tasks"}>
+        <AdminBreadcrumbLink href={"/tasks"}>
           Tasks
-        </BreadcrumbLink>
+        </AdminBreadcrumbLink>
       </BreadcrumbItem>
       {parentTaskId && (
         <>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbLink
-              className={"text-gray-300"}
+            <AdminBreadcrumbLink
               href={`/tasks/${parentTaskId}`}
             >
               {parentTaskName}
-            </BreadcrumbLink>
+            </AdminBreadcrumbLink>
           </BreadcrumbItem>
         </>
       )}
       <BreadcrumbSeparator />
       <BreadcrumbItem>
-        <BreadcrumbPage className={"text-white capitalize"}>
+        <AdminBreadcrumbPage>
           Add {parentTaskId ? "Subtask" : "Task"}
-        </BreadcrumbPage>
+        </AdminBreadcrumbPage>
       </BreadcrumbItem>
     </BreadcrumbList>
   );

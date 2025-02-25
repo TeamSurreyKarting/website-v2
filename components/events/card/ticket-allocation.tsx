@@ -88,7 +88,7 @@ export default function TicketAllocation({ ticket, allocation, canCheckIn }: { t
     <AlertDialog>
       <DropdownMenu>
         <Card
-          className={'bg-ts-blue-400 rounded-lg border border-ts-gold-700 p-2'}
+          className={'bg-ts-gold-300 dark:bg-ts-blue-400 rounded-lg border border-ts-gold-700 p-2'}
         >
           <CardHeader className={"flex flex-row gap-1 items-start justify-between"}>
             <div className={"flex flex-col space-y-1.5"}>
