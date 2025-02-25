@@ -53,7 +53,7 @@ export default async function TaskViews({
   return (
     <>
       <div
-        className={"flex flex-row gap-4 pt-4 pb-2 justify-between"}
+        className={"hidden md:flex flex-row gap-4 pt-4 pb-2 justify-between"}
       >
         <TaskViewSwitcher
           defaultValue={viewType}
@@ -65,10 +65,10 @@ export default async function TaskViews({
       <TasksKanbanBoard
         tasks={tasks}
         authedUserId={authedUserId}
-        className={viewType === ChartViewType.kanban ? "grid" : "hidden"}
+        className={viewType === ChartViewType.kanban ? "hidden md:grid" : "hidden"}
       />
       <div
-        className={viewType === ChartViewType.list ? "block" : "hidden"}
+        className={viewType === ChartViewType.list ? "block" : "hidden max-md:block"}
       >
         <TasksDataTable tasks={tasks} authedUserId={authedUserId} />
       </div>
