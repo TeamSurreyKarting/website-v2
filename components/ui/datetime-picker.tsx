@@ -14,6 +14,7 @@ import clsx from "clsx";
 type DateTimePickerProps = {
   datetime?: Date;
   onDatetimeChange?: (date: Date) => void;
+  disabled?: boolean;
   intervalSeconds?: number;
   min?: Date;
   max?: Date;
@@ -22,6 +23,7 @@ type DateTimePickerProps = {
 export const DateTimePicker: React.FC<DateTimePickerProps> = ({
   datetime,
   onDatetimeChange,
+  disabled = false,
   intervalSeconds = 900,
   min,
   max,
@@ -136,6 +138,7 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
       className={clsx('w-full justify-start text-left font-normal', {
         "text-muted-foreground": datetime
       })}
+      disabled={disabled}
       onClick={() => setOpen(true)}
     >
       <CalendarClock className="mr-2" />
