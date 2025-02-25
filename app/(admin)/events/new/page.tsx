@@ -6,8 +6,6 @@ import { notFound } from "next/navigation";
 async function getMembershipTypes(): Promise<Tables<'MembershipTypes'>[] | null> {
   const supabase = await createClient();
 
-  const now = new Date();
-
   const { data } = await supabase
     .from("MembershipTypes")
     .select("*");
@@ -24,9 +22,9 @@ export default async function NewEventPage() {
   }
 
   return (
-    <>
+    <div className={"container mx-auto"}>
       <h2 className={"text-2xl font-bold"}>New Event</h2>
       <NewEventForm membershipTypes={membershipTypes} />
-    </>
+    </div>
   )
 }

@@ -1,4 +1,4 @@
-import { Database, Tables } from "@/database.types";
+import { Tables } from "@/database.types";
 import { createClient } from "@/utils/supabase/server";
 import RacerDetails from "@/components/racers/profile/racer-details";
 import RacerMembershipList from "@/components/racers/profile/racer-membership-list";
@@ -76,7 +76,7 @@ export default async function Page(props: { params: Promise<{ id?: string }> }) 
   ]);
 
   return (
-    <>
+    <div className={"container mx-auto"}>
       <h2 className={"text-2xl font-bold"}>Racer Profile</h2>
       <h3 className={"text-xl font-medium text-ts-gold-700"}>
         {racerProfile.fullName}
@@ -85,6 +85,6 @@ export default async function Page(props: { params: Promise<{ id?: string }> }) 
         <RacerDetails details={racerProfile} />
         <RacerMembershipList racerDetails={racerProfile} memberships={racerMemberships} />
       </div>
-    </>
+    </div>
   );
 }

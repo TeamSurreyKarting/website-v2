@@ -86,7 +86,7 @@ export default async function EventPage({ params }: { params?: Promise<{ id: str
     }
 
     return (
-      <>
+      <div className={"container mx-auto"}>
         <h2 className={"text-2xl font-bold"}>Event</h2>
         <h3 className={"text-xl font-medium text-ts-gold-700"}>
           {event.name}
@@ -119,7 +119,7 @@ export default async function EventPage({ params }: { params?: Promise<{ id: str
           {event?.EventTicket && <TicketHoldersCard tickets={event.EventTicket} eventStart={new Date(event.startsAt)} />}
         </div>
         {event?.EventTransport && <TransportCard eventId={event.id} transport={event.EventTransport} ticketAllocations={event.EventTicket.flatMap((evTx) => evTx.EventTicketAllocation)} />}
-      </>
+      </div>
     )
   } catch (e) {
     console.error(e);
