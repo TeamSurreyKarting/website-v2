@@ -6,13 +6,8 @@ import { z } from "zod";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { TimePicker } from "@/components/ui/time-picker/picker";
-import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
 import { LoadingButton } from "@/components/ui/loading-button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { FaPlus, FaTrash } from "react-icons/fa6";
@@ -23,6 +18,7 @@ import { Tables } from "@/database.types";
 import { useToast } from "@/hooks/use-toast";
 import CurrencyInput from "react-currency-input-field";
 import { redirect } from "next/navigation";
+import { DateTimePicker } from "@/components/ui/datetime-picker";
 
 const formSchema = z.object({
   name: z.string(),
@@ -138,37 +134,12 @@ export default function NewEventForm({ membershipTypes }: { membershipTypes: Tab
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Starts At</FormLabel>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <FormControl>
-                          <Button
-                            variant={"outline"}
-                            className={cn(
-                              "max-w-[280px] ml-4 pl-3 text-left font-normal bg-ts-blue-500 border border-white",
-                              !field.value && "text-muted-foreground"
-                            )}
-                          >
-                            {field.value ? (
-                              format(field.value, "PPP HH:mm")
-                            ) : (
-                               <span>Pick a date</span>
-                             )}
-                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                          </Button>
-                        </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0 bg-ts-blue-500 text-white">
-                        <Calendar
-                          mode={"single"}
-                          selected={field.value}
-                          onSelect={field.onChange}
-                          disabled={(date) =>
-                            date < new Date()
-                          }
-                        />
-                        <TimePicker date={field.value} dateDidSet={field.onChange} />
-                      </PopoverContent>
-                    </Popover>
+                    <FormControl>
+                      <DateTimePicker
+                        datetime={field.value}
+                        onDatetimeChange={field.onChange}
+                      />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -179,37 +150,13 @@ export default function NewEventForm({ membershipTypes }: { membershipTypes: Tab
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Ends At</FormLabel>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <FormControl>
-                          <Button
-                            variant={"outline"}
-                            className={cn(
-                              "max-w-[280px] ml-4 pl-3 text-left font-normal bg-ts-blue-500 border border-white",
-                              !field.value && "text-muted-foreground"
-                            )}
-                          >
-                            {field.value ? (
-                              format(field.value, "PPP HH:mm")
-                            ) : (
-                               <span>Pick a date</span>
-                             )}
-                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                          </Button>
-                        </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0 bg-ts-blue-500 text-white">
-                        <Calendar
-                          mode={"single"}
-                          selected={field.value}
-                          onSelect={field.onChange}
-                          disabled={(date) =>
-                            date > form.getValues().endsAt
-                          }
-                        />
-                        <TimePicker date={field.value} dateDidSet={field.onChange} />
-                      </PopoverContent>
-                    </Popover>
+                    <FormControl>
+                      <DateTimePicker
+                        datetime={field.value}
+                        onDatetimeChange={field.onChange}
+                        min={form.watch().startsAt}
+                      />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -378,65 +325,23 @@ export default function NewEventForm({ membershipTypes }: { membershipTypes: Tab
                     <div className={"grid grid-cols-1 md:grid-cols-2 gap-2"}>
                       <FormItem>
                         <FormLabel>Available From</FormLabel>
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <FormControl>
-                              <Button
-                                variant={"outline"}
-                                className={cn(
-                                  "w-full text-left font-normal bg-ts-blue-500 border border-white",
-                                  !ticketToAdd.availableFrom && "text-muted-foreground"
-                                )}
-                              >
-                                {ticketToAdd.availableFrom ? (
-                                  format(ticketToAdd.availableFrom, "PPP HH:mm")
-                                ) : (
-                                   <span>Pick a date</span>
-                                 )}
-                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                              </Button>
-                            </FormControl>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-auto p-0 bg-ts-blue-500 text-white">
-                            <Calendar
-                              mode={"single"}
-                              selected={ticketToAdd.availableFrom}
-                              onSelect={(newDate) => setTicketToAdd({...ticketToAdd, availableFrom: newDate})}
-                            />
-                            <TimePicker date={ticketToAdd.availableFrom} dateDidSet={(newDate) => setTicketToAdd({...ticketToAdd, availableFrom: newDate, availableUntil: newDate})} />
-                          </PopoverContent>
-                        </Popover>
+                        <FormControl>
+                          <DateTimePicker
+                            datetime={ticketToAdd.availableFrom}
+                            onDatetimeChange={(newDate) => setTicketToAdd({...ticketToAdd, availableFrom: newDate})}
+                          />
+                        </FormControl>
+                        <FormMessage />
                       </FormItem>
                       <FormItem>
                         <FormLabel>Available Until</FormLabel>
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <FormControl>
-                              <Button
-                                variant={"outline"}
-                                className={cn(
-                                  "w-full text-left font-normal bg-ts-blue-500 border border-white",
-                                  !ticketToAdd.availableUntil && "text-muted-foreground"
-                                )}
-                              >
-                                {ticketToAdd.availableUntil ? (
-                                  format(ticketToAdd.availableUntil, "PPP HH:mm")
-                                ) : (
-                                   <span>Pick a date</span>
-                                 )}
-                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                              </Button>
-                            </FormControl>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-auto p-0 bg-ts-blue-500 text-white">
-                            <Calendar
-                              mode={"single"}
-                              selected={ticketToAdd.availableUntil}
-                              onSelect={(newDate) => setTicketToAdd({...ticketToAdd, availableUntil: newDate})}
-                            />
-                            <TimePicker date={ticketToAdd.availableUntil} dateDidSet={(newDate) => setTicketToAdd({...ticketToAdd, availableUntil: newDate})} />
-                          </PopoverContent>
-                        </Popover>
+                        <FormControl>
+                          <DateTimePicker
+                            datetime={ticketToAdd.availableUntil}
+                            onDatetimeChange={(newDate) => setTicketToAdd({...ticketToAdd, availableUntil: newDate})}
+                          />
+                        </FormControl>
+                        <FormMessage />
                       </FormItem>
                     </div>
                     <FormItem>
