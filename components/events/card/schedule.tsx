@@ -84,88 +84,86 @@ export default function ScheduleCard({ schedule, eventId }: { schedule: Tables<'
   }).sort((a, b) => a.date.getTime() - b.date.getTime());
 
   return (
-    <>
-      <Card>
-        <CardHeader className={"flex flex-row gap-2 items-center justify-between"}>
-          <CardTitle>Schedule</CardTitle>
-          <ResponsiveModal
-            title="Add To Schedule"
-            trigger={
-              <Button>
-                <CalendarPlus />
-                <span>Add To Schedule</span>
-              </Button>
-            }
-            open={addToScheduleDialogIsOpen}
-            onOpenChange={setAddToScheduleDialogOpen}
-          >
-            <Form {...addToScheduleForm}>
-              <form onSubmit={addToScheduleForm.handleSubmit(onAddToScheduleFormSubmit)} className={"space-y-6"}>
-                <FormField
-                  control={addToScheduleForm.control}
-                  name={"title"}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Title</FormLabel>
-                      <FormControl>
-                        <Input
-                          defaultValue={field.value}
-                          onChange={field.onChange}
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={addToScheduleForm.control}
-                  name={"description"}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Description</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          className={"resize-none"}
-                          defaultValue={field.value}
-                          onChange={field.onChange}
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={addToScheduleForm.control}
-                  name={"scheduledFor"}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Scheduled For</FormLabel>
-                      <FormControl>
-                        <DateTimePicker
-                          datetime={field.value}
-                          onDatetimeChange={field.onChange}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <div className={"max-md:w-full"}>
-                  <LoadingButton
-                    loading={addToScheduleForm.formState.isLoading}
-                    className={"w-full md:w-fit md:float-right"}
-                    type={"submit"}
-                  >
-                    Add
-                  </LoadingButton>
-                </div>
-              </form>
-            </Form>
-          </ResponsiveModal>
-        </CardHeader>
-        <CardContent className={"flex flex-col gap-2"}>
-          {timelineItems.map((item) => <TimelineItem key={item.id} item={item} />)}
-        </CardContent>
-      </Card>
-    </>
+    <Card>
+      <CardHeader className={"flex flex-row gap-2 items-center justify-between"}>
+        <CardTitle>Schedule</CardTitle>
+        <ResponsiveModal
+          title="Add To Schedule"
+          trigger={
+            <Button>
+              <CalendarPlus />
+              <span>Add To Schedule</span>
+            </Button>
+          }
+          open={addToScheduleDialogIsOpen}
+          onOpenChange={setAddToScheduleDialogOpen}
+        >
+          <Form {...addToScheduleForm}>
+            <form onSubmit={addToScheduleForm.handleSubmit(onAddToScheduleFormSubmit)} className={"space-y-6"}>
+              <FormField
+                control={addToScheduleForm.control}
+                name={"title"}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Title</FormLabel>
+                    <FormControl>
+                      <Input
+                        defaultValue={field.value}
+                        onChange={field.onChange}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={addToScheduleForm.control}
+                name={"description"}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Description</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        className={"resize-none"}
+                        defaultValue={field.value}
+                        onChange={field.onChange}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={addToScheduleForm.control}
+                name={"scheduledFor"}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Scheduled For</FormLabel>
+                    <FormControl>
+                      <DateTimePicker
+                        datetime={field.value}
+                        onDatetimeChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <div className={"max-md:w-full"}>
+                <LoadingButton
+                  loading={addToScheduleForm.formState.isLoading}
+                  className={"w-full md:w-fit md:float-right"}
+                  type={"submit"}
+                >
+                  Add
+                </LoadingButton>
+              </div>
+            </form>
+          </Form>
+        </ResponsiveModal>
+      </CardHeader>
+      <CardContent className={"flex flex-col gap-2"}>
+        {timelineItems.map((item) => <TimelineItem key={item.id} item={item} />)}
+      </CardContent>
+    </Card>
   )
 }
 
