@@ -118,6 +118,7 @@ export type Database = {
           createdBy: string | null
           id: string
           race: string
+          startingPosition: number
           teamRacer: string
         }
         Insert: {
@@ -125,6 +126,7 @@ export type Database = {
           createdBy?: string | null
           id?: string
           race: string
+          startingPosition: number
           teamRacer: string
         }
         Update: {
@@ -132,6 +134,7 @@ export type Database = {
           createdBy?: string | null
           id?: string
           race?: string
+          startingPosition?: number
           teamRacer?: string
         }
         Relationships: [
