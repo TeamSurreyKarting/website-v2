@@ -153,51 +153,40 @@ export type Database = {
       }
       CompetitionEventRacerAvailability: {
         Row: {
+          competitionEvent: string
           createdAt: string
           id: string
           isAvailable: boolean
-          racer: string | null
+          squadRacer: string
         }
         Insert: {
+          competitionEvent: string
           createdAt?: string
           id?: string
           isAvailable?: boolean
-          racer?: string | null
+          squadRacer: string
         }
         Update: {
+          competitionEvent?: string
           createdAt?: string
           id?: string
           isAvailable?: boolean
-          racer?: string | null
+          squadRacer?: string
         }
         Relationships: [
           {
-            foreignKeyName: "CompetitionEventRacerAvailability_racer_fkey"
-            columns: ["racer"]
+            foreignKeyName: "CompetitionEventRacerAvailability_competitionEvent_fkey"
+            columns: ["competitionEvent"]
             isOneToOne: false
-            referencedRelation: "RacerDetails"
+            referencedRelation: "CompetitionEvents"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "CompetitionEventRacerAvailability_racer_fkey"
-            columns: ["racer"]
+            foreignKeyName: "CompetitionEventRacerAvailability_squadRacer_fkey"
+            columns: ["squadRacer"]
             isOneToOne: false
-            referencedRelation: "Racers"
+            referencedRelation: "CompetitionSquad"
             referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "CompetitionEventRacerAvailability_racer_fkey"
-            columns: ["racer"]
-            isOneToOne: false
-            referencedRelation: "TaskDetailsView"
-            referencedColumns: ["primarily_responsible_person_id"]
-          },
-          {
-            foreignKeyName: "CompetitionEventRacerAvailability_racer_fkey"
-            columns: ["racer"]
-            isOneToOne: false
-            referencedRelation: "TaskDetailsView"
-            referencedColumns: ["created_by_id"]
           },
         ]
       }
@@ -207,7 +196,9 @@ export type Database = {
           createdBy: string | null
           duration: number
           event: string
+          format: Database["public"]["Enums"]["race_format"]
           id: string
+          name: string
           startsAt: string
         }
         Insert: {
@@ -215,7 +206,9 @@ export type Database = {
           createdBy?: string | null
           duration: number
           event: string
+          format: Database["public"]["Enums"]["race_format"]
           id?: string
+          name: string
           startsAt: string
         }
         Update: {
@@ -223,7 +216,9 @@ export type Database = {
           createdBy?: string | null
           duration?: number
           event?: string
+          format?: Database["public"]["Enums"]["race_format"]
           id?: string
+          name?: string
           startsAt?: string
         }
         Relationships: [
@@ -290,18 +285,24 @@ export type Database = {
           createdAt: string
           event: string
           id: string
+          maxNumber: number
+          minNumber: number
           name: string
         }
         Insert: {
           createdAt?: string
           event: string
           id?: string
+          maxNumber: number
+          minNumber?: number
           name: string
         }
         Update: {
           createdAt?: string
           event?: string
           id?: string
+          maxNumber?: number
+          minNumber?: number
           name?: string
         }
         Relationships: [
@@ -319,22 +320,22 @@ export type Database = {
           createdAt: string
           createdBy: string | null
           id: string
-          racer: string | null
-          team: string | null
+          racer: string
+          team: string
         }
         Insert: {
           createdAt?: string
           createdBy?: string | null
           id?: string
-          racer?: string | null
-          team?: string | null
+          racer: string
+          team: string
         }
         Update: {
           createdAt?: string
           createdBy?: string | null
           id?: string
-          racer?: string | null
-          team?: string | null
+          racer?: string
+          team?: string
         }
         Relationships: [
           {
@@ -1304,6 +1305,8 @@ export type Database = {
         Row: {
           created_at: string
           id: string
+          lat: number | null
+          long: number | null
           name: string | null
           track_map_upload_path: string | null
           type: Database["public"]["Enums"]["track_type"] | null
@@ -1311,6 +1314,8 @@ export type Database = {
         Insert: {
           created_at?: string
           id?: string
+          lat?: number | null
+          long?: number | null
           name?: string | null
           track_map_upload_path?: string | null
           type?: Database["public"]["Enums"]["track_type"] | null
@@ -1318,6 +1323,8 @@ export type Database = {
         Update: {
           created_at?: string
           id?: string
+          lat?: number | null
+          long?: number | null
           name?: string | null
           track_map_upload_path?: string | null
           type?: Database["public"]["Enums"]["track_type"] | null
@@ -1463,7 +1470,12 @@ export type Database = {
       experience_level: "rookie" | "experienced" | "graduate"
       license_type: "bukc_test" | "bukc_full"
       points_allocations: "formula1_top10" | "linear_top10"
-      race_format: "practice" | "sprint" | "endurance"
+      race_format:
+        | "practice"
+        | "qualifying"
+        | "individual_sprint"
+        | "team_sprint"
+        | "team_endurance"
       RacePenalty:
         | "Kart Change Penalty"
         | "Excessive Weaving"

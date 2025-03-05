@@ -1,4 +1,5 @@
 import { createServerClient } from "@supabase/ssr";
+import { forbidden } from "next/navigation";
 import { NextResponse, type NextRequest } from "next/server";
 
 export async function updateSession(request: NextRequest) {
@@ -45,6 +46,14 @@ export async function updateSession(request: NextRequest) {
     const url = request.nextUrl.clone();
     url.pathname = "/auth";
     return NextResponse.redirect(url);
+  }
+
+  const userIsAdminUser: boolean = user?.app_metadata.isAdmin ?? false;
+  const isDevEnv = process.env.LOCAL_DEV === "TRUE";
+
+  if (!requestIsForAuthRoute && !userIsAdminUser && !isDevEnv) {
+    // Forbid request
+    return NextResponse.redirect(forbidden());
   }
 
   // IMPORTANT: You *must* return the supabaseResponse object as it is. If you're

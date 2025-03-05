@@ -1,16 +1,18 @@
 import { notFound } from "next/navigation";
 import { Tables } from "@/database.types";
 import { createClient } from "@/utils/supabase/server";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { AddCompetitionEventForm } from "@/components/forms/competitions/add-event";
 import { AddSquadRacerForm } from "@/components/forms/competitions/add-squad-racer";
 import { AddCompMembershipRestriction } from "@/components/forms/competitions/add-comp-membership-restrictions";
 import Link from "next/link";
 import { format } from "date-fns";
+import { Badge } from "@/components/ui/badge";
+import { CircleAlert } from "lucide-react";
 
 type CompetitionComplex = Tables<'Competitions'> & {
   CompetitionEvents: (Tables<'CompetitionEvents'> & { Events: Tables<'Events'> | null, Tracks: Tables<'Tracks'> })[],
-  CompetitionSquad: (Tables<'CompetitionSquad'> & { Racers: Tables<'Racers'> })[] }
+  CompetitionSquad: (Tables<'CompetitionSquad'> & { Racers: Tables<'Racers'> & { Members: Tables<'Members'>[] } })[] }
 
 async function getCompetition(id: string): Promise<CompetitionComplex> {
   try {
@@ -18,7 +20,7 @@ async function getCompetition(id: string): Promise<CompetitionComplex> {
 
     const { data } = await supabase
       .from("Competitions")
-      .select('*, CompetitionEvents( *, Events( * ), Tracks( * ) ), CompetitionSquad( *, Racers( * ) )')
+      .select('*, CompetitionEvents( *, Events( * ), Tracks( * ) ), CompetitionSquad( *, Racers( *, Members( * ) ) )')
       .eq("id", id)
       .maybeSingle()
       .throwOnError();
@@ -133,6 +135,8 @@ export default async function CompetitionsDetailPage(props: { params: Promise<{ 
       getRacers(),
     ])
 
+    const compMembershipRequirementsSet = new Set(compMembershipRequirements.map((m) => m.membership));
+
     return (
       <>
         <h2 className={"text-2xl font-bold"}>Competition</h2>
@@ -172,14 +176,21 @@ export default async function CompetitionsDetailPage(props: { params: Promise<{ 
           </CardHeader>
           <CardContent className={"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"}>
             { competition.CompetitionSquad.length > 0 ?
-              competition.CompetitionSquad.map((squadRacer) => (
-                <Card className={"border dark:border-ts-gold dark:bg-ts-blue dark:text-foreground border-ts-blue bg-ts-gold-700 text-black"} key={squadRacer.id}>
-                  <CardHeader className={"flex flex-row gap-2 items-center justify-between"}>
-                    <CardTitle>{squadRacer.Racers.fullName}</CardTitle>
-                  </CardHeader>
-                </Card>
-              ))
-              : <em>No squad racers added.</em>
+              competition.CompetitionSquad.map((squadRacer) => {
+                const racerMemberships = new Set(squadRacer.Racers.Members.map((x) => x.membership));
+                const correctMemberships = compMembershipRequirementsSet.intersection(racerMemberships);
+
+                return (
+                  <Card className={"border dark:border-ts-gold dark:bg-ts-blue dark:text-foreground border-ts-blue bg-ts-gold-700 text-black"} key={squadRacer.id}>
+                    <CardHeader>
+                      <CardTitle>{squadRacer.Racers.fullName}</CardTitle>
+                      {correctMemberships.size === 0 && (
+                          <Badge variant="destructive"><CircleAlert />Racer is missing necessary membership</Badge>
+                      )}
+                    </CardHeader>
+                  </Card>
+                )
+              }) : <em>No squad racers.</em>
             }
           </CardContent>
         </Card>

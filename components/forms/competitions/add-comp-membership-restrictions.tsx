@@ -14,7 +14,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { LoadingButton } from "@/components/ui/loading-button";
 import { IoIdCard } from "react-icons/io5";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel,
   AlertDialogContent, AlertDialogDescription, AlertDialogFooter,
@@ -93,6 +93,7 @@ export function AddCompMembershipRestriction(
   return (
     <ResponsiveModal
       title={"Membership Restrictions"}
+      description={"Require at least one of the following memberships to be held by squad members to be eligible for selection."}
       trigger={
         <Button>
           <IoIdCard />
@@ -108,7 +109,9 @@ export function AddCompMembershipRestriction(
             { membershipRequirements.map((mr) => (
               <Card key={mr.id}>
                 <CardHeader className={"py-2 px-4 flex flex-row justify-between items-center gap-2"}>
-                  <CardTitle>{mr.MembershipTypes.name}</CardTitle>
+                  <div>
+                    <CardTitle>{mr.MembershipTypes.name}</CardTitle>
+                  </div>
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <Button variant={"ghost"}>
