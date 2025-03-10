@@ -39,6 +39,6 @@ export default async function Page(props: {
       <h2 className={"text-2xl font-medium"}>New Transaction</h2>
       <h3 className={"text-lg font-medium text-accent"}>{account.name}</h3>
       <NewFinancialTransactionForm accountId={accountId} />
-    </div>
+    </>
   );
 }

@@ -19,7 +19,7 @@ import {
   DrawerTrigger,
   DrawerFooter,
 } from "@/components/ui/drawer";
-import { ReactElement, useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 
 export function ResponsiveModal({
   trigger,
@@ -29,10 +29,10 @@ export function ResponsiveModal({
   open: externalOpen,
   onOpenChange: externalOnOpenChange,
 }: {
-  trigger: ReactElement,
+  trigger?: ReactNode,
   title: string,
   description?: string,
-  children: ReactElement,
+  children?: ReactNode,
   open?: boolean,
   onOpenChange?: (open: boolean) => void,
 }) {
@@ -56,9 +56,11 @@ export function ResponsiveModal({
   if (isDesktop) {
     return (
       <Dialog open={internalOpen} onOpenChange={handleOpenChange}>
-        <DialogTrigger asChild>
-          {trigger || <Button variant="outline">Open</Button>}
-        </DialogTrigger>
+        {trigger !== undefined && (
+          <DialogTrigger asChild>
+            {trigger || <Button variant="outline">Open</Button>}
+          </DialogTrigger>
+        )}
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>
@@ -80,9 +82,11 @@ export function ResponsiveModal({
           <DrawerTitle>{title}</DrawerTitle>
           {description && <DrawerDescription>{description}</DrawerDescription>}
         </DrawerHeader>
-        <div className={"mx-4"}>
-          {children}
-        </div>
+        { (children) && (
+          <div className={"mx-4"}>
+            {children}
+          </div>
+        )}
         <DrawerFooter>
           <DrawerClose asChild>
             <Button variant="outline">Cancel</Button>

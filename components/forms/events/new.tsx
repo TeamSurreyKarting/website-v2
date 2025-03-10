@@ -62,7 +62,6 @@ export default function NewEventForm({ membershipTypes }: { membershipTypes: Tab
   const { replace } = useRouter();
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("submit")
     try {
       const supabase = createClient();
 
