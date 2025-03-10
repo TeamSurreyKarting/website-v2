@@ -109,15 +109,23 @@ create table "public"."Competitions" (
 
 drop type "public"."race_format__old_version_to_be_dropped";
 
+drop table "public"."Tracks";
+
+CREATE TABLE IF NOT EXISTS "public"."Tracks" (
+    "id" uuid not null default gen_random_uuid(),
+    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "type" "public"."track_type",
+    "name" "text",
+    "track_map_upload_path" "text"
+);
+
 alter table "public"."Tracks" add column "lat" numeric;
 
 alter table "public"."Tracks" add column "long" numeric;
 
-alter table "public"."Tracks" alter column "id" set default gen_random_uuid();
-
-alter table "public"."Tracks" alter column "id" drop identity;
-
 alter table "public"."Tracks" alter column "id" set data type uuid using "id"::uuid;
+
+alter table "public"."Tracks" alter column "id" set default gen_random_uuid();
 
 CREATE UNIQUE INDEX "CompetitionEligibleDrivers_pkey" ON public."CompetitionSquad" USING btree (id);
 
